@@ -8,7 +8,11 @@ public class CardSystem : Singleton<CardSystem>
     public List<bool> cardOrientations = new List<bool>(); // true = upright, false = reversed
     
     public System.Action<List<string>, List<bool>> OnHandChanged;
-    
+
+    public int reversedCardCount()
+    {
+        return cardOrientations.Count(o => !o) ;
+    }
     public void DrawCardsForCustomer()
     {
         currentHand.Clear();
@@ -59,6 +63,8 @@ public class CardSystem : Singleton<CardSystem>
         }
     }
     
+    
+    
     public DivinationResult PerformDivination(Customer customer)
     {
         var result = new DivinationResult();
@@ -90,22 +96,14 @@ public class CardSystem : Singleton<CardSystem>
             var cardInfo = CSVLoader.Instance.cardInfoMap[cardId];
             var effects = isUpright ? cardInfo.upEffect : cardInfo.downEffect;
             
-            foreach (string effect in effects)
-            {
-                allEffects.Add(new CardEffect
-                {
-                    cardId = cardId,
-                    effect = effect,
-                    isUpright = isUpright
-                });
-            }
+            
+            ApplyAttributeEffects(effects, tempCustomer);
         }
         
-        // Apply special effects first (Moon card effects)
-        ApplySpecialEffects(allEffects, tempCustomer);
+        // // Apply special effects first (Moon card effects)
+        // ApplySpecialEffects(allEffects, tempCustomer);
         
         // Apply normal attribute changes
-        ApplyAttributeEffects(allEffects, tempCustomer);
         
         result.finalAttributes = new Dictionary<string, int>
         {
@@ -183,11 +181,27 @@ public class CardSystem : Singleton<CardSystem>
         }
     }
     
-    private void ApplyAttributeEffects(List<CardEffect> allEffects, Customer customer)
+    private void ApplyAttributeEffects(List<string> allEffects, Customer customer)
     {
-        foreach (var effect in allEffects)
+        for (int i = 0; i < allEffects.Count; i++)
         {
-            ApplyEffect(effect, customer);
+            switch (allEffects[i])
+            {
+                case "allNegHalf":
+                    break;
+                case "allPosHalf":
+                    break;
+                case "wealth":
+                case "rela":
+                case "sanity":
+                case "power":
+
+                    var key = allEffects[i];
+                    i++;
+                    var value = int.Parse(allEffects[i]);
+                    customer.ModifyAttribute(key, value);
+                    break;
+            }
         }
     }
     
@@ -257,6 +271,11 @@ public class DivinationResult
 {
     public Dictionary<string, int> initialAttributes;
     public Dictionary<string, int> finalAttributes;
+
+    public int diffAttribute(string attribute)
+    {
+         return finalAttributes[attribute] - initialAttributes[attribute];
+    }
     public bool isSatisfied;
     public int moneyEarned;
 }

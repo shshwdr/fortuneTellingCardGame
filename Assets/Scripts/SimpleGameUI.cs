@@ -1,25 +1,30 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameUI : MonoBehaviour
+/// <summary>
+/// Simplified GameUI that works with both CardUI and CardUISimple
+/// </summary>
+public class SimpleGameUI : MonoBehaviour
 {
     [Header("Customer Info UI")]
-    public Text customerNameText;
-    public Text customerTargetText;
-    public Text wealthText;
-    public Text relationshipText;
-    public Text sanityText;
-    public Text powerText;
+    public TMP_Text customerNameText;
+    public TMP_Text customerTargetText;
+    public AttributeCell wealthText;
+    public AttributeCell relationshipText;
+    public AttributeCell sanityText;
+    public AttributeCell powerText;
     
     [Header("Game State UI")]
-    public Text dayText;
-    public Text moneyText;
-    public Text currentCustomerIndexText;
+    public TMP_Text dayText;
+    public TMP_Text moneyText;
+    public TMP_Text currentCustomerIndexText;
     
     [Header("Card UI")]
     public Transform cardContainer;
-    public CardUI[] cardSlots = new CardUI[4];
+    // Using MonoBehaviour array to support both CardUI and CardUISimple
+    public CardUISimple[] cardSlots = new CardUISimple[4];
     
     [Header("Action Buttons")]
     public Button performDivinationButton;
@@ -28,12 +33,12 @@ public class GameUI : MonoBehaviour
     
     [Header("Result UI")]
     public GameObject resultPanel;
-    public Text resultText;
-    public Text moneyEarnedText;
+    public TMP_Text resultText;
+    public TMP_Text moneyEarnedText;
     
     private Customer currentCustomer;
     
-    void Start()
+    void Awake()
     {
         InitializeUI();
         SubscribeToEvents();
@@ -55,13 +60,22 @@ public class GameUI : MonoBehaviour
         if (nextDayButton != null)
             nextDayButton.onClick.AddListener(NextDay);
             
-        // Setup card slots
+        // Setup card slots - works with both CardUI and CardUISimple
         for (int i = 0; i < cardSlots.Length; i++)
         {
             if (cardSlots[i] != null)
             {
                 int index = i; // Capture for closure
-                cardSlots[i].OnCardClicked += (cardIndex) => OnCardClicked(cardIndex);
+                
+                // Try CardUI first
+                {
+                    // Try CardUISimple
+                    var cardUISimple = cardSlots[i] as CardUISimple;
+                    if (cardUISimple != null)
+                    {
+                        cardUISimple.OnCardClicked += (cardIndex) => OnCardClicked(cardIndex);
+                    }
+                }
             }
         }
         
@@ -123,17 +137,11 @@ public class GameUI : MonoBehaviour
     
     private void UpdateCustomerAttributes(Customer customer)
     {
-        if (wealthText != null)
-            wealthText.text = $"Wealth: {customer.wealth}";
-            
-        if (relationshipText != null)
-            relationshipText.text = $"Relationship: {customer.relationship}";
-            
-        if (sanityText != null)
-            sanityText.text = $"Sanity: {customer.sanity}";
-            
-        if (powerText != null)
-            powerText.text = $"Power: {customer.power}";
+        var result = CardSystem.Instance.PerformDivination(currentCustomer);
+        wealthText.SetValue("Wealth", customer.wealth, result.diffAttribute("wealth"));
+        relationshipText .SetValue("Relationship", customer.relationship, result.diffAttribute("rela"));
+        sanityText.SetValue("Sanity", customer.sanity, result.diffAttribute("sanity"));
+        powerText.SetValue("Power", customer.power, result.diffAttribute("power"));
     }
     
     private void UpdateMoneyDisplay(int money)
@@ -169,8 +177,17 @@ public class GameUI : MonoBehaviour
                 if (i < cards.Count)
                 {
                     cardSlots[i].gameObject.SetActive(true);
-                    cardSlots[i].SetCardData(cards[i], i);
-                    cardSlots[i].SetUpright(orientations[i]);
+                    
+                    // Try CardUI first
+                    {
+                        // Try CardUISimple
+                        var cardUISimple = cardSlots[i] as CardUISimple;
+                        if (cardUISimple != null)
+                        {
+                            cardUISimple.SetCardData(cards[i], i);
+                            cardUISimple.SetUpright(orientations[i]);
+                        }
+                    }
                 }
                 else
                 {
@@ -183,11 +200,31 @@ public class GameUI : MonoBehaviour
     private void OnCardClicked(int cardIndex)
     {
         CardSystem.Instance.FlipCard(cardIndex);
+        UpdateCustomerAttributes(currentCustomer);
     }
-    
+
+    void UpdateActions()
+    {
+        if (CardSystem.Instance.reversedCardCount() != 2)
+        {
+            performDivinationButton.interactable = false;
+            performDivinationButton.GetComponentInChildren<TMP_Text>().text = "Require 2 reversed cards";
+        }
+        else
+        {
+            performDivinationButton.interactable = true;
+            performDivinationButton.GetComponentInChildren<TMP_Text>().text = "Fortune Telling";
+        }
+    }
+
     private void PerformDivination()
     {
         if (currentCustomer == null) return;
+
+        if (CardSystem.Instance.reversedCardCount() != 2)
+        {
+            return;
+        }
         
         var result = CardSystem.Instance.PerformDivination(currentCustomer);
         
@@ -198,7 +235,8 @@ public class GameUI : MonoBehaviour
             GameSystem.Instance.AddMoney(result.moneyEarned);
         }
         
-        // Wait for player to close result panel before proceeding
+        GameSystem.Instance.NextCustomer();
+        CardSystem.Instance.DrawCardsForCustomer();
     }
     
     private void ShowResult(DivinationResult result)
@@ -242,12 +280,6 @@ public class GameUI : MonoBehaviour
     
     private void SkipCustomer()
     {
-        // Add small sanity boost for skipping
-        if (currentCustomer != null)
-        {
-            GameSystem.Instance.AddMoney(1); // Small consolation
-        }
-        
         GameSystem.Instance.NextCustomer();
         CardSystem.Instance.DrawCardsForCustomer();
     }

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +8,9 @@ using UnityEngine.UI;
 public class CardUISimple : MonoBehaviour
 {
     [Header("UI References")]
-    public Text cardNameText;
-    public Text cardDescriptionText;
-    public Text cardEffectText;
+    public TMP_Text cardNameText;
+    public TMP_Text cardDescriptionText;
+    public TMP_Text cardEffectText;
     public Button cardButton;
     public GameObject cardBack;
     public GameObject cardFront;
@@ -20,8 +21,9 @@ public class CardUISimple : MonoBehaviour
     public int cardIndex;
     
     private CardInfo cardInfo;
-    
+    public Transform oppositeTrans;
     public System.Action<int> OnCardClicked;
+    
     
     void Start()
     {
@@ -112,7 +114,7 @@ public class CardUISimple : MonoBehaviour
         else
         {
             // If no separate front/back objects, rotate the whole card
-            transform.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
+            oppositeTrans.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
         }
         
         UpdateEffectText();
@@ -129,7 +131,7 @@ public class CardUISimple : MonoBehaviour
         }
         else
         {
-            transform.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
+            oppositeTrans.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
         }
         
         UpdateEffectText();
