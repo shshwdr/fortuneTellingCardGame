@@ -83,6 +83,7 @@ public class SimpleGameUI : MonoBehaviour
         
         if (resultPanel != null)
             resultPanel.SetActive(false);
+
     }
     
     private void SubscribeToEvents()
@@ -133,19 +134,26 @@ public class SimpleGameUI : MonoBehaviour
         if (customerNameText != null)
             customerNameText.text = customer.info.name;
             
-        if (customerTargetText != null)
-            customerTargetText.text = $"Wants: {customer.info.target}";
             
         UpdateCustomerAttributes(customer);
     }
     
+    
+    
     private void UpdateCustomerAttributes(Customer customer)
     {
-        var result = CardSystem.Instance.PerformDivination(currentCustomer);
+        var result = CardSystem.Instance.PerformDivination(currentCustomer,false);
         wealthText.SetValue("Wealth", customer.wealth, result.diffAttribute("wealth"));
         relationshipText .SetValue("Relationship", customer.relationship, result.diffAttribute("rela"));
         sanityText.SetValue("Sanity", customer.sanity, result.diffAttribute("sanity"));
         powerText.SetValue("Power", customer.power, result.diffAttribute("power"));
+
+        var satisfiedText = result.isSatisfied ? "(Satisfied!)" : "";
+        var satisfiedTextColor = result.isSatisfied ? "<color=green>":"";
+        if (customerTargetText != null)
+            customerTargetText.text = $"{satisfiedTextColor}Wants: {customer.info.target} {satisfiedText}";
+
+        UpdateActions();
     }
     
     private void UpdateMoneyDisplay(int money)
@@ -172,7 +180,7 @@ public class SimpleGameUI : MonoBehaviour
         }
     }
     
-    private void UpdateCardDisplay(List<string> cards, List<bool> orientations)
+    private void UpdateCardDisplay(List<Card> cards)
     {
         for (int i = 0; i < cardSlots.Length; i++)
         {
@@ -182,15 +190,10 @@ public class SimpleGameUI : MonoBehaviour
                 {
                     cardSlots[i].gameObject.SetActive(true);
                     
-                    // Try CardUI first
+                    var cardUISimple = cardSlots[i] as CardUISimple;
+                    if (cardUISimple != null)
                     {
-                        // Try CardUISimple
-                        var cardUISimple = cardSlots[i] as CardUISimple;
-                        if (cardUISimple != null)
-                        {
-                            cardUISimple.SetCardData(cards[i], i);
-                            cardUISimple.SetUpright(orientations[i]);
-                        }
+                        cardUISimple.SetCardData(cards[i], i);
                     }
                 }
                 else
@@ -230,7 +233,7 @@ public class SimpleGameUI : MonoBehaviour
             return;
         }
         
-        var result = CardSystem.Instance.PerformDivination(currentCustomer);
+        var result = CardSystem.Instance.PerformDivination(currentCustomer,true);
         
         ShowResult(result);
         

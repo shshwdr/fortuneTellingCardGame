@@ -1,4 +1,36 @@
 using System.Collections.Generic;
+using UnityEngine;
+
+[System.Serializable]
+public class Card
+{
+    public CardInfo info;
+    public bool isUpright;
+    public List<string> buffs = new List<string>(); // Future buff system
+    
+    public Card(CardInfo cardInfo, bool upright = true)
+    {
+        info = cardInfo;
+        isUpright = upright;
+    }
+    
+    public List<string> GetEffects()
+    {
+        return isUpright ? info.upEffect : info.downEffect;
+    }
+    
+    public void FlipCard()
+    {
+        isUpright = !isUpright;
+    }
+    
+    public Card Clone()
+    {
+        var clone = new Card(info, isUpright);
+        clone.buffs = new List<string>(buffs);
+        return clone;
+    }
+}
 
 [System.Serializable]
 public class CustomerInfo
@@ -102,8 +134,11 @@ public class GameState
     public List<string> ownedRunes = new List<string>();
     public Dictionary<string, string> cardSigils = new Dictionary<string, string>(); // cardId -> sigilId
     public List<string> ownedUpgrades = new List<string>();
-    public List<string> availableCards = new List<string>();
-    public List<string> usedCards = new List<string>();
+    public List<Card> availableCards = new List<Card>();
+    public List<Card> usedCards = new List<Card>();
     
     public List<Customer> todayCustomers = new List<Customer>();
+    
+    // Persistent customer storage
+    public Dictionary<string, Customer> persistentCustomers = new Dictionary<string, Customer>();
 }

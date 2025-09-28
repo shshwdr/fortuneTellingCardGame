@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class CardSystem : Singleton<CardSystem>
 {
-    public List<string> currentHand = new List<string>();
-    public List<bool> cardOrientations = new List<bool>(); // true = upright, false = reversed
+    public List<Card> currentHand = new List<Card>();
     
-    public System.Action<List<string>, List<bool>> OnHandChanged;
+    public System.Action<List<Card>> OnHandChanged;
 
     public int reversedCardCount()
     {
-        return cardOrientations.Count(o => !o) ;
+        return currentHand.Count(card => !card.isUpright);
     }
     public void DrawCardsForCustomer()
     {
+        // Move current hand to used cards
         GameSystem.Instance.gameState.usedCards.AddRange(currentHand);
         currentHand.Clear();
-        cardOrientations.Clear();
         
         // Draw 4 cards from available deck
         for (int i = 0; i < 4; i++)
@@ -28,21 +27,14 @@ public class CardSystem : Singleton<CardSystem>
                 RefillCardDeck();
             }
             int randomIndex = Random.Range(0, GameSystem.Instance.gameState.availableCards.Count);
-            string drawnCard = GameSystem.Instance.gameState.availableCards[randomIndex];
-            
+            Card drawnCard = GameSystem.Instance.gameState.availableCards[randomIndex].Clone();
+            drawnCard.isUpright = true;
             currentHand.Add(drawnCard);
-            cardOrientations.Add(true); // Default to upright
             
             GameSystem.Instance.gameState.availableCards.RemoveAt(randomIndex);
         }
         
-        // // If deck is empty, refill it
-        // if (GameSystem.Instance.gameState.availableCards.Count == 0)
-        // {
-        //     RefillCardDeck();
-        // }
-        
-        OnHandChanged?.Invoke(currentHand, cardOrientations);
+        OnHandChanged?.Invoke(currentHand);
     }
     
     private void RefillCardDeck()
@@ -52,16 +44,16 @@ public class CardSystem : Singleton<CardSystem>
     
     public void FlipCard(int cardIndex)
     {
-        if (cardIndex >= 0 && cardIndex < cardOrientations.Count)
+        if (cardIndex >= 0 && cardIndex < currentHand.Count)
         {
-            cardOrientations[cardIndex] = !cardOrientations[cardIndex];
-            OnHandChanged?.Invoke(currentHand, cardOrientations);
+            currentHand[cardIndex].FlipCard();
+            OnHandChanged?.Invoke(currentHand);
         }
     }
     
     
     
-    public DivinationResult PerformDivination(Customer customer)
+    public DivinationResult PerformDivination(Customer customer, bool updateState)
     {
         var result = new DivinationResult();
         result.initialAttributes = new Dictionary<string, int>
@@ -82,24 +74,23 @@ public class CardSystem : Singleton<CardSystem>
         };
         
         // Apply card effects in order
-        List<CardEffect> allEffects = new List<CardEffect>();
+        List<string> allEffects = new List<string>();
+        
+        allEffects.AddRange(currentHand.SelectMany(card => card.GetEffects()));
         
         for (int i = 0; i < currentHand.Count; i++)
         {
-            string cardId = currentHand[i];
-            bool isUpright = cardOrientations[i];
+            Card card = currentHand[i];
+            var effects = card.GetEffects();
             
-            var cardInfo = CSVLoader.Instance.cardInfoMap[cardId];
-            var effects = isUpright ? cardInfo.upEffect : cardInfo.downEffect;
-            
-            
-            ApplyAttributeEffects(effects, tempCustomer);
+            ApplyAttributeEffects(effects, tempCustomer,allEffects);
         }
         
         // // Apply special effects first (Moon card effects)
         // ApplySpecialEffects(allEffects, tempCustomer);
         
         // Apply normal attribute changes
+
         
         result.finalAttributes = new Dictionary<string, int>
         {
@@ -108,7 +99,6 @@ public class CardSystem : Singleton<CardSystem>
             {"sanity", tempCustomer.sanity},
             {"power", tempCustomer.power}
         };
-        
         // Check if customer is satisfied
         string targetAttribute = customer.info.target;
         int initialValue = result.initialAttributes[targetAttribute];
@@ -116,11 +106,20 @@ public class CardSystem : Singleton<CardSystem>
         
         result.isSatisfied = finalValue > initialValue;
         
+        if (updateState)
+        {
+            // Apply the changes to the actual customer (persistent state)
+            customer.wealth = tempCustomer.wealth;
+            customer.relationship = tempCustomer.relationship;
+            customer.sanity = tempCustomer.sanity;
+            customer.power = tempCustomer.power;
+        }
+        
         if (result.isSatisfied)
         {
             // Calculate money reward based on improvement
             int improvement = finalValue - initialValue;
-            result.moneyEarned = Mathf.Max(1, improvement / 2);
+            result.moneyEarned = Mathf.Max(1, improvement);
         }
         
         return result;
@@ -177,11 +176,11 @@ public class CardSystem : Singleton<CardSystem>
         }
     }
     
-    private void ApplyAttributeEffects(List<string> allEffects, Customer customer)
+    private void ApplyAttributeEffects(List<string> effects, Customer customer,List<string> allEffects)
     {
-        for (int i = 0; i < allEffects.Count; i++)
+        for (int i = 0; i < effects.Count; i++)
         {
-            switch (allEffects[i])
+            switch (effects[i])
             {
                 case "allNegHalf":
                     break;
@@ -192,9 +191,18 @@ public class CardSystem : Singleton<CardSystem>
                 case "sanity":
                 case "power":
 
-                    var key = allEffects[i];
+                    var key = effects[i];
                     i++;
-                    var value = int.Parse(allEffects[i]);
+                    var value = int.Parse(effects[i]);
+
+                    if (value > 0 && allEffects.Contains("allPosHalf"))
+                    {
+                        value = Mathf.RoundToInt(value / 2f);
+                    }else if (value < 0 && allEffects.Contains("allNegHalf"))
+                    {
+                        value = Mathf.RoundToInt(value / 2f);
+                    }
+                    
                     customer.ModifyAttribute(key, value);
                     break;
             }

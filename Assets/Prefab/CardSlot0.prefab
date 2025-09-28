@@ -99,7 +99,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 0.6, g: 0.4, b: 0.2, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -146,6 +146,8 @@ MonoBehaviour:
   isUpright: 1
   cardIndex: 0
   oppositeTrans: {fileID: 7301924321140807890}
+  uprightColor: {r: 0.81761, g: 0.5523497, b: 0.29053432, a: 1}
+  reversedColor: {r: 0.44025147, g: 0.29419318, b: 0.1481349, a: 1}
 --- !u!1 &810008474977168224
 GameObject:
   m_ObjectHideFlags: 0

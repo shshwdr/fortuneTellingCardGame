@@ -23,6 +23,9 @@ public class CardUISimple : MonoBehaviour
     private CardInfo cardInfo;
     public Transform oppositeTrans;
     public System.Action<int> OnCardClicked;
+
+    public Color uprightColor;
+    public Color reversedColor;
     
     
     void Start()
@@ -45,6 +48,15 @@ public class CardUISimple : MonoBehaviour
         }
     }
     
+    public void SetCardData(Card card, int index)
+    {
+        cardId = card.info.identifier;
+        cardIndex = index;
+        cardInfo = card.info;
+        isUpright = card.isUpright;
+        UpdateCardDisplay();
+    }
+    
     private void UpdateCardDisplay()
     {
         if (cardInfo == null) return;
@@ -55,7 +67,9 @@ public class CardUISimple : MonoBehaviour
         if (cardDescriptionText != null)
             cardDescriptionText.text = cardInfo.description;
             
-        UpdateEffectText();
+        UpdateUpright();
+        //UpdateEffectText();
+
     }
     
     private void UpdateEffectText()
@@ -104,6 +118,12 @@ public class CardUISimple : MonoBehaviour
     public void FlipCard()
     {
         isUpright = !isUpright;
+        UpdateUpright();
+        
+    }
+
+    public void UpdateUpright()
+    {
         
         // Simple visual update without animation
         if (cardBack != null && cardFront != null)
@@ -117,23 +137,16 @@ public class CardUISimple : MonoBehaviour
             oppositeTrans.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
         }
         
+        cardButton.image.color = isUpright ? uprightColor : reversedColor;
+        
         UpdateEffectText();
     }
+    
     
     public void SetUpright(bool upright)
     {
         isUpright = upright;
         
-        if (cardBack != null && cardFront != null)
-        {
-            cardFront.SetActive(isUpright);
-            cardBack.SetActive(!isUpright);
-        }
-        else
-        {
-            oppositeTrans.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
-        }
-        
-        UpdateEffectText();
+        UpdateUpright();
     }
 }

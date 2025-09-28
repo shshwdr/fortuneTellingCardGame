@@ -1,6 +1,6 @@
-﻿identifier,name,description,upEffect,downEffect
-sun,sun,sun,wealth|3|sanity|1,wealth|1|sanity|-4
-lover,lover,lover,rela|2,rela|-2
-moon,moon,moon,allNegHalf,allPosHalf
-fool,fool,fool,sanity|3,sanity|-2
-magician,magician,magician,wealth|1|rela|1,wealth|-2
+﻿identifier,name,description,upEffect,downEffect,isStart
+sun,sun,sun,wealth|3|sanity|1,wealth|1|sanity|-4,1
+lover,lover,lover,rela|2,rela|-2,1
+moon,moon,moon,allNegHalf,allPosHalf,1
+fool,fool,fool,sanity|3,sanity|-2,1
+magician,magician,magician,wealth|1|rela|1,wealth|-2,1

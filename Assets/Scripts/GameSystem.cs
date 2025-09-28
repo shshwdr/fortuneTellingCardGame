@@ -15,7 +15,19 @@ public class GameSystem : Singleton<GameSystem>
     {
         gameState = new GameState();
         InitializeAvailableCards();
+        InitializePersistentCustomers();
         StartNewDay();
+        
+        OnMoneyChanged?.Invoke(gameState.money);
+    }
+    
+    private void InitializePersistentCustomers()
+    {
+        gameState.persistentCustomers.Clear();
+        foreach (var customerInfo in CSVLoader.Instance.customerInfoMap.Values)
+        {
+            gameState.persistentCustomers[customerInfo.identifier] = new Customer(customerInfo);
+        }
     }
     
     private void InitializeAvailableCards()
@@ -23,7 +35,10 @@ public class GameSystem : Singleton<GameSystem>
         gameState.availableCards.Clear();
         foreach (var cardInfo in CSVLoader.Instance.cardInfoMap.Values)
         {
-            gameState.availableCards.Add(cardInfo.identifier);
+            if (cardInfo.isStart)
+            {
+                gameState.availableCards.Add(new Card(cardInfo));
+            }
         }
     }
     
@@ -59,16 +74,15 @@ public class GameSystem : Singleton<GameSystem>
                 if (customerKey == "r")
                 {
                     // Random customer
-                    var randomCustomer = GetRandomCustomer();
+                    var randomCustomer = GetRandomPersistentCustomer();
                     if (randomCustomer != null)
                     {
-                        gameState.todayCustomers.Add(new Customer(randomCustomer));
+                        gameState.todayCustomers.Add(randomCustomer);
                     }
                 }
-                else if (CSVLoader.Instance.customerInfoMap.ContainsKey(customerKey))
+                else if (gameState.persistentCustomers.ContainsKey(customerKey))
                 {
-                    var customerInfo = CSVLoader.Instance.customerInfoMap[customerKey];
-                    gameState.todayCustomers.Add(new Customer(customerInfo));
+                    gameState.todayCustomers.Add(gameState.persistentCustomers[customerKey]);
                 }
             }
         }
@@ -89,12 +103,12 @@ public class GameSystem : Singleton<GameSystem>
         gameState.todayCustomers = uniqueCustomers;
     }
     
-    private CustomerInfo GetRandomCustomer()
+    private Customer GetRandomPersistentCustomer()
     {
-        var allCustomers = CSVLoader.Instance.customerInfoMap.Values.ToList();
-        if (allCustomers.Count > 0)
+        var availableCustomers = gameState.persistentCustomers.Values.ToList();
+        if (availableCustomers.Count > 0)
         {
-            return allCustomers[Random.Range(0, allCustomers.Count)];
+            return availableCustomers[Random.Range(0, availableCustomers.Count)];
         }
         return null;
     }

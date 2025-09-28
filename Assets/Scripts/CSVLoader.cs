@@ -10,6 +10,7 @@ public class CardInfo
     public string description;
     public List<string> upEffect;
     public List<string> downEffect;
+    public bool isStart;
 }
 
 public class CSVLoader : Singleton<CSVLoader>
