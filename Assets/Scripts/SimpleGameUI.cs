@@ -37,6 +37,8 @@ public class SimpleGameUI : MonoBehaviour
     public TMP_Text moneyEarnedText;
     
     private Customer currentCustomer;
+
+    public Image customerImage;
     
     void Awake()
     {
@@ -118,6 +120,8 @@ public class SimpleGameUI : MonoBehaviour
     private void UpdateCustomerDisplay(Customer customer)
     {
         currentCustomer = customer;
+
+        customerImage.sprite = Resources.Load<Sprite>("Characters/" + currentCustomer.info.identifier);
         
         if (customer == null)
         {

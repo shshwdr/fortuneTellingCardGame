@@ -15,12 +15,18 @@ public class CardSystem : Singleton<CardSystem>
     }
     public void DrawCardsForCustomer()
     {
+        GameSystem.Instance.gameState.usedCards.AddRange(currentHand);
         currentHand.Clear();
         cardOrientations.Clear();
         
         // Draw 4 cards from available deck
-        for (int i = 0; i < 4 && GameSystem.Instance.gameState.availableCards.Count > 0; i++)
+        for (int i = 0; i < 4; i++)
         {
+            if (GameSystem.Instance.gameState.availableCards.Count == 0)
+            {
+                Debug.Log("Deck is empty. Refilling...");
+                RefillCardDeck();
+            }
             int randomIndex = Random.Range(0, GameSystem.Instance.gameState.availableCards.Count);
             string drawnCard = GameSystem.Instance.gameState.availableCards[randomIndex];
             
@@ -30,28 +36,18 @@ public class CardSystem : Singleton<CardSystem>
             GameSystem.Instance.gameState.availableCards.RemoveAt(randomIndex);
         }
         
-        // If deck is empty, refill it
-        if (GameSystem.Instance.gameState.availableCards.Count == 0)
-        {
-            RefillCardDeck();
-        }
+        // // If deck is empty, refill it
+        // if (GameSystem.Instance.gameState.availableCards.Count == 0)
+        // {
+        //     RefillCardDeck();
+        // }
         
         OnHandChanged?.Invoke(currentHand, cardOrientations);
     }
     
     private void RefillCardDeck()
     {
-        GameSystem.Instance.gameState.availableCards.Clear();
-        foreach (var cardInfo in CSVLoader.Instance.cardInfoMap.Values)
-        {
-            GameSystem.Instance.gameState.availableCards.Add(cardInfo.identifier);
-        }
-        
-        // Remove cards currently in hand
-        foreach (string cardInHand in currentHand)
-        {
-            GameSystem.Instance.gameState.availableCards.Remove(cardInHand);
-        }
+        GameSystem.Instance.gameState.availableCards.AddRange(GameSystem.Instance.gameState.usedCards);
     }
     
     public void FlipCard(int cardIndex)
