@@ -149,3 +149,9 @@ MonoBehaviour:
     - name: Dialogue/start
       pathPrefix: Scripts
       guid: 2e02e88bd6c8808488b3fec9567f9129
+    - name: Dialogue/lordGoodResult
+      pathPrefix: Scripts
+      guid: f15970e16577ae44581087bc9eb44878
+    - name: Dialogue/lordBadResult
+      pathPrefix: Scripts
+      guid: a3dd5ab1d4694df44a38df0102138d7d

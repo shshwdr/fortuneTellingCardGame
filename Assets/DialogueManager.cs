@@ -10,7 +10,7 @@ public class DialogueManager : Singleton<DialogueManager>
     private ICharacterManager characterManager;
     private ITextPrinterManager printerManager;
     private Action dialogueStopAction;
-    public void Init()
+    public void Start()
     {
         UniTask.Run(async () =>
         {
@@ -31,6 +31,18 @@ public class DialogueManager : Singleton<DialogueManager>
             }
         });
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            StartDialogue("start", () =>
+            {
+                Debug.Log("对话结束");
+            });
+        }
+    }
+
     private void OnDialoguePlay(Script script)
     {
         // Debug.Log($"对话开始: {script?.Path}");
@@ -62,24 +74,29 @@ public class DialogueManager : Singleton<DialogueManager>
             
             FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>().blocksRaycasts = false;
         }
+        if (dialogueStopAction != null)
+        {
+            dialogueStopAction();
+        }
     }
     public void StartDialogue(string name, Action dialogueStopAction = null)
     {
+        if( FindObjectOfType<RuntimeBehaviour>() && FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>())
         FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>().blocksRaycasts = true;
-        UniTask.Run(async () =>
-        {
-            try
-            {
-                await UniTask.WaitUntil(() => Engine.Initialized);
-                this.dialogueStopAction = dialogueStopAction;
-                await scriptPlayer.LoadAndPlay($"Dialogue/{name}");
-                Debug.Log("对话开始成功");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"启动对话失败: {e.Message}");
-            }
-        });
+        this.dialogueStopAction = dialogueStopAction;
+        scriptPlayer.LoadAndPlay($"Dialogue/{name}");
+        // UniTask.Run(async () =>
+        // {
+        //     try
+        //     {
+        //         await scriptPlayer.LoadAndPlay($"Dialogue/{name}");
+        //         Debug.Log("对话开始成功");
+        //     }
+        //     catch (System.Exception e)
+        //     {
+        //         Debug.LogError($"启动对话失败: {e.Message}");
+        //     }
+        // });
         //await scriptPlayer.LoadAndPlay("脚本路径");
     }
 }

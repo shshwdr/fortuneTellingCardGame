@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     {
         CSVLoader.Instance.Init();
         
-        DialogueManager.Instance.Init();
+        //DialogueManager.Instance.Init();
     }
 
     private void Start()

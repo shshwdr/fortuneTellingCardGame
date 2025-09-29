@@ -245,14 +245,23 @@ public class SimpleGameUI : MonoBehaviour
         {
             ToastManager.Instance.ShowToast($"Customer is happy! You earned {result.moneyEarned} gold");
             GameSystem.Instance.AddMoney(result.moneyEarned);
+            DialogueManager.Instance.StartDialogue("lordGoodResult", () =>
+            {
+                GameSystem.Instance.NextCustomer();
+            });
         }
         else
         {
             
             ToastManager.Instance.ShowToast($"The customer is not satisfied...");
+            DialogueManager.Instance.StartDialogue("lordBadResult", () =>
+            {
+                GameSystem.Instance.NextCustomer();
+            });
         }
         
-        GameSystem.Instance.NextCustomer();
+        
+        
     }
     
     private void ShowResult(DivinationResult result)

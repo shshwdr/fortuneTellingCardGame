@@ -1,9 +1,4 @@
 @printer Bubble
-test
-@if getWealth()>50
-    good result
-@else
-    bad result
 ...Who are you? I have never seen you before. This is my village — no strangers should be here.
 This cabin... I don’t recall ordering anyone to build it.
 Was it the wind that brought me here? Or a dream?

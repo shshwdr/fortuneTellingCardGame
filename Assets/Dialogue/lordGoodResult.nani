@@ -1,0 +1,6 @@
+@printer Bubble
+@if getWealth()>50
+    Perhaps your words are the real laws written by heaven.
+@else
+    Perhaps your words are the real laws written by heaven.
+@stop

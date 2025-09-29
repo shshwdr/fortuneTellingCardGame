@@ -1,0 +1,6 @@
+@printer Bubble
+@if getWealth()>50
+    If your readings are all lies, how do I know you’re not a spirit in disguise?
+@else
+    If your readings are all lies, how do I know you’re not a spirit in disguise?
+@stop
