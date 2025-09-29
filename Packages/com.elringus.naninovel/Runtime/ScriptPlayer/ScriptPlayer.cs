@@ -32,6 +32,7 @@ namespace Naninovel
 
         public event Action<Script> OnPlay;
         public event Action<Script> OnStop;
+        public event Action<Script> OnFinalStop;
         public event Action<Command> OnCommandExecutionStart;
         public event Action<Command> OnCommandExecutionFinish;
         public event Action<bool> OnSkip;
@@ -307,6 +308,10 @@ namespace Naninovel
             OnStop?.Invoke(PlayedScript);
         }
 
+        public virtual void FinalStop()
+        {
+            OnFinalStop?.Invoke(PlayedScript);
+        }
         public virtual async UniTask<bool> Rewind (int lineIndex)
         {
             if (PlayedCommand is null) throw new Error("Script player failed to rewind: played command is not valid.");

@@ -16,6 +16,7 @@ We'll get here after player will make a choice."
         public override UniTask Execute (AsyncToken token = default)
         {
             Engine.GetServiceOrErr<IScriptPlayer>().Stop();
+            Engine.GetServiceOrErr<IScriptPlayer>().FinalStop();
             return UniTask.CompletedTask;
         }
     }

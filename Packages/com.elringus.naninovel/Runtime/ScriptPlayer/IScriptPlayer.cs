@@ -18,6 +18,8 @@ namespace Naninovel
         /// Event invoked when player stops playing a script.
         /// </summary>
         event Action<Script> OnStop;
+        event Action<Script> OnFinalStop;
+        
         /// <summary>
         /// Event invoked when player starts executing a <see cref="Command"/>.
         /// </summary>
@@ -116,6 +118,8 @@ namespace Naninovel
         /// Halts the playback of the currently played script.
         /// </summary>
         void Stop ();
+
+        void FinalStop();
         /// <summary>
         /// Depending on whether the specified <paramref name="lineIndex"/> being before or after currently played command' line index,
         /// performs a fast-forward playback or state rollback of the currently loaded script.

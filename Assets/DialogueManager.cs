@@ -21,7 +21,7 @@ public class DialogueManager : Singleton<DialogueManager>
                 scriptPlayer = Engine.GetService<IScriptPlayer>();
                 characterManager = Engine.GetService<ICharacterManager>();
                 printerManager = Engine.GetService<ITextPrinterManager>();
-                scriptPlayer.OnStop += OnDialogueStopped;
+                scriptPlayer.OnFinalStop += OnDialogueStopped;
                 scriptPlayer.OnPlay += OnDialoguePlay;
                 StartDialogue("start");
                 
@@ -36,11 +36,11 @@ public class DialogueManager : Singleton<DialogueManager>
         // Debug.Log($"对话开始: {script?.Path}");
         // // 执行对话开始前的操作
         // ShowDialogueUI();
-        if (FindObjectOfType<RuntimeBehaviour>())
-        {
-            
-            FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>().blocksRaycasts = true;
-        }
+        // if (FindObjectOfType<RuntimeBehaviour>())
+        // {
+        //     
+        //     FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>().blocksRaycasts = true;
+        // }
     }
     private void OnDialogueStopped(Script script)
     {
