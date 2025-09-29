@@ -55,6 +55,8 @@ public class GameSystem : Singleton<GameSystem>
         
         OnDayChanged?.Invoke(gameState.currentDay);
         
+        CardSystem.Instance.DrawCardsForCustomer();
+        
         if (gameState.todayCustomers.Count > 0)
         {
             OnCustomerChanged?.Invoke(gameState.todayCustomers[0]);
@@ -128,6 +130,7 @@ public class GameSystem : Singleton<GameSystem>
         
         if (gameState.currentCustomerIndex < gameState.todayCustomers.Count)
         {
+            CardSystem.Instance.DrawCardsForCustomer();
             OnCustomerChanged?.Invoke(gameState.todayCustomers[gameState.currentCustomerIndex]);
         }
         else

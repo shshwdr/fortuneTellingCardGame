@@ -35,10 +35,14 @@ public class SimpleGameUI : MonoBehaviour
     public GameObject resultPanel;
     public TMP_Text resultText;
     public TMP_Text moneyEarnedText;
+
+    public GameObject desk;
     
     private Customer currentCustomer;
 
     public Image customerImage;
+    
+    
     
     void Awake()
     {
@@ -239,11 +243,16 @@ public class SimpleGameUI : MonoBehaviour
         
         if (result.isSatisfied)
         {
+            ToastManager.Instance.ShowToast($"Customer is happy! You earned {result.moneyEarned} gold");
             GameSystem.Instance.AddMoney(result.moneyEarned);
+        }
+        else
+        {
+            
+            ToastManager.Instance.ShowToast($"The customer is not satisfied...");
         }
         
         GameSystem.Instance.NextCustomer();
-        CardSystem.Instance.DrawCardsForCustomer();
     }
     
     private void ShowResult(DivinationResult result)
@@ -282,18 +291,15 @@ public class SimpleGameUI : MonoBehaviour
             resultPanel.SetActive(false);
             
         GameSystem.Instance.NextCustomer();
-        CardSystem.Instance.DrawCardsForCustomer();
     }
     
     private void SkipCustomer()
     {
         GameSystem.Instance.NextCustomer();
-        CardSystem.Instance.DrawCardsForCustomer();
     }
     
     private void NextDay()
     {
         GameSystem.Instance.StartNewDay();
-        CardSystem.Instance.DrawCardsForCustomer();
     }
 }

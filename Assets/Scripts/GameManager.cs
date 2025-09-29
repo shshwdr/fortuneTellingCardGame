@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         GameSystem.Instance.StartNewGame();
-        CardSystem.Instance.DrawCardsForCustomer();
         
         
         

@@ -35,6 +35,7 @@ public class CardSystem : Singleton<CardSystem>
         }
         
         OnHandChanged?.Invoke(currentHand);
+        
     }
     
     private void RefillCardDeck()
