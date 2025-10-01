@@ -9,6 +9,21 @@ public static class CustomFunctions
         var character = GameSystem.Instance.GetCurrentCustomer();
         return character.wealth;
     }
+
+    [ExpressionFunction("talked")]
+    public static bool HasTalked()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        return character.talkedTime > 0;
+    }
+
+    [ExpressionFunction("talkedTime")]
+    public static int TalkedTime()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        return character.talkedTime;
+    }
+    
     // [ExpressionFunction("getRelationship")]
     // [Doc("获取指定角色的好感度数值", examples: "getRelationship(\"雅琼\")")]
     // public static float GetRelationship(string characterName)

@@ -28,7 +28,7 @@ public class CardSystem : Singleton<CardSystem>
             }
             int randomIndex = Random.Range(0, GameSystem.Instance.gameState.availableCards.Count);
             Card drawnCard = GameSystem.Instance.gameState.availableCards[randomIndex].Clone();
-            drawnCard.isUpright = true;
+            drawnCard.isUpright = false;
             currentHand.Add(drawnCard);
             
             GameSystem.Instance.gameState.availableCards.RemoveAt(randomIndex);

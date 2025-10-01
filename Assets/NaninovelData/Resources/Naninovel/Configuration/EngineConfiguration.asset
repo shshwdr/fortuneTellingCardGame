@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OverrideObjectsLayer: 0
   ObjectsLayer: 0
-  AsyncExceptionLogType: 0
+  AsyncExceptionLogType: 3
   AsyncInstantiation: 1
   InitializeOnApplicationLoad: 1
   SceneIndependent: 1

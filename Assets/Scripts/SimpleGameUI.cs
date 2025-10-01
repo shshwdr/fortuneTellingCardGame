@@ -94,6 +94,7 @@ public class SimpleGameUI : MonoBehaviour
     {
         if (GameSystem.Instance != null)
         {
+            GameSystem.Instance.OnCustomerShow += ShowCustomer;
             GameSystem.Instance.OnCustomerChanged += UpdateCustomerDisplay;
             GameSystem.Instance.OnMoneyChanged += UpdateMoneyDisplay;
             GameSystem.Instance.OnDayChanged += UpdateDayDisplay;
@@ -110,6 +111,7 @@ public class SimpleGameUI : MonoBehaviour
     {
         if (GameSystem.Instance != null)
         {
+            GameSystem.Instance.OnCustomerShow -= ShowCustomer;
             GameSystem.Instance.OnCustomerChanged -= UpdateCustomerDisplay;
             GameSystem.Instance.OnMoneyChanged -= UpdateMoneyDisplay;
             GameSystem.Instance.OnDayChanged -= UpdateDayDisplay;
@@ -121,11 +123,20 @@ public class SimpleGameUI : MonoBehaviour
             CardSystem.Instance.OnHandChanged -= UpdateCardDisplay;
         }
     }
+
+    private void ShowCustomer(Customer customer)
+    {
+        currentCustomer = customer;
+        customerImage.enabled = true;
+        customerImage.sprite = Resources.Load<Sprite>("Characters/" + currentCustomer.info.identifier);
+        customerImage.GetComponent<Animator>().SetTrigger("walkin");
+        SFXManager.Instance.PlayMessage();
+    }
     
     private void UpdateCustomerDisplay(Customer customer)
     {
         currentCustomer = customer;
-
+        customerImage.enabled = true;
         customerImage.sprite = Resources.Load<Sprite>("Characters/" + currentCustomer.info.identifier);
         
         if (customer == null)
@@ -241,11 +252,14 @@ public class SimpleGameUI : MonoBehaviour
         
         ShowResult(result);
         
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        character.talkedTime++;
         if (result.isSatisfied)
         {
             ToastManager.Instance.ShowToast($"Customer is happy! You earned {result.moneyEarned} gold");
             GameSystem.Instance.AddMoney(result.moneyEarned);
-            DialogueManager.Instance.StartDialogue("lordGoodResult", () =>
+            
+            DialogueManager.Instance.StartDialogue(character.identifier+"Request","goodResult", () =>
             {
                 GameSystem.Instance.NextCustomer();
             });
@@ -254,7 +268,7 @@ public class SimpleGameUI : MonoBehaviour
         {
             
             ToastManager.Instance.ShowToast($"The customer is not satisfied...");
-            DialogueManager.Instance.StartDialogue("lordBadResult", () =>
+            DialogueManager.Instance.StartDialogue(character.identifier+"Request","badResult", () =>
             {
                 GameSystem.Instance.NextCustomer();
             });

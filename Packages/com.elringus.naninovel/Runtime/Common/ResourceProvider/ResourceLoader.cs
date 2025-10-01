@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using JetBrains.Annotations;
+using Debug = System.Diagnostics.Debug;
 
 namespace Naninovel
 {
@@ -160,6 +161,7 @@ namespace Naninovel
             foreach (var source in ProvisionSources)
             {
                 var fullPath = source.BuildFullPath(path);
+                LogDebug($"Checking '{fullPath}' via '{source.Provider}'.");
                 if (!await source.Provider.ResourceExists<TResource>(fullPath)) continue;
 
                 var resource = await source.Provider.LoadResource<TResource>(fullPath);

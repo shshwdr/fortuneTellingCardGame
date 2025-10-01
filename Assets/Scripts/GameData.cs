@@ -49,7 +49,8 @@ public class Customer
     public int relationship = 50;
     public int sanity = 50;
     public int power = 50;
-    
+    public int talkedTime = 0;
+    public string identifier => info.identifier;
     public Customer(CustomerInfo customerInfo)
     {
         info = customerInfo;

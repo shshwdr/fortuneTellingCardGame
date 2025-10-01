@@ -1,0 +1,38 @@
+@printer Bubble pos:50,70
+@if talked()==false
+    @gosub .start
+
+@else
+    It's you again.
+@random
+    girl ask
+@FinalStop stay
+@stop
+
+
+
+# start
+girl start
+@choice "The future is shaped by your hand. I merely offer another angle."
+    @goto .ContineuChoice
+@choice "Do you believe in fate? If you do, I shall read it for you."
+    @goto .ContineuChoice
+@stop
+# ContineuChoice
+girl start2
+@return
+
+
+
+# goodResult
+@random
+    good
+@FinalStop
+@stop
+
+
+# badResult
+@random
+    bad
+@FinalStop
+@stop

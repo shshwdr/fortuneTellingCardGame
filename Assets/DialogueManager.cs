@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Naninovel;
+using Naninovel.Commands;
 using UnityEngine;
 
 public class DialogueManager : Singleton<DialogueManager>
@@ -10,26 +11,57 @@ public class DialogueManager : Singleton<DialogueManager>
     private ICharacterManager characterManager;
     private ITextPrinterManager printerManager;
     private Action dialogueStopAction;
-    public void Start()
+    public async void Start()
     {
-        UniTask.Run(async () =>
+        //Debug.LogError("DialogueManager Start");
+        
+        //Debug.LogError("DialogueManager Async");
+        try
         {
-            try
+            // WebGL安全的等待Engine初始化
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
+                // WebGL平台使用基于帧的等待，避免死锁
+                int maxWaitFrames = 300; // 最多等待5秒（假设60FPS）
+                int waitedFrames = 0;
+                
+                while (!Engine.Initialized && waitedFrames < maxWaitFrames)
+                {
+                    //Debug.LogError("DialogueManager waiting");
+                    await UniTask.Yield(); // 等待一帧
+                    waitedFrames++;
+                }
+                
+                //Debug.LogError("DialogueManager finished");
+                if (!Engine.Initialized)
+                {
+                    //Debug.LogError("Engine初始化超时！");
+                    return;
+                }
+                //Debug.LogError("DialogueManager really finished");
+            }
+            else
+            {
+                // 非WebGL平台使用标准等待
                 await UniTask.WaitUntil(() => Engine.Initialized);
-                
-                scriptPlayer = Engine.GetService<IScriptPlayer>();
-                characterManager = Engine.GetService<ICharacterManager>();
-                printerManager = Engine.GetService<ITextPrinterManager>();
-                scriptPlayer.OnFinalStop += OnDialogueStopped;
-                scriptPlayer.OnPlay += OnDialoguePlay;
-                StartDialogue("start");
-                
             }
-            catch (System.Exception e)
+            
+            scriptPlayer = Engine.GetService<IScriptPlayer>();
+            characterManager = Engine.GetService<ICharacterManager>();
+            printerManager = Engine.GetService<ITextPrinterManager>();
+            //scriptPlayer.OnFinalStop += OnDialogueStopped;
+            //scriptPlayer.OnPlay += OnDialoguePlay;
+            FinalStopEventManager.OnFinalStop += OnDialogueStopped;
+            StartDialogue("start", () =>
             {
-            }
-        });
+                GameSystem.Instance.StartNewGame();
+            });
+            
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"DialogueManager 初始化异常: {e.Message}");
+        }
     }
 
     private void Update()
@@ -54,18 +86,32 @@ public class DialogueManager : Singleton<DialogueManager>
         //     FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>().blocksRaycasts = true;
         // }
     }
-    private void OnDialogueStopped(Script script)
+    private void OnDialogueStopped(Script script,string message)
     {
-        HideDialogueUI();
+        HideDialogueUI(message);
     }
-    private void HideDialogueUI()
+    private void HideDialogueUI(string message)
     {
-        // 隐藏所有文本打印器
-        foreach (var printer in printerManager.Actors)
+        if (message.Trim() == "stay")
         {
-            if (printer.Visible)
+            // 隐藏所有文本打印器
+            foreach (var printer in printerManager.Actors)
             {
-                printer.ChangeVisibility(false, new Tween(0.5f)).Forget();
+                if (printer.Visible)
+                {
+                    printer.ChangeTintColor(Color.grey, new Tween(0.5f));
+                }
+            }
+        }
+        else
+        {
+            // 隐藏所有文本打印器
+            foreach (var printer in printerManager.Actors)
+            {
+                if (printer.Visible)
+                {
+                    printer.ChangeVisibility(false, new Tween(0.5f)).Forget();
+                }
             }
         }
 
@@ -79,12 +125,32 @@ public class DialogueManager : Singleton<DialogueManager>
             dialogueStopAction();
         }
     }
+
+    void show()
+    {
+        foreach (var printer in printerManager.Actors)
+        {
+            if (printer.Visible)
+            {
+                printer.ChangeTintColor(Color.white, new Tween(0.5f));
+            }
+        }
+        if( FindObjectOfType<RuntimeBehaviour>() && FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>())
+            FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>().blocksRaycasts = true;
+    }
+    public void StartDialogue(string name, string label, Action dialogueStopAction = null)
+    {
+        show();
+        this.dialogueStopAction = dialogueStopAction;
+        scriptPlayer.LoadAndPlayAtLabel($"{name}",label);
+    }
+    
     public void StartDialogue(string name, Action dialogueStopAction = null)
     {
-        if( FindObjectOfType<RuntimeBehaviour>() && FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>())
-        FindObjectOfType<RuntimeBehaviour>().GetComponentInChildren<CanvasGroup>().blocksRaycasts = true;
+        show();
         this.dialogueStopAction = dialogueStopAction;
-        scriptPlayer.LoadAndPlay($"Dialogue/{name}");
+        //Debug.LogError($"启动对话: {name}");
+        scriptPlayer.LoadAndPlay($"{name}");
         // UniTask.Run(async () =>
         // {
         //     try

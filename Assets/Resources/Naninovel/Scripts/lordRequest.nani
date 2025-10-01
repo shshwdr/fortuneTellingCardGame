@@ -1,0 +1,52 @@
+@printer Bubble pos:50,70
+
+@if talked()==false
+
+    @gosub .start
+@else
+    @random
+        We meet again, merchant of fate. The villagers have been rather calm lately.
+        Your advice last time proved useful. Yet another matter troubles me today — I would hear your thoughts.
+        Lately I can hardly sleep — the wind keeps whispering questions to me.
+@random
+    The people grow restless, and my laws no longer bring peace. Tell me — will they truly accept my rule?
+    I plan to expand the canals and granaries, but I fear the taxes may crush them. What does fate advise?
+    I wish to open a school and teach my people to read, yet they fear that knowledge invites disaster. Is this truly wise?
+@FinalStop stay
+@stop
+
+
+# start
+...Who are you? I have never seen you before. This is my village — no strangers should be here.
+This cabin... I don’t recall ordering anyone to build it.
+Was it the wind that brought me here? Or a dream?
+No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger — do you see the future of my village?
+@choice "The future is shaped by your hand. I merely offer another angle."
+    @goto .ContinueChoice
+@choice "Do you believe in fate? If you do, I shall read it for you."
+    @goto .ContinueChoice
+@stop
+# ContinueChoice
+...What strange words. Very well — if you claim to know fate, then show me. Tell me what lies ahead for this village.
+@return
+
+
+
+# goodResult
+@printer Bubble
+@random
+    Your words carry depth... Perhaps I have overlooked the gentler side of rule.
+    Your insight is worth reflection. I shall have it recorded.
+    I thought you a wanderer — yet your tongue holds more truth than the law itself.
+@FinalStop
+@stop
+
+
+# badResult
+@printer Bubble
+@random
+    Nonsense — should I really listen to you?
+    You can’t even see my struggle, yet you speak of destiny?
+    If you are the voice of fate, then fate must be nothing but human chatter.
+@FinalStop
+@stop

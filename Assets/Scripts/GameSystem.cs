@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,12 +8,14 @@ public class GameSystem : Singleton<GameSystem>
     public GameState gameState = new GameState();
     
     public System.Action<Customer> OnCustomerChanged;
+    public System.Action<Customer> OnCustomerShow;
     public System.Action<int> OnMoneyChanged;
     public System.Action<int> OnDayChanged;
     public System.Action OnGameStateChanged;
     
     public void StartNewGame()
     {
+        //Debug.LogError("StartNewGame");
         gameState = new GameState();
         InitializeAvailableCards();
         InitializePersistentCustomers();
@@ -44,7 +47,7 @@ public class GameSystem : Singleton<GameSystem>
     
     public void StartNewDay()
     {
-        gameState.currentCustomerIndex = 0;
+        gameState.currentCustomerIndex = -1;
         gameState.todayCustomers.Clear();
         
         // Reset card deck for new day
@@ -59,7 +62,7 @@ public class GameSystem : Singleton<GameSystem>
         
         if (gameState.todayCustomers.Count > 0)
         {
-            OnCustomerChanged?.Invoke(gameState.todayCustomers[0]);
+            NextCustomer();
         }
         
         OnGameStateChanged?.Invoke();
@@ -123,6 +126,15 @@ public class GameSystem : Singleton<GameSystem>
         }
         return null;
     }
+
+    IEnumerator customerShow()
+    {
+        OnCustomerShow?.Invoke(GetCurrentCustomer());
+        yield return new WaitForSeconds(3);
+        
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        DialogueManager.Instance.StartDialogue(character.info.identifier+ "Request");
+    }
     
     public void NextCustomer()
     {
@@ -131,7 +143,9 @@ public class GameSystem : Singleton<GameSystem>
         if (gameState.currentCustomerIndex < gameState.todayCustomers.Count)
         {
             CardSystem.Instance.DrawCardsForCustomer();
+            
             OnCustomerChanged?.Invoke(gameState.todayCustomers[gameState.currentCustomerIndex]);
+            StartCoroutine(customerShow());
         }
         else
         {

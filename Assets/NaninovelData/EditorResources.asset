@@ -146,12 +146,12 @@ MonoBehaviour:
       guid: 735d6aa767879aa469134858c5b2f0a7
   - Id: Scripts
     Resources:
-    - name: Dialogue/start
+    - name: Resources/Naninovel/Scripts/lordRequest
       pathPrefix: Scripts
-      guid: 2e02e88bd6c8808488b3fec9567f9129
-    - name: Dialogue/lordGoodResult
+      guid: 187b3302a7e10fc498c74c38d1a96707
+    - name: Resources/Naninovel/Scripts/girlRequest
       pathPrefix: Scripts
-      guid: f15970e16577ae44581087bc9eb44878
-    - name: Dialogue/lordBadResult
+      guid: 5b5be8780fbfee7418174ce590e8048e
+    - name: Resources/Naninovel/Scripts/start
       pathPrefix: Scripts
-      guid: a3dd5ab1d4694df44a38df0102138d7d
+      guid: 941afb4c66b1ed14e86aacd0a0e27622

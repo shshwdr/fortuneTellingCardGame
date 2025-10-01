@@ -17,7 +17,7 @@ public class CardUISimple : MonoBehaviour
     
     [Header("Card Data")]
     public string cardId;
-    public bool isUpright = true;
+    public bool isUpright = false;
     public int cardIndex;
     
     private CardInfo cardInfo;
