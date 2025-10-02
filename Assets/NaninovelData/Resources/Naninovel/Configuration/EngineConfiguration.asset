@@ -23,5 +23,5 @@ MonoBehaviour:
   EnableBridging: 1
   AutoGenerateMetadata: 1
   NaninovelProjectRoot: 
-  EnableDevelopmentConsole: 1
+  EnableDevelopmentConsole: 0
   DebugOnlyConsole: 0

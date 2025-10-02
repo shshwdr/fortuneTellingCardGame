@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Naninovel;
+using Naninovel.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,8 +43,8 @@ public class SimpleGameUI : MonoBehaviour
     private Customer currentCustomer;
 
     public Image customerImage;
-    
-    
+
+    public Button logButton;
     
     void Awake()
     {
@@ -87,7 +89,11 @@ public class SimpleGameUI : MonoBehaviour
         
         if (resultPanel != null)
             resultPanel.SetActive(false);
-
+        logButton.onClick.AddListener(() =>
+        {
+            var uiManager = Engine.GetService<IUIManager>();
+            uiManager.GetUI<IBacklogUI>()?.Show();
+        });
     }
     
     private void SubscribeToEvents()

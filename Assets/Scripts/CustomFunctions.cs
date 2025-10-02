@@ -23,6 +23,20 @@ public static class CustomFunctions
         var character = GameSystem.Instance.GetCurrentCustomer();
         return character.talkedTime;
     }
+    [ExpressionFunction("story")]
+    public static int Story()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        var result = -1;
+        if (!character.talkedDialogue.Contains(0))
+        {
+            result= 0;
+        }
+
+        character.talkedDialogue.Add(result);
+        return result;
+    }
+    
     
     // [ExpressionFunction("getRelationship")]
     // [Doc("获取指定角色的好感度数值", examples: "getRelationship(\"雅琼\")")]

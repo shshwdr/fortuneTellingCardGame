@@ -50,10 +50,13 @@ public class Customer
     public int sanity = 50;
     public int power = 50;
     public int talkedTime = 0;
+
+    public HashSet<int> talkedDialogue;
     public string identifier => info.identifier;
     public Customer(CustomerInfo customerInfo)
     {
         info = customerInfo;
+        talkedDialogue = new HashSet<int>();
     }
     
     public int GetAttribute(string attributeName)
@@ -67,6 +70,8 @@ public class Customer
             default: return 0;
         }
     }
+    
+    
     
     public void SetAttribute(string attributeName, int value)
     {

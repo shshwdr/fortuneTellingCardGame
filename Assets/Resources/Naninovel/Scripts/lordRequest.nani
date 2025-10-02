@@ -1,13 +1,28 @@
 @printer Bubble pos:50,70
-
 @if talked()==false
 
     @gosub .start
 @else
     @random
-        We meet again, merchant of fate. The villagers have been rather calm lately.
-        Your advice last time proved useful. Yet another matter troubles me today — I would hear your thoughts.
-        Lately I can hardly sleep — the wind keeps whispering questions to me.
+        @group
+            We meet again, merchant of fate. The villagers have been rather calm lately.
+            Your advice last time proved useful. Yet another matter troubles me today — I would hear your thoughts.
+        @group
+            Lately I can hardly sleep — the wind keeps whispering questions to me.
+            I’ve thought long and hard, but still came to seek your reading. Perhaps fate is clearer than dreams.
+        @group
+            Ha! You again? I’m starting to think this little cabin is the true seat of power in my village.
+            Don’t laugh — I mean it. Since you’re here to listen, I’ll be honest. I have a new dilemma.
+        @group
+            You’re here again. Sometimes I wonder — do you already know when I’ll come?
+            Your last reading still puzzles me. This time, I expect something more concrete.
+        @group
+            It’s good to see you again. Every visit here calms my heart.
+            Your words are like a lighthouse in the fog. I want to ask for another reading today.
+        @group
+            Fate is strange. The more I try to avoid it, the more I find myself standing at your door.
+            Perhaps I was never choosing — only being chosen.
+        
 @random
     The people grow restless, and my laws no longer bring peace. Tell me — will they truly accept my rule?
     I plan to expand the canals and granaries, but I fear the taxes may crush them. What does fate advise?
@@ -48,5 +63,28 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     Nonsense — should I really listen to you?
     You can’t even see my struggle, yet you speak of destiny?
     If you are the voice of fate, then fate must be nothing but human chatter.
+    @gosub .story
 @FinalStop
 @stop
+
+
+# story
+@if story()==0
+    The village has grown calmer.
+    The new laws seem to work — no more complaints or unrest.
+    I took your advice: “rule with virtue.”
+
+    At first, I did not know what that meant.
+    But when I set aside my authority and walked among them, their eyes changed.
+    For the first time, I felt they truly saw me.
+    @choice "They’ve learned to trust, not fear."
+        @changeAttribute "emotion" value:1
+        @goto .story0
+    @choice "Trust is the foundation of power, not its rival."
+        @changeAttribute "power" value:1
+        @goto .story0
+    @stop
+    # story0
+    Their smiles bring warmth — and fear.
+    I fear I may not deserve their trust.
+@return
