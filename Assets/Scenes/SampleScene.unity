@@ -3282,10 +3282,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customerNameText: {fileID: 724685343}
   customerTargetText: {fileID: 2067394539}
-  wealthText: {fileID: 1012159775}
+  wisdomText: {fileID: 1654789305}
   relationshipText: {fileID: 2109259161}
-  sanityText: {fileID: 1654789305}
-  powerText: {fileID: 670109015}
+  sanityText: {fileID: 670109015}
+  powerText: {fileID: 1012159775}
   dayText: {fileID: 735926223}
   moneyText: {fileID: 249154867}
   currentCustomerIndexText: {fileID: 975911740}

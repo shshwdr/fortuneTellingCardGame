@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class Card
@@ -45,11 +46,12 @@ public class CustomerInfo
 public class Customer
 {
     public CustomerInfo info;
-    public int wealth = 50;
-    public int relationship = 50;
-    public int sanity = 50;
     public int power = 50;
+   public int emotion = 50;
+    public int wisdom = 50;
+    public int sanity = 50;
     public int talkedTime = 0;
+    public int mainAttribute=> GetAttribute(info.target);
 
     public HashSet<int> talkedDialogue;
     public string identifier => info.identifier;
@@ -63,8 +65,8 @@ public class Customer
     {
         switch (attributeName.ToLower())
         {
-            case "wealth": return wealth;
-            case "rela": return relationship;
+            case "wisdom": return wisdom;
+            case "emotion": return emotion;
             case "sanity": return sanity;
             case "power": return power;
             default: return 0;
@@ -78,8 +80,8 @@ public class Customer
         value = UnityEngine.Mathf.Clamp(value, 0, 100);
         switch (attributeName.ToLower())
         {
-            case "wealth": wealth = value; break;
-            case "rela": relationship = value; break;
+            case "wisdom": wisdom = value; break;
+            case "emotion": emotion = value; break;
             case "sanity": sanity = value; break;
             case "power": power = value; break;
         }

@@ -1,14 +1,42 @@
+using System.Collections.Generic;
 using Naninovel;
 using UnityEngine;
 
 public static class CustomFunctions
 {
-    [ExpressionFunction("getWealth")]
-    public static float getWealth()
+    [ExpressionFunction("getPower")]
+    public static float getPower()
     {
         var character = GameSystem.Instance.GetCurrentCustomer();
-        return character.wealth;
+        return character.power;
     }
+    
+    [ExpressionFunction("getEmotion")]
+    public static float getEmotion()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        return character.emotion;
+    }
+    [ExpressionFunction("getEmotion")]
+    public static float getWisdom()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        return character.wisdom;
+    }
+    [ExpressionFunction("getSanity")]
+    public static float getSanity()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        return character.sanity;
+    }
+    [ExpressionFunction("getMain")]
+    public static float getMain()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        return character.mainAttribute;
+    }
+    
+    
 
     [ExpressionFunction("talked")]
     public static bool HasTalked()
@@ -23,17 +51,30 @@ public static class CustomFunctions
         var character = GameSystem.Instance.GetCurrentCustomer();
         return character.talkedTime;
     }
+    static List<int> mainAttributes = new List<int>()
+    {
+        50,55,60,65,70,75,80,85,90,90,90,90
+    };
+    static List<int> talkedTime = new List<int>()
+    {
+        0,1,2,3,4,5,6,7,8,9,10
+    };
     [ExpressionFunction("story")]
     public static int Story()
     {
         var character = GameSystem.Instance.GetCurrentCustomer();
         var result = -1;
-        if (!character.talkedDialogue.Contains(0))
+        for (int i = 0; i < 10; i++)
         {
-            result= 0;
+            if (!character.talkedDialogue.Contains(i) && character.mainAttribute >= mainAttributes[i] && character.talkedTime >= talkedTime[i])
+            {
+                result= i;
+                character.talkedDialogue.Add(result);
+                break;
+            }
         }
+        
 
-        character.talkedDialogue.Add(result);
         return result;
     }
     

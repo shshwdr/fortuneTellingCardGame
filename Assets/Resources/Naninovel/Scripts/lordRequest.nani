@@ -53,6 +53,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     Your words carry depth... Perhaps I have overlooked the gentler side of rule.
     Your insight is worth reflection. I shall have it recorded.
     I thought you a wanderer — yet your tongue holds more truth than the law itself.
+    @gosub .story
 @FinalStop
 @stop
 
@@ -63,7 +64,6 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     Nonsense — should I really listen to you?
     You can’t even see my struggle, yet you speak of destiny?
     If you are the voice of fate, then fate must be nothing but human chatter.
-    @gosub .story
 @FinalStop
 @stop
 
@@ -87,4 +87,9 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     # story0
     Their smiles bring warmth — and fear.
     I fear I may not deserve their trust.
+@else if:story()==1
+    Actually... I once read about this place in a ... diary.
+    It said there was a cabin where one could glimpse fate.
+    I thought it was fiction, yet now I find myself inside it.
+    Fate does enjoy its tricks.
 @return

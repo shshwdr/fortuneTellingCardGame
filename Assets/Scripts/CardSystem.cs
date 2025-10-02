@@ -59,8 +59,8 @@ public class CardSystem : Singleton<CardSystem>
         var result = new DivinationResult();
         result.initialAttributes = new Dictionary<string, int>
         {
-            {"wealth", customer.wealth},
-            {"rela", customer.relationship},
+            {"wisdom", customer.wisdom},
+            {"emotion", customer.emotion},
             {"sanity", customer.sanity},
             {"power", customer.power}
         };
@@ -68,8 +68,8 @@ public class CardSystem : Singleton<CardSystem>
         // Create a copy for calculation
         var tempCustomer = new Customer(customer.info)
         {
-            wealth = customer.wealth,
-            relationship = customer.relationship,
+            wisdom = customer.wisdom,
+            emotion = customer.emotion,
             sanity = customer.sanity,
             power = customer.power
         };
@@ -95,8 +95,8 @@ public class CardSystem : Singleton<CardSystem>
         
         result.finalAttributes = new Dictionary<string, int>
         {
-            {"wealth", tempCustomer.wealth},
-            {"rela", tempCustomer.relationship},
+            {"wisdom", tempCustomer.wisdom},
+            {"emotion", tempCustomer.emotion},
             {"sanity", tempCustomer.sanity},
             {"power", tempCustomer.power}
         };
@@ -110,8 +110,8 @@ public class CardSystem : Singleton<CardSystem>
         if (updateState)
         {
             // Apply the changes to the actual customer (persistent state)
-            customer.wealth = tempCustomer.wealth;
-            customer.relationship = tempCustomer.relationship;
+            customer.wisdom = tempCustomer.wisdom;
+            customer.emotion = tempCustomer.emotion;
             customer.sanity = tempCustomer.sanity;
             customer.power = tempCustomer.power;
         }
@@ -187,8 +187,8 @@ public class CardSystem : Singleton<CardSystem>
                     break;
                 case "allPosHalf":
                     break;
-                case "wealth":
-                case "rela":
+                case "wisdom":
+                case "emotion":
                 case "sanity":
                 case "power":
 

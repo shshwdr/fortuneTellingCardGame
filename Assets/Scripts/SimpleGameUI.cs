@@ -3,6 +3,7 @@ using Naninovel;
 using Naninovel.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
@@ -13,7 +14,7 @@ public class SimpleGameUI : MonoBehaviour
     [Header("Customer Info UI")]
     public TMP_Text customerNameText;
     public TMP_Text customerTargetText;
-    public AttributeCell wealthText;
+    [FormerlySerializedAs("wealthText")] public AttributeCell wisdomText;
     public AttributeCell relationshipText;
     public AttributeCell sanityText;
     public AttributeCell powerText;
@@ -164,10 +165,10 @@ public class SimpleGameUI : MonoBehaviour
     private void UpdateCustomerAttributes(Customer customer)
     {
         var result = CardSystem.Instance.PerformDivination(currentCustomer,false);
-        wealthText.SetValue("Wealth", customer.wealth, result.diffAttribute("wealth"));
-        relationshipText .SetValue("Relationship", customer.relationship, result.diffAttribute("rela"));
-        sanityText.SetValue("Sanity", customer.sanity, result.diffAttribute("sanity"));
         powerText.SetValue("Power", customer.power, result.diffAttribute("power"));
+        relationshipText .SetValue("Emotion", customer.emotion, result.diffAttribute("emotion"));
+        wisdomText.SetValue("Wisdom", customer.wisdom, result.diffAttribute("wisdom"));
+        sanityText.SetValue("Sanity", customer.sanity, result.diffAttribute("sanity"));
 
         var satisfiedText = result.isSatisfied ? "(Satisfied!)" : "";
         var satisfiedTextColor = result.isSatisfied ? "<color=green>":"";
