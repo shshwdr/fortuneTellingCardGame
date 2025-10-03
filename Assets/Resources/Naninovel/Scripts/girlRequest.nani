@@ -1,38 +1,202 @@
 @printer Bubble pos:50,70
 @if talked()==false
     @gosub .start
-
 @else
-    It's you again.
-@random
-    girl ask
+#非初次见面的寒暄
+    @random
+        @group
+            You again... I didn’t expect to meet anyone here.
+            Each time I leave, I promise never to return — yet I always do.
+        @group
+            I dreamt of this place last night. The river was frozen, and my reflection called your name.
+            Strange, isn’t it? Dreams remembering for us.
+        @group
+            Fate brought me back, didn’t it? 
+            The heart is stubborn — it keeps walking to the same door.
+        @group
+            Ah, you again. You must think me foolish.
+            Still, you always listen. So... I have another question.
+        @group
+            The wind carried me here. Or perhaps it was regret.
+            I need another reading — this heart won’t rest.
+#需要占卜的问题
+@if lastStory()>5
+#后期问题
+    @random
+        I have built a life here, yet every day feels like waiting. 
+        Tell me — am I still chasing a ghost?
+        My husband trusts me, my son smiles... 
+        Why then do I feel unseen?
+        I keep writing, page after page, but I’m not sure who it’s for.
+        Can words truly preserve a heart?
+@else
+#前期问题
+    @random
+        Why did he leave? Was love not enough?
+        Tell me — will he return if I keep believing?
+        If fate binds us, why does pain cut so deep?
+        I gave him everything. Is there still hope for me?
 @FinalStop stay
 @stop
 
 
-
+#初次见面
 # start
-girl start
-@choice "The future is shaped by your hand. I merely offer another angle."
-    @goto .ContineuChoice
-@choice "Do you believe in fate? If you do, I shall read it for you."
-    @goto .ContineuChoice
+…Where am I? 
+I remember the river, the cold... and then nothing.
+Did you bring me here? No... you’re not of this world, are you?
+
+They said when the heart breaks, it drifts to strange places.
+If this is fate’s doing, then please — tell me,
+Can love still be found for someone who has already drowned?
+
+@choice "Love may return in another form — not always from the same hands."
+    @changeAttribute "emotion" value:3
+    @goto .ContinueChoice
+@choice "Your heart still beats. Let it seek what it truly wants, not what is gone."
+    @changeAttribute "power" value:3
+    @goto .ContinueChoice
 @stop
-# ContineuChoice
-girl start2
+
+# ContinueChoice
+…You speak kindly. It almost sounds like truth.
+Then tell me, seer — where does the path of love lead me?
 @return
 
 
-
+#对玩家的占卜结果满意
 # goodResult
+@printer Bubble
 @random
-    good
+    Your words… they bring warmth, like sunlight through clouds.
+    Perhaps there is meaning in this pain after all.
+    You make it sound as though even sorrow can bloom.
+    @gosub .story
 @FinalStop
 @stop
 
-
+#对玩家的占卜结果不满
 # badResult
+@printer Bubble
 @random
-    bad
+    Stop... I came for hope, not riddles.
+    You speak as though hearts can be mended by words alone.
+    If you were me, could you still believe?
 @FinalStop
 @stop
+
+
+#发展故事
+# story
+
+@if story()==0
+    I thought about your words last time.
+    I waited by the river, just once more… but he never came.
+    The water carried only my reflection back to me.
+    Maybe love isn’t meant to return.
+
+    Yet... I’m still here. Perhaps that means something.
+    @choice "It means your heart refused to vanish — cherish that strength."
+        @changeAttribute "wisdom" value:1
+        @goto .story0
+    @choice "It means fate spared you — maybe for a new beginning."
+        @changeAttribute "emotion" value:1
+        @goto .story0
+    @stop
+    # story0
+    I used to think love was a single thread. 
+    Now I see it might weave into many things.
+
+@else if:story()==1
+    A man from the village found me wandering and brought me shelter.
+    He’s gentle — always asks if I’ve eaten, never asks where I came from.
+    I thought kindness was a small thing... now it feels heavier than love.
+@else if:story()==2
+    I still write to him — the traveler. 
+    Not out of longing, I tell myself... but to ask about the world.
+    When I seal each letter, my hand still trembles.
+
+    Maybe I’m foolish, but I like to think he’ll write back.
+    @choice "A letter unreturned can still teach — it makes you listen to yourself."
+        @changeAttribute "wisdom" value:2
+        @goto .story2
+    @choice "He might return someday — hope is what keeps us breathing."
+        @changeAttribute "emotion" value:2
+        @goto .story2
+    @stop
+    # story2
+    Sometimes I don’t send the letters at all. I just read them to the wind.
+
+@else if:story()==3
+    My husband and I began restoring the fields.
+    He listens when I speak, though others whisper — “A woman gives orders?”
+    I don’t care. The crops grow. Isn’t that enough?
+@else if:story()==4
+    I’ve started keeping records — of planting, trade, and disputes.
+    But also of what I see, what I feel.
+    He calls it “my little diary.” He smiles when I write.
+    @choice "Keep writing — words remember what hearts forget."
+        @changeAttribute "wisdom" value:3
+        @goto .story4
+    @choice "Be careful — not all truths are meant to be read."
+        @changeAttribute "emotion" value:3
+        @goto .story4
+    @stop
+    # story4
+    When I write, it feels like my heart finally has a shape.
+
+@else if:story()==5
+    The traveler’s letters stopped coming.
+    At first I thought it was distance. Then I realized — perhaps he’s gone.
+    I should feel sad… but instead I feel quiet.
+    Maybe love doesn’t die — it just changes names.
+@else if:story()==6
+    I thought I could balance everything — love my husband, admire the traveler, serve the people.
+    But hearts are fragile things; they spill when filled too full.
+    Still, I want to believe all of it can be true.
+@else if:story()==7
+    He found my diary today. 
+    I heard his voice break before I reached the door.
+    He asked… “Were you ever mine?”
+    I had no answer that could save him.
+    @choice "He deserved truth — even if it shattered him."
+        @changeAttribute "wisdom" value:4
+        @goto .story7
+    @choice "Some truths only wound — silence might have been mercy."
+        @changeAttribute "emotion" value:4
+        @goto .story7
+    @stop
+    # story7
+    The next morning, he was gone. The house felt smaller than ever.
+
+@else if:story()==8
+    They say I cursed him — that I brought sorrow to this land.
+    They won’t let me speak in the councils anymore.
+    My son attends in my place. They adore him.
+    Perhaps this is what fate intended.
+@else if:story()==9
+    My son visits less. He says I should rest, enjoy peace.
+    Peace... feels like being buried alive.
+    Sometimes I dream of the traveler again, standing by the river.
+    But even in the dream, he turns away.
+@else if:story()==10
+    I came here again because... I remembered.
+    The day I first saw you — I was drowning.
+    You said love may return in another form.
+    Tell me, was this the form it took?
+    @choice "It returned as memory — painful, but real."
+        @changeAttribute "wisdom" value:5
+        @goto .story10
+    @choice "It never returned — but you learned to live without it."
+        @changeAttribute "emotion" value:5
+        @goto .story10
+    @stop
+    # story10
+    If that’s true, then maybe even pain deserves to be remembered.
+@else if:story()==11
+    I’m tired now. My hands shake when I write.
+    They’ll take my books away soon — call them nonsense.
+    If anyone finds these pages, I hope they read with mercy.
+    Maybe love was never meant to last... only to be written.
+
+@return

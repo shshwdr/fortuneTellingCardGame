@@ -7,6 +7,7 @@ public class Card
 {
     public CardInfo info;
     public bool isUpright;
+    public bool isFixed = false;
     public List<string> buffs = new List<string>(); // Future buff system
     
     public Card(CardInfo cardInfo, bool upright = true)
@@ -31,6 +32,16 @@ public class Card
         clone.buffs = new List<string>(buffs);
         return clone;
     }
+
+    public void Fix()
+    {
+        isFixed = !isFixed;
+    }
+
+    public void Reset()
+    {
+        isFixed = false;
+    }
 }
 
 [System.Serializable]
@@ -53,12 +64,12 @@ public class Customer
     public int talkedTime = 0;
     public int mainAttribute=> GetAttribute(info.target);
 
-    public HashSet<int> talkedDialogue;
+    public int lastStory;
     public string identifier => info.identifier;
     public Customer(CustomerInfo customerInfo)
     {
         info = customerInfo;
-        talkedDialogue = new HashSet<int>();
+        lastStory = -1;
     }
     
     public int GetAttribute(string attributeName)
@@ -69,7 +80,7 @@ public class Customer
             case "emotion": return emotion;
             case "sanity": return sanity;
             case "power": return power;
-            default: return 0;
+            default: Debug.LogError("Unknown attribute name: " + attributeName); return 0;
         }
     }
     
@@ -85,12 +96,14 @@ public class Customer
             case "sanity": sanity = value; break;
             case "power": power = value; break;
         }
+        //GameSystem.Instance.OnAttributeChanged?.Invoke();
     }
     
     public void ModifyAttribute(string attributeName, int change)
     {
         int current = GetAttribute(attributeName);
         SetAttribute(attributeName, current + change);
+        //GameSystem.Instance.OnAttributeChanged?.Invoke();
     }
 }
 

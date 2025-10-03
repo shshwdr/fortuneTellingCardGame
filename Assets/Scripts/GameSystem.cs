@@ -8,6 +8,7 @@ public class GameSystem : Singleton<GameSystem>
     public GameState gameState = new GameState();
     
     public System.Action<Customer> OnCustomerChanged;
+    public System.Action OnAttributeChanged;
     public System.Action<Customer> OnCustomerShow;
     public System.Action<int> OnMoneyChanged;
     public System.Action<int> OnDayChanged;

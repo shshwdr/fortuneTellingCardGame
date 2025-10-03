@@ -33,6 +33,7 @@ public class SimpleGameUI : MonoBehaviour
     public Button performDivinationButton;
     public Button skipCustomerButton;
     public Button nextDayButton;
+    public Button redrawButton;
     
     [Header("Result UI")]
     public GameObject resultPanel;
@@ -65,6 +66,12 @@ public class SimpleGameUI : MonoBehaviour
             
         if (skipCustomerButton != null)
             skipCustomerButton.onClick.AddListener(SkipCustomer);
+        
+        redrawButton.onClick.AddListener(() =>
+        {
+            CardSystem.Instance.Redraw();
+            UpdateCustomerAttributes(currentCustomer);
+        });
             
         if (nextDayButton != null)
             nextDayButton.onClick.AddListener(NextDay);
@@ -103,6 +110,7 @@ public class SimpleGameUI : MonoBehaviour
         {
             GameSystem.Instance.OnCustomerShow += ShowCustomer;
             GameSystem.Instance.OnCustomerChanged += UpdateCustomerDisplay;
+            GameSystem.Instance.OnAttributeChanged += UpdateCurrentCustomerAttributes;
             GameSystem.Instance.OnMoneyChanged += UpdateMoneyDisplay;
             GameSystem.Instance.OnDayChanged += UpdateDayDisplay;
             GameSystem.Instance.OnGameStateChanged += UpdateGameStateDisplay;
@@ -120,6 +128,7 @@ public class SimpleGameUI : MonoBehaviour
         {
             GameSystem.Instance.OnCustomerShow -= ShowCustomer;
             GameSystem.Instance.OnCustomerChanged -= UpdateCustomerDisplay;
+            GameSystem.Instance.OnAttributeChanged -= UpdateCurrentCustomerAttributes;
             GameSystem.Instance.OnMoneyChanged -= UpdateMoneyDisplay;
             GameSystem.Instance.OnDayChanged -= UpdateDayDisplay;
             GameSystem.Instance.OnGameStateChanged -= UpdateGameStateDisplay;
@@ -159,9 +168,13 @@ public class SimpleGameUI : MonoBehaviour
             
         UpdateCustomerAttributes(customer);
     }
-    
-    
-    
+
+
+
+    public void UpdateCurrentCustomerAttributes()
+    {
+        UpdateCustomerAttributes(currentCustomer);
+    }
     private void UpdateCustomerAttributes(Customer customer)
     {
         var result = CardSystem.Instance.PerformDivination(currentCustomer,false);
@@ -228,32 +241,32 @@ public class SimpleGameUI : MonoBehaviour
     
     private void OnCardClicked(int cardIndex)
     {
-        CardSystem.Instance.FlipCard(cardIndex);
-        UpdateCustomerAttributes(currentCustomer);
+        CardSystem.Instance.FixCard(cardIndex);
+        //UpdateCustomerAttributes(currentCustomer);
     }
 
     void UpdateActions()
     {
-        if (CardSystem.Instance.reversedCardCount() != 2)
-        {
-            performDivinationButton.interactable = false;
-            performDivinationButton.GetComponentInChildren<TMP_Text>().text = "Require 2 reversed cards";
-        }
-        else
-        {
-            performDivinationButton.interactable = true;
-            performDivinationButton.GetComponentInChildren<TMP_Text>().text = "Fortune Telling";
-        }
+        // if (CardSystem.Instance.reversedCardCount() != 2)
+        // {
+        //     performDivinationButton.interactable = false;
+        //     performDivinationButton.GetComponentInChildren<TMP_Text>().text = "Require 2 reversed cards";
+        // }
+        // else
+        // {
+        //     performDivinationButton.interactable = true;
+        //     performDivinationButton.GetComponentInChildren<TMP_Text>().text = "Fortune Telling";
+        // }
     }
 
     private void PerformDivination()
     {
         if (currentCustomer == null) return;
 
-        if (CardSystem.Instance.reversedCardCount() != 2)
-        {
-            return;
-        }
+        // if (CardSystem.Instance.reversedCardCount() != 2)
+        // {
+        //     return;
+        // }
         
         var result = CardSystem.Instance.PerformDivination(currentCustomer,true);
         
@@ -282,7 +295,7 @@ public class SimpleGameUI : MonoBehaviour
         }
         
         
-        
+        GameSystem.Instance.OnAttributeChanged?.Invoke();
     }
     
     private void ShowResult(DivinationResult result)

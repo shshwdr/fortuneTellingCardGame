@@ -20,6 +20,8 @@ namespace Naninovel.Commands
             var character = GameSystem.Instance.GetCurrentCustomer();
             character.ModifyAttribute(Message.Value, Value.Value);
             ToastManager.Instance.ShowToast($"{Message.Value} +{Value.Value}");
+            
+            GameSystem.Instance.OnAttributeChanged?.Invoke();
            // ToastManager.Instance.ShowToast(Message.Value, Duration.Value);
             await UniTask.CompletedTask;
         }

@@ -3,75 +3,86 @@
 
     @gosub .start
 @else
+#非初次见面的寒暄
     @random
         @group
             We meet again, merchant of fate. The villagers have been rather calm lately.
-            Your advice last time proved useful. Yet another matter troubles me today — I would hear your thoughts.
+            Your advice last time proved useful. Yet another matter troubles me today - I would hear your thoughts.
         @group
-            Lately I can hardly sleep — the wind keeps whispering questions to me.
+            Lately I can hardly sleep - the wind keeps whispering questions to me.
             I’ve thought long and hard, but still came to seek your reading. Perhaps fate is clearer than dreams.
         @group
             Ha! You again? I’m starting to think this little cabin is the true seat of power in my village.
-            Don’t laugh — I mean it. Since you’re here to listen, I’ll be honest. I have a new dilemma.
+            Don’t laugh - I mean it. Since you’re here to listen, I’ll be honest. I have a new dilemma.
         @group
-            You’re here again. Sometimes I wonder — do you already know when I’ll come?
+            You’re here again. Sometimes I wonder - do you already know when I’ll come?
             Your last reading still puzzles me. This time, I expect something more concrete.
         @group
             It’s good to see you again. Every visit here calms my heart.
             Your words are like a lighthouse in the fog. I want to ask for another reading today.
         @group
             Fate is strange. The more I try to avoid it, the more I find myself standing at your door.
-            Perhaps I was never choosing — only being chosen.
-        
-@random
-    The people grow restless, and my laws no longer bring peace. Tell me — will they truly accept my rule?
-    I plan to expand the canals and granaries, but I fear the taxes may crush them. What does fate advise?
-    I wish to open a school and teach my people to read, yet they fear that knowledge invites disaster. Is this truly wise?
+            Perhaps I was never choosing - only being chosen.
+#需要占卜的问题        
+@if lastStory()>5
+#后期
+    @random
+        I saw a shadow behind my throne last night - it whispered my own name. Is fate mocking me?
+        I have built a realm of order, yet my heart feels hollow. Can power fill what love cannot?
+        The roads I built now lead beyond my sight. Have I freed my land, or lost it?
+@else
+#前期
+    @random
+        The people grow restless, and my laws no longer bring peace. Tell me - will they truly accept my rule?
+        I plan to expand the canals and granaries, but I fear the taxes may crush them. What does fate advise?
+        I wish to open a school and teach my people to read, yet they fear that knowledge invites disaster. Is this truly wise?
 @FinalStop stay
 @stop
 
-
+#初次见面
 # start
-...Who are you? I have never seen you before. This is my village — no strangers should be here.
+...Who are you? I have never seen you before. This is my village - no strangers should be here.
 This cabin... I don’t recall ordering anyone to build it.
 Was it the wind that brought me here? Or a dream?
-No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger — do you see the future of my village?
+No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger - do you see the future of my village?
 @choice "The future is shaped by your hand. I merely offer another angle."
+    @changeAttribute "wisdom" value:1
     @goto .ContinueChoice
 @choice "Do you believe in fate? If you do, I shall read it for you."
+    @changeAttribute "power" value:1
     @goto .ContinueChoice
 @stop
 # ContinueChoice
-...What strange words. Very well — if you claim to know fate, then show me. Tell me what lies ahead for this village.
+...What strange words. Very well - if you claim to know fate, then show me. Tell me what lies ahead for this village.
 @return
 
 
-
+#对玩家的占卜结果满意
 # goodResult
 @printer Bubble
 @random
     Your words carry depth... Perhaps I have overlooked the gentler side of rule.
     Your insight is worth reflection. I shall have it recorded.
-    I thought you a wanderer — yet your tongue holds more truth than the law itself.
+    I thought you a wanderer - yet your tongue holds more truth than the law itself.
     @gosub .story
 @FinalStop
 @stop
 
-
+#对玩家的占卜结果不满
 # badResult
 @printer Bubble
 @random
-    Nonsense — should I really listen to you?
+    Nonsense - should I really listen to you?
     You can’t even see my struggle, yet you speak of destiny?
     If you are the voice of fate, then fate must be nothing but human chatter.
 @FinalStop
 @stop
 
-
+#发展故事
 # story
 @if story()==0
     The village has grown calmer.
-    The new laws seem to work — no more complaints or unrest.
+    The new laws seem to work - no more complaints or unrest.
     I took your advice: “rule with virtue.”
 
     At first, I did not know what that meant.
@@ -85,11 +96,112 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
         @goto .story0
     @stop
     # story0
-    Their smiles bring warmth — and fear.
+    Their smiles bring warmth - and fear.
     I fear I may not deserve their trust.
 @else if:story()==1
     Actually... I once read about this place in a ... diary.
     It said there was a cabin where one could glimpse fate.
     I thought it was fiction, yet now I find myself inside it.
     Fate does enjoy its tricks.
+@else if:story()==2
+    I expanded the canals and granaries. The harvest was the best in years.
+    The people thank me, bring gifts and songs.
+
+    But I notice - they grow dependent. Some have stopped working, waiting for handouts.
+    They say, “The lord will save us.”
+    And their words chill me.
+    @choice "Too much mercy makes men forget to strive."
+        @changeAttribute "wisdom" value:2
+        @goto .story2
+    @choice "You hold their fates already - why fear it?"
+        @changeAttribute "power" value:2
+        @goto .story2
+    @stop
+    # story2
+    I look upon the full granaries - and feel empty inside.
+    Is this truly the prosperity I sought?
+@else if:story()==3
+    I inherited the village from my father.
+    He was kind and gentle, never sought to expand.
+    But I… I want this land to grow strong.
+    Sometimes, I fear I’ve lost the tenderness he carried.
+@else if:story()==4
+    I followed your suggestion and built a school.
+    At first they feared the written word - called it divine.
+    But soon they grew proud to copy the laws.
+
+    One boy asked: “If words can shape fate, who writes fate itself?”
+    I could not answer.
+    @choice "They have begun to think - that’s the seed of wisdom."
+        @changeAttribute "wisdom" value:3
+        @goto .story4
+    @choice "Do not let them question the law - they are not ready."
+        @changeAttribute "power" value:3
+        @goto .story4
+    @stop
+    # story4
+    I'm not sure I'm doing the right thing.
+@else if:story()==5
+    I begin to see… maybe not only this village needs me.
+    Distant lands, countless souls - they all long for order.
+    But if I leave, who will guard this place?
+    It feels as if fate waits for me to choose.
+@else if:story()==6
+    Mother used to say Father was her destiny.
+    They planted trees, rested beneath the wind together.
+    Sometimes I wonder - can their love be the seed of this land’s peace?
+    If I could be trusted as he was… maybe I’d be a true lord.
+    @choice "Let affection temper judgment; that is lasting peace."
+        @changeAttribute "emotion" value:3
+        @goto .story6
+    @choice "Trust is earned by deeds, not titles - keep building."
+        @changeAttribute "power" value:3
+        @goto .story6
+    @stop
+    # story6
+    If I can be both firm and kind, perhaps I will be worthy of them.
+@else if:story()==7
+    I built roads; nearby villages now pledge loyalty.
+    They call me the Guardian of the North.
+    Yet at night, the wind whispers:
+    “Do you guard them, or yourself?”
+@else if:story()==8
+    No one dares defy my orders now.
+    But the happier I seem, the quieter it gets.
+    I thought control would bring harmony, but I gained only hollow cheers.
+    Is fate mocking me?
+@else if:story()==9
+    A foreigner came, calling my rule an illusion.
+    I cast him out, but he left one phrase:
+    “When fate has only one voice, it ceases to be fate.”
+    I don’t understand… but it echoes in my mind.
+    @choice "Hear the echo - question protects truth."
+        @changeAttribute "wisdom" value:4
+        @goto .story9
+    @choice "One voice is enough to rule - press forward."
+        @changeAttribute "power" value:4
+        @goto .story9
+    @stop
+    # story9
+    If I silence the echo, do I silence myself too?
+@else if:story()==10
+    In the end, I ordered his execution.
+    But as the flames rose, he smiled.
+    So calm… as if he understood fate better than I.
+    For the first time, I wondered which side of destiny I stood on.
+    @choice "Own the mistake - clarity begins there."
+        @changeAttribute "wisdom" value:4
+        @goto .story10
+    @choice "Stand taller - doubt is a ruler’s poison."
+        @changeAttribute "power" value:4
+        @goto .story10
+    @stop
+    # story10
+    I cannot burn the question with the man.
+@else if:story()==11
+    I’ve read his book countless times.
+    It says, “True power is the freedom to choose.”
+    Then I realized - my order was too perfect.
+    And perfection… means silence.
+
 @return

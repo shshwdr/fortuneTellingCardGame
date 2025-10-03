@@ -12,30 +12,60 @@ public class CardSystem : Singleton<CardSystem>
     {
         return currentHand.Count(card => !card.isUpright);
     }
+
+    public void Redraw()
+    {
+        List<Card> redrawCards = new List<Card>();
+        foreach (var card in currentHand)
+        {
+            if (!card.isFixed)
+            {
+                redrawCards.Add(card);
+            }
+        }
+        GameSystem.Instance.gameState.usedCards.AddRange(redrawCards);
+        currentHand.RemoveAll(card => !card.isFixed);
+        int drawCount = 4 - currentHand.Count;
+        for (int i = 0; i < drawCount; i++)
+        {
+            DrawOneCard();
+        }
+        OnHandChanged?.Invoke(currentHand);
+    }
     public void DrawCardsForCustomer()
     {
         // Move current hand to used cards
+        foreach (var card in currentHand)
+        {
+                card.Reset();
+        }
+        
         GameSystem.Instance.gameState.usedCards.AddRange(currentHand);
         currentHand.Clear();
         
         // Draw 4 cards from available deck
         for (int i = 0; i < 4; i++)
         {
-            if (GameSystem.Instance.gameState.availableCards.Count == 0)
-            {
-                Debug.Log("Deck is empty. Refilling...");
-                RefillCardDeck();
-            }
-            int randomIndex = Random.Range(0, GameSystem.Instance.gameState.availableCards.Count);
-            Card drawnCard = GameSystem.Instance.gameState.availableCards[randomIndex].Clone();
-            drawnCard.isUpright = false;
-            currentHand.Add(drawnCard);
-            
-            GameSystem.Instance.gameState.availableCards.RemoveAt(randomIndex);
+            DrawOneCard();
         }
         
         OnHandChanged?.Invoke(currentHand);
         
+    }
+
+    void DrawOneCard()
+    {
+        if (GameSystem.Instance.gameState.availableCards.Count == 0)
+        {
+            Debug.Log("Deck is empty. Refilling...");
+            RefillCardDeck();
+        }
+        int randomIndex = Random.Range(0, GameSystem.Instance.gameState.availableCards.Count);
+        Card drawnCard = GameSystem.Instance.gameState.availableCards[randomIndex].Clone();
+        drawnCard.isUpright = Random.Range(0, 2) == 0;
+        currentHand.Add(drawnCard);
+            
+        GameSystem.Instance.gameState.availableCards.RemoveAt(randomIndex);
     }
     
     private void RefillCardDeck()
@@ -48,6 +78,14 @@ public class CardSystem : Singleton<CardSystem>
         if (cardIndex >= 0 && cardIndex < currentHand.Count)
         {
             currentHand[cardIndex].FlipCard();
+            OnHandChanged?.Invoke(currentHand);
+        }
+    }
+    public void FixCard(int cardIndex)
+    {
+        if (cardIndex >= 0 && cardIndex < currentHand.Count)
+        {
+            currentHand[cardIndex].Fix();
             OnHandChanged?.Invoke(currentHand);
         }
     }

@@ -1,6 +1,14 @@
 ﻿identifier,name,description,upEffect,downEffect,isStart
-sun,sun,sun,power|3|sanity|1,power|1|sanity|-4,1
-lover,lover,lover,emotion|2,emotion|-2,1
+sun,sun,sun,power|2,power|3|sanity|-4,1
+lover,lover,lover,emotion|2,emotion|-3|sanity|2,1
 moon,moon,moon,allNegHalf,allPosHalf,1
-fool,fool,fool,sanity|3,sanity|-2,1
-magician,magician,magician,power|1|emotion|1,power|-2,1
+fool,fool,fool,sanity|3,sanity|-1,1
+magician,magician,magician,power|1|emotion|1,emotion|2|sanity|-2,1
+hermit,hermit,hermit,wisdom|1,wisdom|2|power|-2,1
+hanged,hanged,hanged,copyLastUpEffect,copyLastDownEffect,1
+emperor,emperor,emperor,power|3|sanity|-1,power|5|allO|-2,1
+devil,devil,devil,AdjacentCardForceUp,AdjacentCardForceDown,1
+world,The World,The World,whenAllUpCard|allA|1,whenAllDownCard|allA|2,
+Judgement,Judgement,Judgement,whenGet|power|5|allO|1,whenGet|power|8|allO|2,
+Temperance,Temperance,Temperance,whenMinus|sanity|emotion|1,whenMinus|emotion|emotion|1,
+tower,tower,tower,whenAdd|power|power|1,whenMinus|power|sanity|1,

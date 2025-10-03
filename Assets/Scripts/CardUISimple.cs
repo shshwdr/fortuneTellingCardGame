@@ -14,11 +14,14 @@ public class CardUISimple : MonoBehaviour
     public Button cardButton;
     public GameObject cardBack;
     public GameObject cardFront;
+    public GameObject fixedOb;
     
     [Header("Card Data")]
     public string cardId;
     public bool isUpright = false;
+    public bool isFixed = false;
     public int cardIndex;
+    
     
     private CardInfo cardInfo;
     public Transform oppositeTrans;
@@ -54,6 +57,8 @@ public class CardUISimple : MonoBehaviour
         cardIndex = index;
         cardInfo = card.info;
         isUpright = card.isUpright;
+        isFixed = card.isFixed;
+        
         UpdateCardDisplay();
     }
     
@@ -69,7 +74,7 @@ public class CardUISimple : MonoBehaviour
             
         UpdateUpright();
         //UpdateEffectText();
-
+fixedOb.SetActive(isFixed);
     }
     
     private void UpdateEffectText()

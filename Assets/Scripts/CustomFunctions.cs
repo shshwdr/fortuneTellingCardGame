@@ -66,10 +66,10 @@ public static class CustomFunctions
         var result = -1;
         for (int i = 0; i < 10; i++)
         {
-            if (!character.talkedDialogue.Contains(i) && character.mainAttribute >= mainAttributes[i] && character.talkedTime >= talkedTime[i])
+            if (character.lastStory < i && character.mainAttribute >= mainAttributes[i] && character.talkedTime >= talkedTime[i])
             {
                 result= i;
-                character.talkedDialogue.Add(result);
+                character.lastStory=i;
                 break;
             }
         }
@@ -77,8 +77,13 @@ public static class CustomFunctions
 
         return result;
     }
-    
-    
+
+    [ExpressionFunction("lastStory")]
+    public static int lastStory()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        return character.lastStory;
+    }
     // [ExpressionFunction("getRelationship")]
     // [Doc("获取指定角色的好感度数值", examples: "getRelationship(\"雅琼\")")]
     // public static float GetRelationship(string characterName)
