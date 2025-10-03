@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -83,35 +84,99 @@ fixedOb.SetActive(isFixed);
         
         var effects = isUpright ? cardInfo.upEffect : cardInfo.downEffect;
         string effectText = isUpright ? "Upright:\n" : "Reversed:\n";
-        
-        foreach (string effect in effects)
-        {
-            effectText += FormatEffect(effect) + "\n";
-        }
+        effectText += FormatEffect(effects);
+        // foreach (string effect in effects)
+        // {
+        //     effectText += FormatEffect(effects) + "\n";
+        // }
         
         cardEffectText.text = effectText;
     }
     
-    private string FormatEffect(string effect)
+    private string FormatEffect(List<string> effects)
     {
-        if (effect.Contains('|'))
+        int i = 0;
+        string effectText = "";
+        for (; i < effects.Count; i++)
         {
-            string[] parts = effect.Split('|');
-            if (parts.Length == 2)
+            switch (effects[i])
             {
-                string attribute = parts[0];
-                string value = parts[1];
-                return $"{attribute} {(value.StartsWith("-") ? "" : "+")}{value}";
+                case "when":
+                {
+                    i++;
+                    effectText += "When: ";
+                    switch (effects[i])
+                    {
+                        case "allUpCard":
+                        {
+                            effectText += "All Cards Are Upright: ";
+                            break;
+                        }
+                        case "allDownCard":
+                        {
+                            effectText += "All Cards Are Reversed: ";
+                            break;
+                        }
+                    }
+
+                    i++;
+                    effectText += attributeEffectText(effects.GetRange(i, effects.Count - i));
+                }
+                    return effectText;
+                case "allNegHalf": return "Halve all negative effects";
+                case "allPosAdd": return "All Postive effect add extra 1";
+                case "allPosHalf": return "Halve all positive effects";
+                default:
+                    effectText += attributeEffectText(effects);
+                    return effectText;
+            }
+            
+        }
+        return effectText;
+    }
+
+    string attributeEffectText(List<string> effects)
+    {
+        int i = 0;
+        string effectText = "";
+        for (; i < effects.Count; i++)
+        {
+            switch (effects[i])
+            {
+                case "wisdom":
+                    effectText += "Wisdom ";
+                    i++;
+                    effectText += (effects[i].StartsWith("-") ? "" : "+") + effects[i]+ "\n";
+                    
+                    break;
+                    case "power":
+                        effectText += "Power ";
+                        i++;
+                        effectText += (effects[i].StartsWith("-") ? "" : "+") + effects[i]+ "\n";
+                    
+                        break;
+                        case "emotion":
+                            effectText += "Emotion ";
+                            i++;
+                            effectText += (effects[i].StartsWith("-") ? "" : "+") + effects[i]+ "\n";
+                    
+                            break;
+                case "sanity":
+                    effectText += "Sanity ";
+                    i++;
+                    effectText += (effects[i].StartsWith("-") ? "" : "+") + effects[i]+ "\n";
+                    
+                    break;
+                case "allA":
+                    effectText += "All Attributes ";
+                    i++;
+                    effectText += (effects[i].StartsWith("-") ? "" : "+") + effects[i] + "\n";
+                    
+                    break;
+                                break;
             }
         }
-        
-        // Special effects
-        switch (effect)
-        {
-            case "allNegHalf": return "Halve all negative effects";
-            case "allPosHalf": return "Halve all positive effects";
-            default: return effect;
-        }
+        return effectText;
     }
     
     public void OnCardClick()

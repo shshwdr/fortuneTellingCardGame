@@ -91,7 +91,13 @@ public class CardSystem : Singleton<CardSystem>
     }
     
     
-    
+    public List<string> allAttributes = new List<string>()
+    {
+        "wisdom",
+        "emotion",
+        "sanity",
+        "power"
+    };
     public DivinationResult PerformDivination(Customer customer, bool updateState)
     {
         var result = new DivinationResult();
@@ -123,6 +129,14 @@ public class CardSystem : Singleton<CardSystem>
             var effects = card.GetEffects();
             
             ApplyAttributeEffects(effects, tempCustomer,allEffects);
+        }
+        
+        for (int i = 0; i < currentHand.Count; i++)
+        {
+            Card card = currentHand[i];
+            var effects = card.GetEffects();
+            
+            ApplyWhenEffects(effects, tempCustomer,allEffects,currentHand);
         }
         
         // // Apply special effects first (Moon card effects)
@@ -229,50 +243,108 @@ public class CardSystem : Singleton<CardSystem>
                 case "emotion":
                 case "sanity":
                 case "power":
-
+                {
                     var key = effects[i];
                     i++;
                     var value = int.Parse(effects[i]);
 
-                    if (value > 0 && allEffects.Contains("allPosHalf"))
-                    {
-                        value = Mathf.RoundToInt(value / 2f);
-                    }else if (value < 0 && allEffects.Contains("allNegHalf"))
-                    {
-                        value = Mathf.RoundToInt(value / 2f);
-                    }
-                    
-                    customer.ModifyAttribute(key, value);
-                    break;
-            }
-        }
-    }
-    
-    private void ApplyEffect(CardEffect cardEffect, Customer customer)
-    {
-        string effect = cardEffect.effect;
-        
-        // Skip special effects (already handled)
-        if (effect == "allNegHalf" || effect == "allPosHalf")
-            return;
-            
-        // Parse attribute effects (format: "attribute|value")
-        string[] parts = effect.Split('|');
-        if (parts.Length == 2)
-        {
-            string attribute = parts[0];
-            if (int.TryParse(parts[1], out int value))
-            {
-                if (cardEffect.isHalved)
-                {
-                    value = Mathf.RoundToInt(value / 2f);
+                    adjustValue(key, value, allEffects, customer);
                 }
-                
-                customer.ModifyAttribute(attribute, value);
+                    break;
+                case "allA":
+                {
+                    
+                    i++;
+                    var value = int.Parse(effects[i]);
+                    foreach (var key in allAttributes)
+                    {
+                         adjustValue(key, value, allEffects, customer);
+                    }
+
+                    break;
+                }
+                case "when":
+                {
+                    return;
+                }
             }
         }
     }
+    private void ApplyWhenEffects(List<string> effects, Customer customer,List<string> allEffects, List<Card> currentHand)
+    {
+        for (int i = 0; i < effects.Count; i++)
+        {
+            switch (effects[i])
+            {
+                case "when":
+                {
+                    i++;
+                    switch (effects[i])
+                    {
+                        case "allUpCard":
+                            bool allUp = true;
+                            for (int j = 0; j < currentHand.Count; j++)
+                            {
+                                if (!currentHand[j].isUpright)
+                                {
+                                    allUp = false;
+                                }
+                            }
+                            if (allUp)
+                            {
+                                i++;
+                                ApplyAttributeEffects (effects.GetRange(i, effects.Count - i), customer,allEffects);
+                            }
+                            break;
+                        case "allDownCard":
+                            bool allDown = true;
+                            for (int j = 0; j < currentHand.Count; j++)
+                                if (currentHand[j].isUpright)
+                                {
+                                    allDown = false;
+                                }
+
+                            if (allDown)
+                            {
+                                i++;
+                                ApplyAttributeEffects (effects.GetRange(i, effects.Count - i), customer,allEffects);
+                            }
+                            break;
+                        case "total":
+                            break;
+                    }
+
+                    break;
+                }
+                default:
+                    return;
+            }
+        }
+    }
+
+    void adjustValue(string key, int value, List<string> allEffects, Customer customer)
+    {
+        
+
+        if (value > 0)
+        {
+            if(allEffects.Contains("allPosHalf"))
+            {
+                value = Mathf.RoundToInt(value / 2f);
+            }
+            else if (allEffects.Contains("allPosAdd"))
+            {
+                value += 1;
+            }
+        }else if (value < 0 && allEffects.Contains("allNegHalf"))
+        {
+            value = Mathf.RoundToInt(value / 2f);
+        }
+                    
+        customer.ModifyAttribute(key, value);
+    }
     
+   
     private bool IsNegativeEffect(string effect)
     {
         if (effect.Contains('|'))
