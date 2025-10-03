@@ -71,7 +71,7 @@ Then tell me, seer — where does the path of love lead me?
     Your words… they bring warmth, like sunlight through clouds.
     Perhaps there is meaning in this pain after all.
     You make it sound as though even sorrow can bloom.
-    @gosub .story
+@gosub .story
 @FinalStop
 @stop
 

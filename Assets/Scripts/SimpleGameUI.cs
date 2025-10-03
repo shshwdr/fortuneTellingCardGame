@@ -247,6 +247,8 @@ public class SimpleGameUI : MonoBehaviour
 
     void UpdateActions()
     {
+        redrawButton.GetComponentInChildren<TMP_Text>().text = $"Redraw({CardSystem.Instance.redrawTime})";
+        redrawButton.interactable = CardSystem.Instance.redrawTime>0;
         // if (CardSystem.Instance.reversedCardCount() != 2)
         // {
         //     performDivinationButton.interactable = false;

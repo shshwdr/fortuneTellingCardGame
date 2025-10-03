@@ -53,7 +53,7 @@ public static class CustomFunctions
     }
     static List<int> mainAttributes = new List<int>()
     {
-        50,55,60,65,70,75,80,85,90,90,90,90
+        55,60,65,70,75,80,85,90,90,90,90
     };
     static List<int> talkedTime = new List<int>()
     {

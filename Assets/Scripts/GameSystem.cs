@@ -50,6 +50,8 @@ public class GameSystem : Singleton<GameSystem>
     {
         gameState.currentCustomerIndex = -1;
         gameState.todayCustomers.Clear();
+
+        CardSystem.Instance.redrawTime = CardSystem.Instance.redrawTimePerDay;
         
         // Reset card deck for new day
         InitializeAvailableCards();

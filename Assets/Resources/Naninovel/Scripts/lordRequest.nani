@@ -64,7 +64,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     Your words carry depth... Perhaps I have overlooked the gentler side of rule.
     Your insight is worth reflection. I shall have it recorded.
     I thought you a wanderer - yet your tongue holds more truth than the law itself.
-    @gosub .story
+@gosub .story
 @FinalStop
 @stop
 

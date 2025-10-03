@@ -7,6 +7,8 @@ public class CardSystem : Singleton<CardSystem>
     public List<Card> currentHand = new List<Card>();
     
     public System.Action<List<Card>> OnHandChanged;
+    public int redrawTimePerDay = 5;
+    public int redrawTime = 5;
 
     public int reversedCardCount()
     {
@@ -15,6 +17,12 @@ public class CardSystem : Singleton<CardSystem>
 
     public void Redraw()
     {
+        if (redrawTime <= 0)
+        {
+            Debug.LogError("Redraw: Redraw time is 0");
+            return;
+        }
+        redrawTime--;
         List<Card> redrawCards = new List<Card>();
         foreach (var card in currentHand)
         {
