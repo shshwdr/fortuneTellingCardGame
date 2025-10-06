@@ -20,7 +20,6 @@ public class CSVLoader : Singleton<CSVLoader>
     public Dictionary<string, DayInfo> dayInfoMap = new Dictionary<string, DayInfo>();
     public Dictionary<string, RuneInfo> runeInfoMap = new Dictionary<string, RuneInfo>();
     public Dictionary<string, SigilInfo> sigilInfoMap = new Dictionary<string, SigilInfo>();
-    public Dictionary<string, UpgradeInfo> upgradeInfoMap = new Dictionary<string, UpgradeInfo>();
     
     // Start is called before the first frame update
     public void Init()
@@ -30,7 +29,6 @@ public class CSVLoader : Singleton<CSVLoader>
         LoadDayData();
         LoadRuneData();
         LoadSigilData();
-        LoadUpgradeData();
     }
     
     private void LoadCardData()
@@ -78,15 +76,6 @@ public class CSVLoader : Singleton<CSVLoader>
         }
     }
     
-    private void LoadUpgradeData()
-    {
-        var upgradeInfos = CsvUtil.LoadObjects<UpgradeInfo>("upgrade");
-        foreach (var upgradeInfo in upgradeInfos)
-        {
-            upgradeInfoMap[upgradeInfo.identifier] = upgradeInfo;
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {

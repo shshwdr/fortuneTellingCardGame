@@ -173,12 +173,14 @@ public class CardSystem : Singleton<CardSystem>
         result.finalSanity = result.initialSanity + tempSanityChange;
         result.tempSanityChange = tempSanityChange;
         
-        // Check if customer is satisfied
-        string targetAttribute = customer.info.target;
-        int initialValue = result.initialAttributes[targetAttribute];
-        int finalValue = result.finalAttributes[targetAttribute];
+        // Check if customer requirements are satisfied
+        Dictionary<string, int> attributeChanges = new Dictionary<string, int>();
+        foreach (var attr in result.finalAttributes.Keys)
+        {
+            attributeChanges[attr] = result.diffAttribute(attr);
+        }
         
-        result.isSatisfied = finalValue > initialValue;
+        result.isSatisfied = customer.AreRequirementsSatisfied(attributeChanges);
         
         if (updateState)
         {
@@ -196,9 +198,16 @@ public class CardSystem : Singleton<CardSystem>
         
         if (result.isSatisfied)
         {
-            // Calculate money reward based on improvement
-            int improvement = finalValue - initialValue;
-            result.moneyEarned = Mathf.Max(1, improvement);
+            // Calculate money reward based on total improvement across all requirements
+            int totalImprovement = 0;
+            foreach (var requirement in customer.requirements)
+            {
+                if (attributeChanges.ContainsKey(requirement.attributeName))
+                {
+                    totalImprovement += attributeChanges[requirement.attributeName];
+                }
+            }
+            result.moneyEarned = Mathf.Max(1, totalImprovement);
         }
         
         return result;

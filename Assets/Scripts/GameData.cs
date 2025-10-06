@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 [System.Serializable]
@@ -45,6 +46,19 @@ public class Card
 }
 
 [System.Serializable]
+public class AttributeRequirement
+{
+    public string attributeName;
+    public int requiredIncrease;
+    
+    public AttributeRequirement(string attribute, int requirement)
+    {
+        attributeName = attribute;
+        requiredIncrease = requirement;
+    }
+}
+
+[System.Serializable]
 public class CustomerInfo
 {
     public string identifier;
@@ -58,14 +72,16 @@ public class Customer
 {
     public CustomerInfo info;
     public int power = 10;
-   public int emotion = 10;
+    public int emotion = 10;
     public int wisdom = 10;
-   // public int sanity = 50;
     public int talkedTime = 0;
-    public int mainAttribute=> GetAttribute(info.target);
-
+    public int mainAttribute => GetAttribute(info.target);
     public int lastStory;
     public string identifier => info.identifier;
+    
+    // Customer requirements based on day and attributes
+    public List<AttributeRequirement> requirements = new List<AttributeRequirement>();
+    
     public Customer(CustomerInfo customerInfo)
     {
         info = customerInfo;
@@ -104,6 +120,72 @@ public class Customer
         int current = GetAttribute(attributeName);
         SetAttribute(attributeName, current + change);
         //GameSystem.Instance.OnAttributeChanged?.Invoke();
+    }
+    
+    /// <summary>
+    /// Generate customer requirements based on current day
+    /// Main attribute: max(1, day/2)
+    /// Secondary attribute (from day 2+): random(0, day/2) for one random non-main attribute
+    /// </summary>
+    public void GenerateRequirements(int currentDay)
+    {
+        requirements.Clear();
+        
+        // Main attribute requirement: max(1, day/2)
+        int mainRequirement = Mathf.Max(1, currentDay / 2);
+        requirements.Add(new AttributeRequirement(info.target, mainRequirement));
+        
+        // Secondary attribute requirement (from day 2 onwards)
+        if (currentDay >= 2)
+        {
+            // Get all attributes except the main one
+            List<string> otherAttributes = new List<string> { "wisdom", "emotion", "power" };
+            otherAttributes.Remove(info.target);
+            
+            // Randomly select one secondary attribute
+            string secondaryAttribute = otherAttributes[Random.Range(0, otherAttributes.Count)];
+            int secondaryRequirement = Random.Range(0, currentDay / 2 + 1); // +1 to make it inclusive
+            
+            if (secondaryRequirement > 0)
+            {
+                requirements.Add(new AttributeRequirement(secondaryAttribute, secondaryRequirement));
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Check if all requirements are satisfied based on attribute changes
+    /// </summary>
+    public bool AreRequirementsSatisfied(Dictionary<string, int> attributeChanges)
+    {
+        foreach (var requirement in requirements)
+        {
+            if (!attributeChanges.ContainsKey(requirement.attributeName))
+                return false;
+                
+            int actualIncrease = attributeChanges[requirement.attributeName];
+            if (actualIncrease < requirement.requiredIncrease)
+                return false;
+        }
+        
+        return true;
+    }
+    
+    /// <summary>
+    /// Get a formatted string describing the customer's requirements
+    /// </summary>
+    public string GetRequirementsText()
+    {
+        if (requirements.Count == 0)
+            return "No requirements";
+            
+        List<string> requirementTexts = new List<string>();
+        foreach (var requirement in requirements)
+        {
+            requirementTexts.Add($"{requirement.attributeName} +{requirement.requiredIncrease}");
+        }
+        
+        return string.Join(", ", requirementTexts);
     }
 }
 

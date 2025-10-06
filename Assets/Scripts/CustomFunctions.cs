@@ -53,11 +53,11 @@ public static class CustomFunctions
     }
     static List<int> mainAttributes = new List<int>()
     {
-        15,20,25,30,35,40,45,50,
+        15,20,25,30,35,40,45,50,100
     };
     static List<int> talkedTime = new List<int>()
     {
-        1,2,3,4,5,6,7,8,9,10
+        1,2,3,4,5,6,7,8,9,10,100
     };
 
     public static string NextStoryRequest()
@@ -81,13 +81,13 @@ public static class CustomFunctions
     {
         var character = GameSystem.Instance.GetCurrentCustomer();
         var result = -1;
-        for (int i = 0; i < 10; i++)
+        int i = character.lastStory  + 1;
+        //for (int i = 0; i < 10; i++)
         {
-            if (character.lastStory < i && character.mainAttribute >= mainAttributes[i] && character.talkedTime >= talkedTime[i])
+            if (mainAttributes.Count>i && talkedTime.Count>i && character.mainAttribute >= mainAttributes[i] && character.talkedTime >= talkedTime[i])
             {
                 result= i;
                 character.lastStory=i;
-                break;
             }
         }
         

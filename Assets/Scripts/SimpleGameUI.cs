@@ -205,9 +205,14 @@ public class SimpleGameUI : MonoBehaviour
         }
 
         var satisfiedText = result.isSatisfied ? "(Satisfied!)" : "";
-        var satisfiedTextColor = result.isSatisfied ? "<color=green>" : "";
+        var satisfiedTextColor = result.isSatisfied ? "<color=green>" : "<color=red>";
+        var closeColor = result.isSatisfied ? "</color>" : "</color>";
+        
         if (customerTargetText != null)
-            customerTargetText.text = $"{satisfiedTextColor}Wants: {customer.info.target} {satisfiedText}";
+        {
+            string requirementsText = customer.GetRequirementsText();
+            customerTargetText.text = $"{satisfiedTextColor}Needs: {requirementsText} {satisfiedText}{closeColor}";
+        }
 
         customerNextChatText.text = CustomFunctions.NextStoryRequest();
 

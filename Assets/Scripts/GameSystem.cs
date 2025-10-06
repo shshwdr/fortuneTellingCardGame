@@ -111,6 +111,12 @@ public class GameSystem : Singleton<GameSystem>
         }
         
         gameState.todayCustomers = uniqueCustomers;
+        
+        // Generate requirements for all customers based on current day
+        foreach (var customer in gameState.todayCustomers)
+        {
+            customer.GenerateRequirements(gameState.currentDay);
+        }
     }
     
     private Customer GetRandomPersistentCustomer()
