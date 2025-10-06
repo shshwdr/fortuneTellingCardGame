@@ -7,3 +7,4 @@ finger,5,flipCard
 upright,5,when|allUpCard|refreshCount|1
 down,5,when|allDownCard|addGold|1
 healSanity,5,sanityMax|1
+balance,5,when|sanityNoChange|sanity|1

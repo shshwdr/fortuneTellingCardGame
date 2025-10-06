@@ -64,16 +64,7 @@ public class DialogueManager : Singleton<DialogueManager>
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            StartDialogue("start", () =>
-            {
-                Debug.Log("对话结束");
-            });
-        }
-    }
+ 
 
     private void OnDialoguePlay(Script script)
     {
