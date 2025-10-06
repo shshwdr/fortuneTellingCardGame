@@ -11,6 +11,7 @@ public class GameSystem : Singleton<GameSystem>
     public System.Action OnAttributeChanged;
     public System.Action<Customer> OnCustomerShow;
     public System.Action<int> OnMoneyChanged;
+    public System.Action<int> OnSanityChanged;
     public System.Action<int> OnDayChanged;
     public System.Action OnGameStateChanged;
     
@@ -23,6 +24,7 @@ public class GameSystem : Singleton<GameSystem>
         StartNewDay();
         
         OnMoneyChanged?.Invoke(gameState.money);
+        OnSanityChanged?.Invoke(gameState.sanity);
     }
     
     private void InitializePersistentCustomers()
@@ -185,7 +187,33 @@ public class GameSystem : Singleton<GameSystem>
         }
         return false;
     }
+
+    public int GetSanity()
+    {
+        return gameState.sanity;
+    }
+    public void AddSanity(int amount)
+    {
+        gameState.sanity += amount;
+        // if (gameState.sanity > 100)
+        // {
+        //     gameState.sanity = 100;
+        // }
+        OnSanityChanged?.Invoke(gameState.sanity);
+        OnGameStateChanged?.Invoke();
+    }
     
+    public void SubtractSanity(int amount)
+    { 
+        gameState.sanity -= amount;
+        if (gameState.sanity < 0)
+        {
+            gameState.sanity = 0;
+            ToastManager.Instance.ShowToast("You've lose all your sanity...game over");
+        }
+        OnSanityChanged?.Invoke(gameState.sanity);
+        OnGameStateChanged?.Invoke();
+    }
     public bool HasUpgrade(string upgradeId)
     {
         return gameState.ownedUpgrades.Contains(upgradeId);

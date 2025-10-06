@@ -89,6 +89,9 @@ Then tell me, seer — where does the path of love lead me?
 #发展故事
 # story
 
+#发展故事
+# story
+
 @if story()==0
     I thought about your words last time.
     I waited by the river, just once more… but he never came.
@@ -111,6 +114,16 @@ Then tell me, seer — where does the path of love lead me?
     A man from the village found me wandering and brought me shelter.
     He’s gentle — always asks if I’ve eaten, never asks where I came from.
     I thought kindness was a small thing... now it feels heavier than love.
+    @choice "Let kindness take root — accept being cared for."
+        @changeAttribute "emotion" value:1
+        @goto .story1
+    @choice "Stand on your feet — let gratitude become strength."
+        @changeAttribute "power" value:1
+        @goto .story1
+    @stop
+    # story1
+    Maybe being held up once helps me learn to walk again.
+
 @else if:story()==2
     I still write to him — the traveler. 
     Not out of longing, I tell myself... but to ask about the world.
@@ -131,6 +144,16 @@ Then tell me, seer — where does the path of love lead me?
     My husband and I began restoring the fields.
     He listens when I speak, though others whisper — “A woman gives orders?”
     I don’t care. The crops grow. Isn’t that enough?
+    @choice "Guide softly — let results answer the whispers."
+        @changeAttribute "emotion" value:1
+        @goto .story3
+    @choice "Take the lead openly — claim a place at the table."
+        @changeAttribute "power" value:1
+        @goto .story3
+    @stop
+    # story3
+    The earth doesn’t ask who you are — only whether you tend it.
+
 @else if:story()==4
     I’ve started keeping records — of planting, trade, and disputes.
     But also of what I see, what I feel.
@@ -150,10 +173,30 @@ Then tell me, seer — where does the path of love lead me?
     At first I thought it was distance. Then I realized — perhaps he’s gone.
     I should feel sad… but instead I feel quiet.
     Maybe love doesn’t die — it just changes names.
+    @choice "Name it gratitude — and let it rest."
+        @changeAttribute "wisdom" value:1
+        @goto .story5
+    @choice "Name it longing — and keep a candle lit."
+        @changeAttribute "emotion" value:1
+        @goto .story5
+    @stop
+    # story5
+    A quiet heart is still a heart.
+
 @else if:story()==6
     I thought I could balance everything — love my husband, admire the traveler, serve the people.
     But hearts are fragile things; they spill when filled too full.
     Still, I want to believe all of it can be true.
+    @choice "Choose boundaries — love needs edges to hold shape."
+        @changeAttribute "wisdom" value:1
+        @goto .story6
+    @choice "Choose generosity — let warmth overflow where it’s needed."
+        @changeAttribute "emotion" value:1
+        @goto .story6
+    @stop
+    # story6
+    Perhaps balance is not a pose, but a rhythm.
+
 @else if:story()==7
     He found my diary today. 
     I heard his voice break before I reached the door.
@@ -174,11 +217,31 @@ Then tell me, seer — where does the path of love lead me?
     They won’t let me speak in the councils anymore.
     My son attends in my place. They adore him.
     Perhaps this is what fate intended.
+    @choice "Let them judge — serve quietly where hands are needed."
+        @changeAttribute "emotion" value:1
+        @goto .story8
+    @choice "Claim your voice — grief does not erase your worth."
+        @changeAttribute "power" value:1
+        @goto .story8
+    @stop
+    # story8
+    If they will not hear me, the fields still will.
+
 @else if:story()==9
     My son visits less. He says I should rest, enjoy peace.
     Peace... feels like being buried alive.
     Sometimes I dream of the traveler again, standing by the river.
     But even in the dream, he turns away.
+    @choice "Turn from the river — let memory stop pulling you under."
+        @changeAttribute "wisdom" value:1
+        @goto .story9
+    @choice "Keep a place by the window — some doors close slowly."
+        @changeAttribute "emotion" value:1
+        @goto .story9
+    @stop
+    # story9
+    The quiet in the house weighs more than winter.
+
 @else if:story()==10
     I came here again because... I remembered.
     The day I first saw you — I was drowning.
@@ -193,10 +256,20 @@ Then tell me, seer — where does the path of love lead me?
     @stop
     # story10
     If that’s true, then maybe even pain deserves to be remembered.
+
 @else if:story()==11
     I’m tired now. My hands shake when I write.
     They’ll take my books away soon — call them nonsense.
     If anyone finds these pages, I hope they read with mercy.
     Maybe love was never meant to last... only to be written.
+    @choice "Let the last page be yours — sign it without apology."
+        @changeAttribute "power" value:1
+        @goto .story11
+    @choice "Leave it unsigned — let the words belong to those who need them."
+        @changeAttribute "wisdom" value:1
+        @goto .story11
+    @stop
+    # story11
+    If they forget my name, perhaps the pages will still remember my hands.
 
 @return

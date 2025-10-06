@@ -57,10 +57,10 @@ public class CustomerInfo
 public class Customer
 {
     public CustomerInfo info;
-    public int power = 50;
-   public int emotion = 50;
-    public int wisdom = 50;
-    public int sanity = 50;
+    public int power = 10;
+   public int emotion = 10;
+    public int wisdom = 10;
+   // public int sanity = 50;
     public int talkedTime = 0;
     public int mainAttribute=> GetAttribute(info.target);
 
@@ -78,7 +78,7 @@ public class Customer
         {
             case "wisdom": return wisdom;
             case "emotion": return emotion;
-            case "sanity": return sanity;
+            //case "sanity": return sanity;
             case "power": return power;
             default: Debug.LogError("Unknown attribute name: " + attributeName); return 0;
         }
@@ -93,7 +93,7 @@ public class Customer
         {
             case "wisdom": wisdom = value; break;
             case "emotion": emotion = value; break;
-            case "sanity": sanity = value; break;
+           // case "sanity": sanity = value; break;
             case "power": power = value; break;
         }
         //GameSystem.Instance.OnAttributeChanged?.Invoke();
@@ -150,6 +150,7 @@ public class UpgradeInfo
 public class GameState
 {
     public int currentDay = 1;
+    public int sanity = 10;
     public int money = 0;
     public int currentCustomerIndex = 0;
     public List<string> ownedRunes = new List<string>();

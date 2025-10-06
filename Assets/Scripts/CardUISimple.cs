@@ -13,8 +13,8 @@ public class CardUISimple : MonoBehaviour
     public TMP_Text cardDescriptionText;
     public TMP_Text cardEffectText;
     public Button cardButton;
-    public GameObject cardBack;
-    public GameObject cardFront;
+    public Image cardBack;
+    //public GameObject cardFront;
     public GameObject fixedOb;
     
     [Header("Card Data")]
@@ -59,7 +59,7 @@ public class CardUISimple : MonoBehaviour
         cardInfo = card.info;
         isUpright = card.isUpright;
         isFixed = card.isFixed;
-        
+        cardBack.sprite = Resources.Load<Sprite>("tarot/" + card.info.identifier); 
         UpdateCardDisplay();
     }
     
@@ -196,12 +196,12 @@ fixedOb.SetActive(isFixed);
     {
         
         // Simple visual update without animation
-        if (cardBack != null && cardFront != null)
-        {
-            cardFront.SetActive(isUpright);
-            cardBack.SetActive(!isUpright);
-        }
-        else
+        // if (cardBack != null && cardFront != null)
+        // {
+        //     cardFront.SetActive(isUpright);
+        //     cardBack.SetActive(!isUpright);
+        // }
+        // else
         {
             // If no separate front/back objects, rotate the whole card
             oppositeTrans.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);

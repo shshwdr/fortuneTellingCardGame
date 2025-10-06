@@ -26,8 +26,8 @@ public static class CustomFunctions
     [ExpressionFunction("getSanity")]
     public static float getSanity()
     {
-        var character = GameSystem.Instance.GetCurrentCustomer();
-        return character.sanity;
+        var character = GameSystem.Instance.GetSanity();
+        return character;
     }
     [ExpressionFunction("getMain")]
     public static float getMain()
@@ -53,12 +53,29 @@ public static class CustomFunctions
     }
     static List<int> mainAttributes = new List<int>()
     {
-        55,60,65,70,75,80,85,90,90,90,90
+        15,20,25,30,35,40,45,50,
     };
     static List<int> talkedTime = new List<int>()
     {
-        0,1,2,3,4,5,6,7,8,9,10
+        1,2,3,4,5,6,7,8,9,10
     };
+
+    public static string NextStoryRequest()
+    {
+        var character = GameSystem.Instance.GetCurrentCustomer();
+        var res = "Next Event: ";
+        var story = character.lastStory+1;
+        if (character.mainAttribute < mainAttributes[story])
+        {
+            res+= $"{mainAttributes[story]-character.mainAttribute} more {character.info.target} ";
+        }
+        if (character.talkedTime < talkedTime[story])
+        {
+            res+= $"{talkedTime[story]-character.talkedTime} more talk";
+        }
+
+        return res;
+    }
     [ExpressionFunction("story")]
     public static int Story()
     {

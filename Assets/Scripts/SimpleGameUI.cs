@@ -14,15 +14,19 @@ public class SimpleGameUI : MonoBehaviour
     [Header("Customer Info UI")]
     public TMP_Text customerNameText;
     public TMP_Text customerTargetText;
+    public TMP_Text customerNextChatText;
     [FormerlySerializedAs("wealthText")] public AttributeCell wisdomText;
     public AttributeCell relationshipText;
-    public AttributeCell sanityText;
+    //public AttributeCell sanityText;
     public AttributeCell powerText;
     
     [Header("Game State UI")]
     public TMP_Text dayText;
     public TMP_Text moneyText;
     public TMP_Text currentCustomerIndexText;
+    public TMP_Text sanityText;
+    public TMP_Text sanityTempText;
+    
     
     [Header("Card UI")]
     public Transform cardContainer;
@@ -112,6 +116,8 @@ public class SimpleGameUI : MonoBehaviour
             GameSystem.Instance.OnCustomerChanged += UpdateCustomerDisplay;
             GameSystem.Instance.OnAttributeChanged += UpdateCurrentCustomerAttributes;
             GameSystem.Instance.OnMoneyChanged += UpdateMoneyDisplay;
+            GameSystem.Instance.OnSanityChanged += UpdateSanityDisplay;
+            
             GameSystem.Instance.OnDayChanged += UpdateDayDisplay;
             GameSystem.Instance.OnGameStateChanged += UpdateGameStateDisplay;
         }
@@ -157,8 +163,9 @@ public class SimpleGameUI : MonoBehaviour
         
         if (customer == null)
         {
-            if (customerNameText != null) customerNameText.text = "No Customer";
+            if (customerNameText != null) customerNameText.text = "";
             if (customerTargetText != null) customerTargetText.text = "";
+            customerNextChatText.text = "";
             return;
         }
         
@@ -177,16 +184,32 @@ public class SimpleGameUI : MonoBehaviour
     }
     private void UpdateCustomerAttributes(Customer customer)
     {
-        var result = CardSystem.Instance.PerformDivination(currentCustomer,false);
+        var result = CardSystem.Instance.PerformDivination(currentCustomer, false);
         powerText.SetValue("Power", customer.power, result.diffAttribute("power"));
-        relationshipText .SetValue("Emotion", customer.emotion, result.diffAttribute("emotion"));
+        relationshipText.SetValue("Emotion", customer.emotion, result.diffAttribute("emotion"));
         wisdomText.SetValue("Wisdom", customer.wisdom, result.diffAttribute("wisdom"));
-        sanityText.SetValue("Sanity", customer.sanity, result.diffAttribute("sanity"));
+        
+        // Update temporary sanity display
+        if (sanityTempText != null)
+        {
+            if (result.tempSanityChange != 0)
+            {
+                string changeText = result.tempSanityChange > 0 ? $"+{result.tempSanityChange}" : result.tempSanityChange.ToString();
+                sanityTempText.text = $"({changeText})";
+                sanityTempText.color = result.tempSanityChange > 0 ? Color.green : Color.red;
+            }
+            else
+            {
+                sanityTempText.text = "";
+            }
+        }
 
         var satisfiedText = result.isSatisfied ? "(Satisfied!)" : "";
-        var satisfiedTextColor = result.isSatisfied ? "<color=green>":"";
+        var satisfiedTextColor = result.isSatisfied ? "<color=green>" : "";
         if (customerTargetText != null)
             customerTargetText.text = $"{satisfiedTextColor}Wants: {customer.info.target} {satisfiedText}";
+
+        customerNextChatText.text = CustomFunctions.NextStoryRequest();
 
         UpdateActions();
     }
@@ -195,6 +218,12 @@ public class SimpleGameUI : MonoBehaviour
     {
         if (moneyText != null)
             moneyText.text = $"Money: {money}";
+    }
+    
+    private void UpdateSanityDisplay(int sanity)
+    {
+        if (sanityText != null)
+            sanityText.text = $"Sanity: {sanity}";
     }
     
     private void UpdateDayDisplay(int day)
@@ -272,10 +301,34 @@ public class SimpleGameUI : MonoBehaviour
         
         var result = CardSystem.Instance.PerformDivination(currentCustomer,true);
         
+        
+        //final result
+
+        if (GameSystem.Instance.GetSanity() <= 0)
+        {
+            ToastManager.Instance.ShowToast("You are too insane to continue, game over");
+            return;
+        }
+        else
+        {
+            foreach (var attr in  CardSystem.Instance.allAttributes)
+            {
+                if (currentCustomer.GetAttribute(attr) <= 0)
+                {
+                    ToastManager.Instance.ShowToast($"customer's {attr} is too low, game over");
+                    return;
+                }
+            }
+        }
+        
         ShowResult(result);
         
         var character = GameSystem.Instance.GetCurrentCustomer();
         character.talkedTime++;
+        
+        
+        
+        
         if (result.isSatisfied)
         {
             ToastManager.Instance.ShowToast($"Customer is happy! You earned {result.moneyEarned} gold");
@@ -298,6 +351,9 @@ public class SimpleGameUI : MonoBehaviour
         
         
         GameSystem.Instance.OnAttributeChanged?.Invoke();
+        
+        
+        
     }
     
     private void ShowResult(DivinationResult result)

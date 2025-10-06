@@ -7,6 +7,9 @@ public class CardSystem : Singleton<CardSystem>
     public List<Card> currentHand = new List<Card>();
     
     public System.Action<List<Card>> OnHandChanged;
+    
+    // Temporary sanity for preview calculations
+    private int tempSanityChange = 0;
     public int redrawTimePerDay = 5;
     public int redrawTime = 5;
 
@@ -23,21 +26,26 @@ public class CardSystem : Singleton<CardSystem>
             return;
         }
         redrawTime--;
+        
+        // Collect unfixed cards to return to deck
         List<Card> redrawCards = new List<Card>();
-        foreach (var card in currentHand)
+        
+        // Replace unfixed cards in their original positions
+        for (int i = 0; i < currentHand.Count; i++)
         {
-            if (!card.isFixed)
+            if (!currentHand[i].isFixed)
             {
-                redrawCards.Add(card);
+                // Add the unfixed card to redraw list
+                redrawCards.Add(currentHand[i]);
+                
+                // Replace with a new card in the same position
+                currentHand[i] = DrawNewCard();
             }
         }
+        
+        // Return the unfixed cards to used cards pile
         GameSystem.Instance.gameState.usedCards.AddRange(redrawCards);
-        currentHand.RemoveAll(card => !card.isFixed);
-        int drawCount = 4 - currentHand.Count;
-        for (int i = 0; i < drawCount; i++)
-        {
-            DrawOneCard();
-        }
+        
         OnHandChanged?.Invoke(currentHand);
     }
     public void DrawCardsForCustomer()
@@ -61,7 +69,7 @@ public class CardSystem : Singleton<CardSystem>
         
     }
 
-    void DrawOneCard()
+    Card DrawNewCard()
     {
         if (GameSystem.Instance.gameState.availableCards.Count == 0)
         {
@@ -71,9 +79,14 @@ public class CardSystem : Singleton<CardSystem>
         int randomIndex = Random.Range(0, GameSystem.Instance.gameState.availableCards.Count);
         Card drawnCard = GameSystem.Instance.gameState.availableCards[randomIndex].Clone();
         drawnCard.isUpright = Random.Range(0, 2) == 0;
-        currentHand.Add(drawnCard);
-            
+        
         GameSystem.Instance.gameState.availableCards.RemoveAt(randomIndex);
+        return drawnCard;
+    }
+    
+    void DrawOneCard()
+    {
+        currentHand.Add(DrawNewCard());
     }
     
     private void RefillCardDeck()
@@ -103,7 +116,6 @@ public class CardSystem : Singleton<CardSystem>
     {
         "wisdom",
         "emotion",
-        "sanity",
         "power"
     };
     public DivinationResult PerformDivination(Customer customer, bool updateState)
@@ -113,16 +125,19 @@ public class CardSystem : Singleton<CardSystem>
         {
             {"wisdom", customer.wisdom},
             {"emotion", customer.emotion},
-            {"sanity", customer.sanity},
             {"power", customer.power}
         };
+        
+        // Initialize sanity values
+        result.initialSanity = GameSystem.Instance.gameState.sanity;
+        result.finalSanity = result.initialSanity;
+        tempSanityChange = 0; // Reset temp sanity change
         
         // Create a copy for calculation
         var tempCustomer = new Customer(customer.info)
         {
             wisdom = customer.wisdom,
             emotion = customer.emotion,
-            sanity = customer.sanity,
             power = customer.power
         };
         
@@ -136,7 +151,7 @@ public class CardSystem : Singleton<CardSystem>
             Card card = currentHand[i];
             var effects = card.GetEffects();
             
-            ApplyAttributeEffects(effects, tempCustomer,allEffects);
+            ApplyAttributeEffects(effects, tempCustomer, allEffects, updateState);
         }
         
         for (int i = 0; i < currentHand.Count; i++)
@@ -144,22 +159,20 @@ public class CardSystem : Singleton<CardSystem>
             Card card = currentHand[i];
             var effects = card.GetEffects();
             
-            ApplyWhenEffects(effects, tempCustomer,allEffects,currentHand);
+            ApplyWhenEffects(effects, tempCustomer, allEffects, currentHand, updateState);
         }
-        
-        // // Apply special effects first (Moon card effects)
-        // ApplySpecialEffects(allEffects, tempCustomer);
-        
-        // Apply normal attribute changes
-
         
         result.finalAttributes = new Dictionary<string, int>
         {
             {"wisdom", tempCustomer.wisdom},
             {"emotion", tempCustomer.emotion},
-            {"sanity", tempCustomer.sanity},
             {"power", tempCustomer.power}
         };
+        
+        // Set sanity results
+        result.finalSanity = result.initialSanity + tempSanityChange;
+        result.tempSanityChange = tempSanityChange;
+        
         // Check if customer is satisfied
         string targetAttribute = customer.info.target;
         int initialValue = result.initialAttributes[targetAttribute];
@@ -172,8 +185,13 @@ public class CardSystem : Singleton<CardSystem>
             // Apply the changes to the actual customer (persistent state)
             customer.wisdom = tempCustomer.wisdom;
             customer.emotion = tempCustomer.emotion;
-            customer.sanity = tempCustomer.sanity;
             customer.power = tempCustomer.power;
+            
+            // Apply sanity changes to game state
+            if (tempSanityChange != 0)
+            {
+                GameSystem.Instance.SubtractSanity(-tempSanityChange);
+            }
         }
         
         if (result.isSatisfied)
@@ -237,7 +255,7 @@ public class CardSystem : Singleton<CardSystem>
         }
     }
     
-    private void ApplyAttributeEffects(List<string> effects, Customer customer,List<string> allEffects)
+    private void ApplyAttributeEffects(List<string> effects, Customer customer, List<string> allEffects, bool updateState)
     {
         for (int i = 0; i < effects.Count; i++)
         {
@@ -249,7 +267,6 @@ public class CardSystem : Singleton<CardSystem>
                     break;
                 case "wisdom":
                 case "emotion":
-                case "sanity":
                 case "power":
                 {
                     var key = effects[i];
@@ -259,6 +276,14 @@ public class CardSystem : Singleton<CardSystem>
                     adjustValue(key, value, allEffects, customer);
                 }
                     break;
+
+                case "sanity":
+                {
+                    i++;
+                    var value = int.Parse(effects[i]);
+                    changeSanity(value, updateState);
+                    break;
+                }
                 case "allA":
                 {
                     
@@ -278,7 +303,7 @@ public class CardSystem : Singleton<CardSystem>
             }
         }
     }
-    private void ApplyWhenEffects(List<string> effects, Customer customer,List<string> allEffects, List<Card> currentHand)
+    private void ApplyWhenEffects(List<string> effects, Customer customer, List<string> allEffects, List<Card> currentHand, bool updateState)
     {
         for (int i = 0; i < effects.Count; i++)
         {
@@ -301,7 +326,7 @@ public class CardSystem : Singleton<CardSystem>
                             if (allUp)
                             {
                                 i++;
-                                ApplyAttributeEffects (effects.GetRange(i, effects.Count - i), customer,allEffects);
+                                ApplyAttributeEffects (effects.GetRange(i, effects.Count - i), customer, allEffects, updateState);
                             }
                             break;
                         case "allDownCard":
@@ -315,7 +340,7 @@ public class CardSystem : Singleton<CardSystem>
                             if (allDown)
                             {
                                 i++;
-                                ApplyAttributeEffects (effects.GetRange(i, effects.Count - i), customer,allEffects);
+                                ApplyAttributeEffects (effects.GetRange(i, effects.Count - i), customer, allEffects, updateState);
                             }
                             break;
                         case "total":
@@ -332,8 +357,6 @@ public class CardSystem : Singleton<CardSystem>
 
     void adjustValue(string key, int value, List<string> allEffects, Customer customer)
     {
-        
-
         if (value > 0)
         {
             if(allEffects.Contains("allPosHalf"))
@@ -350,6 +373,19 @@ public class CardSystem : Singleton<CardSystem>
         }
                     
         customer.ModifyAttribute(key, value);
+        
+    }
+
+    private void changeSanity(int value, bool updateState)
+    {
+        if (updateState)
+        {
+            GameSystem.Instance.SubtractSanity(-value);
+        }
+        else
+        {
+            tempSanityChange += value;
+        }
     }
     
    
@@ -394,11 +430,20 @@ public class DivinationResult
 {
     public Dictionary<string, int> initialAttributes;
     public Dictionary<string, int> finalAttributes;
+    public int initialSanity;
+    public int finalSanity;
+    public int tempSanityChange;
 
     public int diffAttribute(string attribute)
     {
          return finalAttributes[attribute] - initialAttributes[attribute];
     }
+    
+    public int diffSanity()
+    {
+        return finalSanity - initialSanity;
+    }
+    
     public bool isSatisfied;
     public int moneyEarned;
 }
