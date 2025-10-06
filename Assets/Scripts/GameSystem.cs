@@ -63,7 +63,7 @@ public class GameSystem : Singleton<GameSystem>
         
         OnDayChanged?.Invoke(gameState.currentDay);
         
-        CardSystem.Instance.DrawCardsForCustomer();
+        //CardSystem.Instance.DrawCardsForCustomer();
         
         if (gameState.todayCustomers.Count > 0)
         {
