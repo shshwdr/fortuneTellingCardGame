@@ -311,7 +311,7 @@ public class SimpleGameUI : MonoBehaviour
 
         if (GameSystem.Instance.GetSanity() <= 0)
         {
-            ToastManager.Instance.ShowToast("You are too insane to continue, game over");
+            GameSystem.Instance.ShowGameOver("You are too insane to continue.");
             return;
         }
         else
@@ -320,7 +320,7 @@ public class SimpleGameUI : MonoBehaviour
             {
                 if (currentCustomer.GetAttribute(attr) <= 0)
                 {
-                    ToastManager.Instance.ShowToast($"customer's {attr} is too low, game over");
+                    GameSystem.Instance.ShowGameOver($"Customer's {attr} is too low, they left upset.");
                     return;
                 }
             }
@@ -338,6 +338,7 @@ public class SimpleGameUI : MonoBehaviour
         {
             ToastManager.Instance.ShowToast($"Customer is happy! You earned {result.moneyEarned} gold");
             GameSystem.Instance.AddMoney(result.moneyEarned);
+            GameSystem.Instance.CustomerServed(); // Track that we successfully served a customer
             
             DialogueManager.Instance.StartDialogue(character.identifier+"Request","goodResult", () =>
             {

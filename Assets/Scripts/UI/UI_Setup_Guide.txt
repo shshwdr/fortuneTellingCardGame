@@ -1,0 +1,72 @@
+PopupDialog Prefab Structure Guide
+=====================================
+
+To create the PopupDialog prefab in Unity:
+
+1. Create an empty GameObject named "PopupDialog"
+2. Add Canvas component (if not under a Canvas already)
+3. Add the PopupDialog script component
+4. Add a Canvas Group component for fade effects
+
+Structure:
+PopupDialog (PopupDialog script, Canvas Group)
+├── Background (Image with semi-transparent dark color)
+├── Panel (Image for the popup background)
+│   ├── Title (TextMeshPro - UI) [Reference to titleText]
+│   ├── Message (TextMeshPro - UI) [Reference to messageText]  
+│   ├── ButtonContainer (Horizontal Layout Group)
+│   │   ├── Button1 (Button) [Reference to button1]
+│   │   │   └── Text (TextMeshPro - UI) [Reference to button1Text]
+│   │   └── Button2 (Button) [Reference to button2]
+│   │       └── Text (TextMeshPro - UI) [Reference to button2Text]
+
+Set references in PopupDialog script:
+- menu = Background
+- animatedRect = Panel
+- titleText = Title TextMeshPro component
+- messageText = Message TextMeshPro component
+- button1 = Button1 Button component
+- button2 = Button2 Button component
+- button1Text = Button1's Text TextMeshPro component  
+- button2Text = Button2's Text TextMeshPro component
+
+Save as a prefab in Resources/Prefabs/PopupDialog.prefab
+
+ShopMenu Prefab Structure Guide
+===============================
+
+To create the ShopMenu prefab in Unity:
+
+1. Create an empty GameObject named "ShopMenu"
+2. Add the ShopMenu script component
+3. Add a Canvas Group component
+
+Structure:
+ShopMenu (ShopMenu script, Canvas Group)
+├── Background (Image with semi-transparent dark color)
+├── Panel (Image for the shop background)
+│   ├── Title (TextMeshPro - UI displaying "Shop")
+│   ├── MoneyDisplay (TextMeshPro - UI) [Reference to moneyText]
+│   ├── ScrollView (Scroll View)
+│   │   └── Content
+│   │       ├── RuneSection
+│   │       │   ├── RuneTitle (TextMeshPro - UI displaying "Runes")
+│   │       │   └── RuneContainer (Horizontal Layout Group) [Reference to runeContainer]
+│   │       └── CardSection  
+│   │           ├── CardTitle (TextMeshPro - UI displaying "Cards")
+│   │           └── CardContainer (Horizontal Layout Group) [Reference to cardContainer]
+│   └── NextDayButton (Button) [Reference to nextDayButton]
+│       └── Text (TextMeshPro - UI displaying "Proceed to Next Day")
+
+Item Prefabs needed:
+- RuneItemPrefab [Reference to runeItemPrefab]
+- CardItemPrefab [Reference to cardItemPrefab]
+
+Each item prefab should have:
+- NameText (TextMeshPro - UI)
+- DescriptionText (TextMeshPro - UI)  
+- CostText (TextMeshPro - UI)
+- BuyButton (Button)
+  └── Text (TextMeshPro - UI)
+
+Set references in ShopMenu script and save prefabs appropriately.

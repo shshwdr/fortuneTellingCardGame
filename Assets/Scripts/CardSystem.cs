@@ -36,15 +36,15 @@ public class CardSystem : Singleton<CardSystem>
             if (!currentHand[i].isFixed)
             {
                 // Add the unfixed card to redraw list
-                redrawCards.Add(currentHand[i]);
-                
+                //redrawCards.Add(currentHand[i]);
+                GameSystem.Instance.gameState.usedCards.Add(currentHand[i]);
                 // Replace with a new card in the same position
                 currentHand[i] = DrawNewCard();
             }
         }
         
         // Return the unfixed cards to used cards pile
-        GameSystem.Instance.gameState.usedCards.AddRange(redrawCards);
+        //GameSystem.Instance.gameState.usedCards.AddRange(redrawCards);
         
         OnHandChanged?.Invoke(currentHand);
     }

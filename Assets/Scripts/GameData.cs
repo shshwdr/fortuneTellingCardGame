@@ -195,6 +195,7 @@ public class DayInfo
     public string identifier;
     public int day;
     public List<string> customers;
+    public int rent;
 }
 
 [System.Serializable]
@@ -205,6 +206,7 @@ public class RuneInfo
     public string description;
     public int cost;
     public string effect;
+    public bool canBeDraw;
 }
 
 [System.Serializable]

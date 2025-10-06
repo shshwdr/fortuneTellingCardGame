@@ -7,6 +7,10 @@ public class GameSystem : Singleton<GameSystem>
 {
     public GameState gameState = new GameState();
     
+    // Track daily statistics
+    public int customersServedToday = 0;
+    public int moneyEarnedToday = 0;
+    
     public System.Action<Customer> OnCustomerChanged;
     public System.Action OnAttributeChanged;
     public System.Action<Customer> OnCustomerShow;
@@ -50,6 +54,11 @@ public class GameSystem : Singleton<GameSystem>
     
     public void StartNewDay()
     {
+       // PopupDialog.Create("New Day", "test", "Continue to Next Day", () => StartNewDay());
+        // Reset daily statistics
+        customersServedToday = 0;
+        moneyEarnedToday = 0;
+        
         gameState.currentCustomerIndex = -1;
         gameState.todayCustomers.Clear();
 
@@ -169,17 +178,82 @@ public class GameSystem : Singleton<GameSystem>
     
     private void EndDay()
     {
+        int previousDay = gameState.currentDay;
         gameState.currentDay++;
-        // Here you could show end of day summary or shop
-        Debug.Log("Day " + (gameState.currentDay - 1) + " ended. Starting day " + gameState.currentDay);
-        StartNewDay();
+        
+        // Get rent for the day that just ended
+        string dayKey = previousDay.ToString();
+        int rent = 0;
+        if (CSVLoader.Instance.dayInfoMap.ContainsKey(dayKey))
+        {
+            rent = CSVLoader.Instance.dayInfoMap[dayKey].rent;
+        }
+        
+        // Show day end summary
+        ShowDayEndSummary(customersServedToday, moneyEarnedToday, rent);
+    }
+    
+    private void ShowDayEndSummary(int customersServed, int moneyEarned, int rent)
+    {
+        string summary = $"Day {gameState.currentDay - 1} Summary:\n\n";
+        summary += $"Customers served: {customersServed}\n";
+        summary += $"Money earned: {moneyEarned}\n";
+        summary += $"Rent due: {rent}";
+        
+        PopupDialog.Create(
+            "Day End",
+            summary,
+            "Pay Rent",
+            () => PayRentAndContinue(rent)
+        );
+    }
+    
+    private void PayRentAndContinue(int rent)
+    {
+        if (gameState.money >= rent)
+        {
+            // Can afford rent, pay it and go to shop
+            gameState.money -= rent;
+            OnMoneyChanged?.Invoke(gameState.money);
+            ToastManager.Instance.ShowToast($"Paid {rent} rent");
+            
+            // Open shop
+            ShopMenu.OpenShop();
+        }
+        else
+        {
+            // Can't afford rent, game over
+            ShowGameOver($"You couldn't afford the rent of {rent}. You only had {gameState.money}.");
+        }
+    }
+    
+    public void ShowGameOver(string reason)
+    {
+        PopupDialog.Create(
+            "Game Over",
+            reason,
+            "Restart Game",
+            () => {
+                var gameManager = FindObjectOfType<GameManager>();
+                if (gameManager != null)
+                {
+                    gameManager.RestartGame();
+                }
+            }
+        );
     }
     
     public void AddMoney(int amount)
     {
         gameState.money += amount;
+        moneyEarnedToday += amount; // Track daily earnings
         OnMoneyChanged?.Invoke(gameState.money);
         OnGameStateChanged?.Invoke();
+    }
+    
+    public void CustomerServed()
+    {
+        customersServedToday++;
     }
     
     public bool SpendMoney(int amount)
@@ -215,7 +289,6 @@ public class GameSystem : Singleton<GameSystem>
         if (gameState.sanity < 0)
         {
             gameState.sanity = 0;
-            ToastManager.Instance.ShowToast("You've lose all your sanity...game over");
         }
         OnSanityChanged?.Invoke(gameState.sanity);
         OnGameStateChanged?.Invoke();

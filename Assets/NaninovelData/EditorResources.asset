@@ -155,5 +155,8 @@ MonoBehaviour:
     - name: Resources/Naninovel/Scripts/start
       pathPrefix: Scripts
       guid: 941afb4c66b1ed14e86aacd0a0e27622
+    - name: Resources/Naninovel/Scripts/wandererRequest
+      pathPrefix: Scripts
+      guid: b9ec3850bf794d048937d9ab99d0980c
   - Id: Characters/114bd824-1e8b-499e-9c29-e522d1fc225f
     Resources: []

@@ -1,0 +1,258 @@
+@printer Bubble pos:50,70
+@if talked()==false
+    @gosub .start
+@else
+#Small talk after first visit
+    @random
+        @group
+            We meet again, merchant of fate. Today I bring truths found in the mud underfoot.
+            Will you hear a traveler’s small observations?
+        @group
+            I dreamed of a nameless road, ending at a door like yours.
+            Perhaps dreams are more honest than maps.
+        @group
+            The world beyond is unrest, yet the fields here still sing in spring.
+            I wonder if order and chaos are only a heartbeat apart.
+        @group
+            I tried not to come, yet whenever questions grow too sharp, I find myself at this door.
+            You are a whetstone—polishing the question, and the danger.
+        @group
+            I don’t seek answers today—only proof that I’m still walking.
+            But if you speak, I will keep your words.
+#Reading requests
+@if lastStory()>5
+#Late questions
+    @random
+        If I leave, do I abandon love and friends behind? Is wisdom destined for loneliness?
+        My words are becoming someone else’s slogans. Can truth be used like that?
+        When I see through everything, what can I still believe? Is silence closer to the real than speech?
+        If I return to the village, should I keep silent or speak out against injustice?
+@else
+#Early questions
+    @random
+        Should I stay a while longer, or set out again? Beyond lies turmoil; here, kind people.
+        Does love shackle the feet of inquiry? Can I keep both?
+        I doubt fate, yet my steps bring me to your door. How do I live with this paradox?
+        If I write my findings into a book, will it help people see the world—or only see me?
+@FinalStop stay
+@stop
+
+
+#First encounter
+# start
+…Where am I? This place is not the village path I remember, yet it resembles a map in my mind.
+You are not a villager. Nor a traveler. You are someone who waits at the crossroads.
+I don’t believe in fate, but I respect any door willing to be opened.
+Since I’ve stepped in, tell me—does a seeker of truth have moments when he should stop?
+
+@choice "Stopping is to see the direction, not to forsake the distance."
+    @changeAttribute "wisdom" value:2
+    @goto .ContinueChoice
+@choice "Do not let gentleness bind your steps. If you go, go farther."
+    @changeAttribute "power" value:2
+    @goto .ContinueChoice
+@stop
+
+# ContinueChoice
+…Your words are a cold wind that clears my head.
+Very well—let us be honest. I’ll bring you my findings and leave my questions here.
+@return
+
+
+#Satisfied with the reading
+# goodResult
+@printer Bubble
+@random
+    Your words grant a rare calm—not an answer, but reason to keep seeking.
+    I’ll pack today’s talk in the lightest pocket of my satchel.
+    Perhaps truth needs no victory over fate—only courage over fear.
+@gosub .story
+@FinalStop
+@stop
+
+#Unsatisfied with the reading
+# badResult
+@printer Bubble
+@random
+    What you say echoes in fog—it returns too quickly for me to find a direction.
+    If fate is only maxims without footprints, I’d rather search in the mud.
+@FinalStop
+@stop
+
+
+# Development
+# story
+
+@if story()==0
+    I walked the village all day and wrote down three stubborn, small things.
+    First, the well-rope is frayed, yet carefully wound back in place.
+    Second, the baker tests the bread’s warmth with his wrist before sharing it.
+    Third, children step on each other’s shadows to make peace.
+    I suddenly felt that order grows from gentle repetition, not hard decree.
+    @choice "You have found the roots of order—now study how it grows."
+        @changeAttribute "wisdom" value:1
+        @goto .story0
+    @choice "If gentleness can legislate, let it also discipline you."
+        @changeAttribute "emotion" value:1
+        @goto .story0
+    @stop
+    # story0
+    I wrote those three things on a corner of paper so I won’t forget where I began.
+
+@else if:story()==1
+    Refugees arrived; they say armies in the north levy grain—even shadows of granaries are seized.
+    I wish to leave and witness the storm, but friends here ask me to stay a few more days.
+    I stand on the ridge—one foot in mud, my heart in dilemma.
+    @choice "Stay—guard the lives before you. That is the real you can hold."
+        @changeAttribute "emotion" value:1
+        @goto .story1
+    @choice "Go—verify what lies behind rumor, lest conscience rest on hearsay."
+        @changeAttribute "power" value:1
+        @goto .story1
+    @stop
+    # story1
+    I fear the act of choosing will make me small.
+
+@else if:story()==2
+    I spoke long with the girl who always listens earnestly.
+    She asked whether truth and love hurt each other. I had no answer, so I copied the question.
+    By the river I wrote a letter: I want to walk farther, to see the larger world.
+    @choice "Be honest about your desire—do not dress it as virtue."
+        @changeAttribute "wisdom" value:2
+        @goto .story2
+    @choice "If you depart, promise a path to return. Do not turn waiting into punishment."
+        @changeAttribute "emotion" value:2
+        @goto .story2
+    @stop
+    # story2
+    The paper drank my hesitation; the ink proved braver than I.
+
+@else if:story()==3
+    I shuttle between villages—by day I gather rumors, by night I test them.
+    Truth is like grain: you must winnow off the husk to weigh it.
+    Yet I notice—near her, my pace slows.
+    @choice "Train discipline when close—do not let feeling judge for you."
+        @changeAttribute "wisdom" value:1
+        @goto .story3
+    @choice "Accept the slowing—proof your heart isn’t lost."
+        @changeAttribute "emotion" value:1
+        @goto .story3
+    @stop
+    # story3
+    Perhaps seeking truth needs patience, not coldness.
+
+@else if:story()==4
+    I compiled my notes into a book named Mirrors of Fate.
+    I wrote: Fate does not speak; we name our blind spots as oracles.
+    She read a page, silent for long, then said: In that blind spot, perhaps there is love.
+    @choice "Leave a blank in the book—allow love to be an exception."
+        @changeAttribute "emotion" value:2
+        @goto .story4
+    @choice "Sharpen the thesis—make it endure the counterexample."
+        @changeAttribute "wisdom" value:2
+        @goto .story4
+    @stop
+    # story4
+    For the first time I admit on paper: some questions shouldn’t be answered too fast.
+
+@else if:story()==5
+    I decided to travel farther, to the ruined city and the salt road of rumor.
+    Before leaving I gave her a copy and wrote one line: I will bring the wind back.
+    On the road I realized promises are like wind—their warmth differs on different skin.
+    @choice "Promise less, reply more—let facts replace oaths."
+        @changeAttribute "wisdom" value:1
+        @goto .story5
+    @choice "Write your longing—do not let reason steal the heat."
+        @changeAttribute "emotion" value:1
+        @goto .story5
+    @stop
+    # story5
+    My letters grew shorter and truer.
+
+@else if:story()==6
+    I saw armies take grain and commoners lift each other from ruins.
+    I stopped writing lyrical lines; they cover the wounds that must be seen.
+    My letters to her became reports rather than confessions.
+    @choice "Treat her as a person, not a reader—answer with care, not copy."
+        @changeAttribute "emotion" value:1
+        @goto .story6
+    @choice "Suspend the letters until I can separate reporting from caring."
+        @changeAttribute "wisdom" value:1
+        @goto .story6
+    @stop
+    # story6
+    I learn that silence is sometimes duty.
+
+@else if:story()==7
+    I finally put down the pen—not for lack of words, but because each word taxed her.
+    I sealed the unsent letters, writing on the flap: when I deserve to be heard.
+    Truth be told—I now doubt language itself.
+    @choice "Return and speak your apology and choice in person."
+        @changeAttribute "power" value:2
+        @goto .story7
+    @choice "Keep walking; turn apology into change before you speak."
+        @changeAttribute "wisdom" value:2
+        @goto .story7
+    @stop
+    # story7
+    Distance is a mirror; it shows only myself.
+
+@else if:story()==8
+    I came back to the village edge, but did not see her first.
+    I went to the market, the school, the new road—they are straighter than before.
+    I heard of the new lord: his law is a stone that refuses to bend.
+    @choice "Question this order in public—truth shouldn’t fear the square."
+        @changeAttribute "power" value:2
+        @goto .story8
+    @choice "Watch first, gather proof, then decide how to speak."
+        @changeAttribute "wisdom" value:2
+        @goto .story8
+    @stop
+    # story8
+    I know once I speak, many doors won’t open for me again.
+
+@else if:story()==9
+    I spoke with the lord. He claimed order needs a single voice.
+    I answered: When fate has only one voice, the future loses direction.
+    I saw fire rise in his eyes and the crowd step back.
+    @choice "Finish what must be said—do not edit for the ending."
+        @changeAttribute "power" value:2
+        @goto .story9
+    @choice "Step back; bind the words to paper and let time spread them."
+        @changeAttribute "wisdom" value:2
+        @goto .story9
+    @stop
+    # story9
+    I chose the slower way, yet flame travels faster than paper.
+
+@else if:story()==10
+    I was taken. Some call me heretic; others, a stubborn scribe.
+    I handed Mirrors of Fate to the guard, asking him to keep it where light is strongest.
+    He asked if truth fears fire. I said what fears was never truth.
+    @choice "Speak openly in the square—let all hear the reason to dissent."
+        @changeAttribute "power" value:2
+        @goto .story10
+    @choice "Hold silence—leave the last dignity to the written word."
+        @changeAttribute "wisdom" value:2
+        @goto .story10
+    @stop
+    # story10
+    I thought of her—would she ask me not to be brave so loudly?
+
+@else if:story()==11
+    I see the fire. It looks like my young hunger for answers.
+    I smile, because now I know answer lives neither in fire nor in the mouth,
+    but among those still willing to listen to each other.
+    If I have one line left—
+    @choice "Erase my name and leave only the question. Let others answer freely."
+        @changeAttribute "wisdom" value:3
+        @goto .story11
+    @choice "Write my name clearly and bear the fate and misreading of speech."
+        @changeAttribute "power" value:1
+        @changeAttribute "emotion" value:1
+        @goto .story11
+    @stop
+    # story11
+    If truth wants a martyr, let my shadow serve—I still have a road unfinished.
+
+@return
