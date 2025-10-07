@@ -93,7 +93,7 @@ public static class CustomFunctions
 
         if (result != -1)
         {
-            ToastManager.Instance.ShowToast("~~New Story For Customer Revealed~~");
+            ToastManager.Instance.ShowToast("~~New Story Revealed~~");
         }
 
         return result;

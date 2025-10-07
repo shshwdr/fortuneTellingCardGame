@@ -13,6 +13,7 @@ public class ShopMenu : MenuBase
     public GameObject cardDisplayPrefab; // Specific card display prefab
     public TMP_Text moneyText;
     public Button nextDayButton;
+    public bool openAtBeginning = false;
     
     private List<RuneInfo> availableRunes = new List<RuneInfo>();
     private List<CardInfo> availableCards = new List<CardInfo>();

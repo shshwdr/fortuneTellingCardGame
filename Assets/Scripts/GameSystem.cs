@@ -56,7 +56,11 @@ public class GameSystem : Singleton<GameSystem>
     
     public void StartNewDay()
     {
-        ShopMenu.OpenShop();
+        if (FindObjectOfType<ShopMenu>().openAtBeginning)
+        {
+            ShopMenu.OpenShop();
+        }
+        //ShopMenu.OpenShop();
        // PopupDialog.Create("New Day", "test", "Continue to Next Day", () => StartNewDay());
         // Reset daily statistics
         customersServedToday = 0;

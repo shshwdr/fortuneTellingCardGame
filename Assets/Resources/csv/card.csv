@@ -1,14 +1,14 @@
 ﻿identifier,name,description,upEffect,downEffect,isStart,canBeDraw,cost
-sun,sun,sun,power|3|sanity|-3,power|-3|sanity|3,1,1,0
-lover,lover,lover,emotion|3|sanity|-3,emotion|-3|sanity|3,1,1,0
-moon,moon,moon,allPosAdd,allNegHalf,1,1,0
-fool,fool,fool,wisdom|3|sanity|-3,wisdom|-3|sanity|3,1,1,0
-magician,magician,magician,power|2|emotion|-2,power|-2|emotion|2,,1,0
-hermit,hermit,hermit,when|allUpCard|sanity|3,when|allDownCard|sanity|4,,1,0
-hanged,hanged,hanged,copyLastUpEffect,copyLastDownEffect,0,,0
-emperor,emperor,emperor,power|3|allA|-1,power|6|allA|-2,,1,0
-devil,devil,devil,AdjacentCardForceUp,AdjacentCardForceDown,0,,0
-world,The World,The World,when|allUpCard|allA|1,when|allDownCard|allA|2,,1,0
-judgement,Judgement,Judgement,when|total|power|5|allA|1,when|total|power|8|allA|2,0,,0
-temperance,Temperance,Temperance,whenMinus|sanity|emotion|1,whenMinus|emotion|emotion|1,,,0
-tower,tower,tower,whenAdd|power|power|1,whenMinus|power|sanity|1,,,0
+sun,sun,sun,power|3|sanity|-3,power|-3|sanity|3,1,1,5
+lover,lover,lover,emotion|3|sanity|-3,emotion|-3|sanity|3,1,1,5
+moon,moon,moon,allPosAdd,allNegHalf,1,1,5
+fool,fool,fool,wisdom|3|sanity|-3,wisdom|-3|sanity|3,1,1,5
+magician,magician,magician,power|2|emotion|-2,power|-2|emotion|2,0,1,5
+hermit,hermit,hermit,when|allUpCard|sanity|3,when|allDownCard|sanity|4,0,1,5
+hanged,hanged,hanged,copyLastUpEffect,copyLastDownEffect,0,,5
+emperor,emperor,emperor,power|3|allA|-1,power|6|allA|-2,0,1,5
+devil,devil,devil,AdjacentCardForceUp,AdjacentCardForceDown,0,,5
+world,The World,The World,when|allUpCard|allA|1,when|allDownCard|allA|2,0,1,5
+judgement,Judgement,Judgement,when|total|power|5|allA|1,when|total|power|8|allA|2,0,,5
+temperance,Temperance,Temperance,whenMinus|sanity|emotion|1,whenMinus|emotion|emotion|1,,,5
+tower,tower,tower,whenAdd|power|power|1,whenMinus|power|sanity|1,,,5

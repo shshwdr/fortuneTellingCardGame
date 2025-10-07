@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Simplified CardUI without DOTween dependency for testing
 /// </summary>
-public class CardUISimple : MonoBehaviour
+public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI References")]
     public TMP_Text cardNameText;
@@ -218,5 +219,27 @@ fixedOb.SetActive(isFixed);
         isUpright = upright;
         
         UpdateUpright();
+    }
+    
+    /// <summary>
+    /// 鼠标进入时显示卡牌详细信息
+    /// </summary>
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (cardInfo != null && CardDetailDisplay.Instance != null)
+        {
+            CardDetailDisplay.Instance.ShowCardDetail(cardInfo, isUpright);
+        }
+    }
+    
+    /// <summary>
+    /// 鼠标离开时隐藏卡牌详细信息
+    /// </summary>
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (CardDetailDisplay.Instance != null)
+        {
+            CardDetailDisplay.Instance.HideDetail();
+        }
     }
 }
