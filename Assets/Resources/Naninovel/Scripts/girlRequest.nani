@@ -1,4 +1,4 @@
-@printer Bubble pos:50,70
+@printer Bubble pos:50,30
 @if talked()==false
     @gosub .start
 @else

@@ -42,13 +42,13 @@ public class ShopMenu : MenuBase
         
         // Get 3 random runes
         var allRunes = CSVLoader.Instance.runeInfoMap.Values.ToList();
-        var randomRunes = allRunes.OrderBy(x => Random.value).Take(3).ToList();
+        var randomRunes = allRunes.Where(rune => !GameSystem.Instance.gameState.ownedRunes.Any(ownedCard => ownedCard == rune.identifier)).OrderBy(x => Random.value).Take(3).ToList();
         availableRunes.AddRange(randomRunes);
         
         // Get 3 random cards that can be drawn and are not already owned
         var allCards = CSVLoader.Instance.cardInfoMap.Values.Where(card => 
             card.canBeDraw && 
-            !GameSystem.Instance.gameState.availableCards.Any(ownedCard => ownedCard.info.identifier == card.identifier)
+            !GameSystem.Instance.gameState.allCards.Any(ownedCard => ownedCard.info.identifier == card.identifier)
         ).ToList();
         
         var randomCards = allCards.OrderBy(x => Random.value).Take(3).ToList();
@@ -127,7 +127,7 @@ public class ShopMenu : MenuBase
                     displayPrefab.GetComponent<CardUISimple>().SetCardData(((CardInfo)itemData).identifier, 0);
                     //SetupCardDisplay(displayPrefab, (CardInfo)itemData);
                 }
-                shopItemComponent.SetupCard((CardInfo)itemData, () => PurchaseCard((CardInfo)itemData, 10));
+                shopItemComponent.SetupCard((CardInfo)itemData, () => PurchaseCard((CardInfo)itemData));
                 break;
         }
         
@@ -219,18 +219,29 @@ public class ShopMenu : MenuBase
             RefreshAllShopItems();
             UpdateMoneyDisplay();
         }
+        else
+        {
+            ToastManager.Instance.ShowToast($"Can't afford {rune.identifier}!");
+        }
     }
     
-    private void PurchaseCard(CardInfo card, int cost)
+    private void PurchaseCard(CardInfo card)
     {
-        if (GameSystem.Instance.SpendMoney(cost))
+        if (GameSystem.Instance.SpendMoney(card.cost))
         {
-            GameSystem.Instance.gameState.availableCards.Add(new Card(card));
+            var cardt = new Card(card);
+            GameSystem.Instance.gameState.availableCards.Add(cardt);
+            GameSystem.Instance.gameState.allCards.Add(cardt);
+            
             ToastManager.Instance.ShowToast($"Purchased {card.name}!");
             
             // Refresh all shop items
             RefreshAllShopItems();
             UpdateMoneyDisplay();
+        }
+        else
+        {
+             ToastManager.Instance.ShowToast($"Can't afford {card.identifier}!");
         }
     }
     

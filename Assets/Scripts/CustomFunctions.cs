@@ -90,7 +90,11 @@ public static class CustomFunctions
                 character.lastStory=i;
             }
         }
-        
+
+        if (result != -1)
+        {
+            ToastManager.Instance.ShowToast("~~New Story For Customer Revealed~~");
+        }
 
         return result;
     }

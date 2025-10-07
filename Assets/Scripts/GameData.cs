@@ -241,6 +241,7 @@ public class GameState
     public Dictionary<string, string> cardSigils = new Dictionary<string, string>(); // cardId -> sigilId
     public List<string> ownedUpgrades = new List<string>();
     public List<Card> availableCards = new List<Card>();
+    public List<Card> allCards = new List<Card>();
     public List<Card> usedCards = new List<Card>();
     
     public List<Customer> todayCustomers = new List<Customer>();

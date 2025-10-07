@@ -83,7 +83,7 @@ fixedOb.SetActive(isFixed);
         if (cardEffectText == null || cardInfo == null) return;
         
         var effects = isUpright ? cardInfo.upEffect : cardInfo.downEffect;
-        string effectText = isUpright ? "Upright:\n" : "Reversed:\n";
+        string effectText = "";//isUpright ? "Upright:\n" : "Reversed:\n";
         effectText += FormatEffect(effects);
         // foreach (string effect in effects)
         // {

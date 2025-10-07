@@ -47,7 +47,9 @@ public class GameSystem : Singleton<GameSystem>
         {
             if (cardInfo.isStart)
             {
-                gameState.availableCards.Add(new Card(cardInfo));
+                var card = new Card(cardInfo);
+                gameState.availableCards.Add(card);
+                gameState.allCards.Add(card);
             }
         }
     }
