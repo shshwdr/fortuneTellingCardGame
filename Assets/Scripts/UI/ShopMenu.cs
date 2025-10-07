@@ -7,10 +7,10 @@ using System.Linq;
 public class ShopMenu : MenuBase
 {
     [Header("Shop Components")]
-    public Transform runeContainer;
-    public Transform cardContainer;
-    public GameObject runeItemPrefab;
-    public GameObject cardItemPrefab;
+    public Transform itemContainer;
+    public GameObject shopItemPrefab; // Base shop item prefab
+    public GameObject runeDisplayPrefab; // Specific rune display prefab
+    public GameObject cardDisplayPrefab; // Specific card display prefab
     public TMP_Text moneyText;
     public Button nextDayButton;
     
@@ -32,8 +32,7 @@ public class ShopMenu : MenuBase
     private void SetupShop()
     {
         GenerateAvailableItems();
-        CreateRuneItems();
-        CreateCardItems();
+        CreateShopItems();
     }
     
     private void GenerateAvailableItems()
@@ -56,104 +55,156 @@ public class ShopMenu : MenuBase
         availableCards.AddRange(randomCards);
     }
     
-    private void CreateRuneItems()
+    private void CreateShopItems()
     {
-        if (runeContainer == null || runeItemPrefab == null) return;
+        if (itemContainer == null || shopItemPrefab == null) 
+        {
+            Debug.LogWarning("Shop item container or prefab not set up. Using fallback.");
+            return;
+        }
         
         // Clear existing items
-        foreach (Transform child in runeContainer)
+        foreach (Transform child in itemContainer)
         {
             Destroy(child.gameObject);
         }
         
+        // Create rune items
         foreach (var rune in availableRunes)
         {
-            //GameObject runeItem = Instantiate(runeItemPrefab, runeContainer);
-            //SetupRuneItem(runeItem, rune);
-        }
-    }
-    
-    private void CreateCardItems()
-    {
-        if (cardContainer == null || cardItemPrefab == null) return;
-        
-        // Clear existing items
-        foreach (Transform child in cardContainer)
-        {
-            Destroy(child.gameObject);
+            CreateShopItem(rune, ShopItemType.Rune);
         }
         
+        // Create card items
         foreach (var card in availableCards)
         {
-            //GameObject cardItem = Instantiate(cardItemPrefab, cardContainer);
-            //SetupCardItem(cardItem, card);
+            CreateShopItem(card, ShopItemType.Card);
         }
     }
     
-    private void SetupRuneItem(GameObject itemObj, RuneInfo rune)
+    private enum ShopItemType
     {
-        var nameText = itemObj.transform.Find("NameText")?.GetComponent<TMP_Text>();
-        var descText = itemObj.transform.Find("DescriptionText")?.GetComponent<TMP_Text>();
-        var costText = itemObj.transform.Find("CostText")?.GetComponent<TMP_Text>();
-        var buyButton = itemObj.transform.Find("BuyButton")?.GetComponent<Button>();
+        Rune,
+        Card
+    }
+    
+    private void CreateShopItem(object itemData, ShopItemType itemType)
+    {
+        GameObject shopItem = Instantiate(shopItemPrefab, itemContainer);
+        ShopItem shopItemComponent = shopItem.GetComponent<ShopItem>();
+        
+        if (shopItemComponent == null)
+        {
+            shopItemComponent = shopItem.AddComponent<ShopItem>();
+        }
+        
+        // Get the display container from the shop item
+        Transform displayContainer = shopItem.transform.Find("DisplayContainer");
+        if (displayContainer == null)
+        {
+            Debug.LogWarning("DisplayContainer not found in shop item prefab");
+            displayContainer = shopItem.transform;
+        }
+        
+        // Create appropriate display prefab
+        GameObject displayPrefab = null;
+        switch (itemType)
+        {
+            case ShopItemType.Rune:
+                if (runeDisplayPrefab != null)
+                {
+                    displayPrefab = Instantiate(runeDisplayPrefab, displayContainer);
+                    displayPrefab.GetComponent<RuneCell>().SetData((RuneInfo)itemData);
+                    //SetupRuneDisplay(displayPrefab, (RuneInfo)itemData);
+                }
+                shopItemComponent.SetupRune((RuneInfo)itemData, () => PurchaseRune((RuneInfo)itemData));
+                break;
+                
+            case ShopItemType.Card:
+                if (cardDisplayPrefab != null)
+                {
+                    displayPrefab = Instantiate(cardDisplayPrefab, displayContainer);
+                    displayPrefab.GetComponent<CardUISimple>().SetCardData(((CardInfo)itemData).identifier, 0);
+                    //SetupCardDisplay(displayPrefab, (CardInfo)itemData);
+                }
+                shopItemComponent.SetupCard((CardInfo)itemData, () => PurchaseCard((CardInfo)itemData, 10));
+                break;
+        }
+        
+        // Setup purchase button
+        UpdateShopItemPurchaseButton(shopItemComponent, itemType, itemData);
+    }
+    
+    private void SetupRuneDisplay(GameObject displayObj, RuneInfo rune)
+    {
+        var nameText = displayObj.transform.Find("NameText")?.GetComponent<TMP_Text>();
+        var descText = displayObj.transform.Find("DescriptionText")?.GetComponent<TMP_Text>();
+        var costText = displayObj.transform.Find("CostText")?.GetComponent<TMP_Text>();
         
         if (nameText != null) nameText.text = rune.name;
         if (descText != null) descText.text = rune.description;
         if (costText != null) costText.text = $"Cost: {rune.cost}";
         
-        if (buyButton != null)
-        {
-            bool canAfford = GameSystem.Instance.gameState.money >= rune.cost;
-            buyButton.interactable = canAfford && !GameSystem.Instance.HasRune(rune.identifier);
-            
-            var buyButtonText = buyButton.GetComponentInChildren<TMP_Text>();
-            if (buyButtonText != null)
-            {
-                if (GameSystem.Instance.HasRune(rune.identifier))
-                    buyButtonText.text = "Owned";
-                else if (!canAfford)
-                    buyButtonText.text = "Can't Afford";
-                else
-                    buyButtonText.text = "Buy";
-            }
-            
-            buyButton.onClick.AddListener(() => PurchaseRune(rune));
-        }
+        // Additional rune-specific display logic can go here
+        // For example: rune icon, effect preview, etc.
     }
     
-    private void SetupCardItem(GameObject itemObj, CardInfo card)
+    private void SetupCardDisplay(GameObject displayObj, CardInfo card)
     {
-        var nameText = itemObj.transform.Find("NameText")?.GetComponent<TMP_Text>();
-        var descText = itemObj.transform.Find("DescriptionText")?.GetComponent<TMP_Text>();
-        var costText = itemObj.transform.Find("CostText")?.GetComponent<TMP_Text>();
-        var buyButton = itemObj.transform.Find("BuyButton")?.GetComponent<Button>();
+        var nameText = displayObj.transform.Find("NameText")?.GetComponent<TMP_Text>();
+        var descText = displayObj.transform.Find("DescriptionText")?.GetComponent<TMP_Text>();
+        var costText = displayObj.transform.Find("CostText")?.GetComponent<TMP_Text>();
         
         if (nameText != null) nameText.text = card.name;
         if (descText != null) descText.text = card.description;
         
-        // Cards cost is not defined in CardInfo, let's set a default cost based on rarity
         int cardCost = 10; // Default cost for cards
         if (costText != null) costText.text = $"Cost: {cardCost}";
         
-        if (buyButton != null)
+        // Additional card-specific display logic can go here
+        // For example: card artwork, effect preview, etc.
+    }
+    
+    private void UpdateShopItemPurchaseButton(ShopItem shopItem, ShopItemType itemType, object itemData)
+    {
+        Button buyButton = shopItem.GetPurchaseButton();
+        if (buyButton == null) return;
+        
+        bool canAfford = false;
+        bool alreadyOwned = false;
+        string itemName = "";
+        int cost = 10;;
+        switch (itemType)
         {
-            bool canAfford = GameSystem.Instance.gameState.money >= cardCost;
-            bool alreadyOwned = GameSystem.Instance.gameState.availableCards.Any(ownedCard => ownedCard.info.identifier == card.identifier);
-            
-            buyButton.interactable = canAfford && !alreadyOwned;
-            
-            var buyButtonText = buyButton.GetComponentInChildren<TMP_Text>();
-            if (buyButtonText != null)
-            {
-                if (alreadyOwned)
-                    buyButtonText.text = "Owned";
-                else if (!canAfford)
-                    buyButtonText.text = "Can't Afford";
-                else
-                    buyButtonText.text = "Buy";
-            }
-            
-            buyButton.onClick.AddListener(() => PurchaseCard(card, cardCost));
+            case ShopItemType.Rune:
+                var rune = (RuneInfo)itemData;
+                cost = rune.cost;
+                canAfford = GameSystem.Instance.gameState.money >= rune.cost;
+                cost = rune.cost;
+                alreadyOwned = GameSystem.Instance.HasRune(rune.identifier);
+                itemName = rune.name;
+                break;
+                
+            case ShopItemType.Card:
+                var card = (CardInfo)itemData;
+                cost = card.cost;
+                canAfford = GameSystem.Instance.gameState.money >= cost; // Default card cost
+                alreadyOwned = GameSystem.Instance.gameState.availableCards.Any(ownedCard => ownedCard.info.identifier == card.identifier);
+                itemName = card.name;
+                break;
+        }
+        
+        buyButton.interactable = canAfford && !alreadyOwned;
+        
+        var buyButtonText = buyButton.GetComponentInChildren<TMP_Text>();
+        if (buyButtonText != null)
+        {
+            if (alreadyOwned)
+                buyButtonText.text = "Owned";
+            else if (!canAfford)
+                buyButtonText.text = cost+ "Can't Afford";
+            else
+                buyButtonText.text = cost+" Buy";
         }
     }
     
@@ -164,8 +215,8 @@ public class ShopMenu : MenuBase
             GameSystem.Instance.gameState.ownedRunes.Add(rune.identifier);
             ToastManager.Instance.ShowToast($"Purchased {rune.name}!");
             
-            // Refresh the shop display
-            SetupShop();
+            // Refresh all shop items
+            RefreshAllShopItems();
             UpdateMoneyDisplay();
         }
     }
@@ -177,9 +228,21 @@ public class ShopMenu : MenuBase
             GameSystem.Instance.gameState.availableCards.Add(new Card(card));
             ToastManager.Instance.ShowToast($"Purchased {card.name}!");
             
-            // Refresh the shop display
-            SetupShop();
+            // Refresh all shop items
+            RefreshAllShopItems();
             UpdateMoneyDisplay();
+        }
+    }
+    
+    private void RefreshAllShopItems()
+    {
+        if (itemContainer == null) return;
+        
+        // Refresh all shop item button states
+        ShopItem[] shopItems = itemContainer.GetComponentsInChildren<ShopItem>();
+        foreach (var shopItem in shopItems)
+        {
+            shopItem.RefreshButtonState();
         }
     }
     

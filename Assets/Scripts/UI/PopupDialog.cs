@@ -152,7 +152,7 @@ public class PopupDialog : MenuBase
     protected override void Awake()
     {
         base.Awake();
-        destroyWhenHide = true; // Destroy popup when hidden
+        destroyWhenHide = false; // Destroy popup when hidden
     }
     
     void Update()

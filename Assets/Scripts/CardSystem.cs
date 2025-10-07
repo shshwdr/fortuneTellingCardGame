@@ -92,6 +92,7 @@ public class CardSystem : Singleton<CardSystem>
     private void RefillCardDeck()
     {
         GameSystem.Instance.gameState.availableCards.AddRange(GameSystem.Instance.gameState.usedCards);
+        GameSystem.Instance.gameState.usedCards.Clear();
     }
     
     public void FlipCard(int cardIndex)
@@ -455,4 +456,6 @@ public class DivinationResult
     
     public bool isSatisfied;
     public int moneyEarned;
+    
+   
 }

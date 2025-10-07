@@ -54,6 +54,7 @@ public class GameSystem : Singleton<GameSystem>
     
     public void StartNewDay()
     {
+        //ShopMenu.OpenShop();
        // PopupDialog.Create("New Day", "test", "Continue to Next Day", () => StartNewDay());
         // Reset daily statistics
         customersServedToday = 0;
@@ -65,7 +66,7 @@ public class GameSystem : Singleton<GameSystem>
         CardSystem.Instance.redrawTime = CardSystem.Instance.redrawTimePerDay;
         
         // Reset card deck for new day
-        InitializeAvailableCards();
+        //InitializeAvailableCards();
         
         // Load customers for today
         LoadTodayCustomers();

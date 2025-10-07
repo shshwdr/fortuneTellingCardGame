@@ -32,8 +32,8 @@ Set references in PopupDialog script:
 
 Save as a prefab in Resources/Prefabs/PopupDialog.prefab
 
-ShopMenu Prefab Structure Guide
-===============================
+ShopMenu Prefab Structure Guide (Updated)
+==========================================
 
 To create the ShopMenu prefab in Unity:
 
@@ -49,24 +49,48 @@ ShopMenu (ShopMenu script, Canvas Group)
 │   ├── MoneyDisplay (TextMeshPro - UI) [Reference to moneyText]
 │   ├── ScrollView (Scroll View)
 │   │   └── Content
-│   │       ├── RuneSection
-│   │       │   ├── RuneTitle (TextMeshPro - UI displaying "Runes")
-│   │       │   └── RuneContainer (Horizontal Layout Group) [Reference to runeContainer]
-│   │       └── CardSection  
-│   │           ├── CardTitle (TextMeshPro - UI displaying "Cards")
-│   │           └── CardContainer (Horizontal Layout Group) [Reference to cardContainer]
+│   │       └── ItemContainer (Vertical Layout Group) [Reference to itemContainer]
 │   └── NextDayButton (Button) [Reference to nextDayButton]
 │       └── Text (TextMeshPro - UI displaying "Proceed to Next Day")
 
-Item Prefabs needed:
-- RuneItemPrefab [Reference to runeItemPrefab]
-- CardItemPrefab [Reference to cardItemPrefab]
+ShopItem Prefab Structure (NEW)
+===============================
 
-Each item prefab should have:
-- NameText (TextMeshPro - UI)
-- DescriptionText (TextMeshPro - UI)  
-- CostText (TextMeshPro - UI)
-- BuyButton (Button)
-  └── Text (TextMeshPro - UI)
+Create a unified ShopItem prefab:
 
-Set references in ShopMenu script and save prefabs appropriately.
+ShopItem (ShopItem script)
+├── DisplayContainer (Empty GameObject) [Where item-specific displays go]
+├── PurchaseButton (Button) [Reference to purchaseButton in ShopItem script]
+│   └── Text (TextMeshPro - UI) [Reference to purchaseButtonText in ShopItem script]
+
+RuneDisplay Prefab (NEW)
+========================
+
+Create a specific rune display prefab:
+
+RuneDisplay
+├── NameText (TextMeshPro - UI)
+├── DescriptionText (TextMeshPro - UI)
+├── CostText (TextMeshPro - UI)
+├── RuneIcon (Image) [Optional rune-specific icon]
+└── EffectPreview (TextMeshPro - UI) [Optional effect description]
+
+CardDisplay Prefab (NEW)
+========================
+
+Create a specific card display prefab:
+
+CardDisplay
+├── NameText (TextMeshPro - UI)
+├── DescriptionText (TextMeshPro - UI)  
+├── CostText (TextMeshPro - UI)
+├── CardArtwork (Image) [Optional card artwork]
+└── EffectPreview (TextMeshPro - UI) [Optional effect description]
+
+ShopMenu Script References:
+- itemContainer = ItemContainer transform
+- shopItemPrefab = ShopItem prefab
+- runeDisplayPrefab = RuneDisplay prefab
+- cardDisplayPrefab = CardDisplay prefab
+- moneyText = MoneyDisplay TextMeshPro component
+- nextDayButton = NextDayButton Button component

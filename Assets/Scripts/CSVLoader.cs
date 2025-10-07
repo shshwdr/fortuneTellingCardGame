@@ -12,6 +12,7 @@ public class CardInfo
     public List<string> downEffect;
     public bool isStart;
     public bool canBeDraw;
+    public int cost;
 }
 
 public class CSVLoader : Singleton<CSVLoader>

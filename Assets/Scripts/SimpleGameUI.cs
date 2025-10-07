@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Naninovel;
 using Naninovel.UI;
 using TMPro;
@@ -50,7 +52,8 @@ public class SimpleGameUI : MonoBehaviour
 
     public Image customerImage;
 
-    public Button logButton;
+    public Button usedCardButton;
+    public Button availableCardButton;
     
     void Awake()
     {
@@ -101,10 +104,12 @@ public class SimpleGameUI : MonoBehaviour
         
         if (resultPanel != null)
             resultPanel.SetActive(false);
-        logButton.onClick.AddListener(() =>
+        
+        availableCardButton.onClick.AddListener(() =>
+        { 
+        });
+        usedCardButton.onClick.AddListener(() =>
         {
-            var uiManager = Engine.GetService<IUIManager>();
-            uiManager.GetUI<IBacklogUI>()?.Show();
         });
     }
     
@@ -408,5 +413,26 @@ public class SimpleGameUI : MonoBehaviour
     private void NextDay()
     {
         GameSystem.Instance.StartNewDay();
+    }
+
+    private void Update()
+    {
+        
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                var currentHandString =  CardSystem.Instance.currentHand.Select(card => card.info.identifier).ToList();
+                Debug.Log( $"Current Hand: {string.Join(", ", currentHandString)}");
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                var deckString = GameSystem.Instance.gameState.availableCards.Select(card => card.info.identifier).ToList();
+                Debug.Log( $"Deck: {string.Join(", ", deckString)}");
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                var usedString = GameSystem.Instance.gameState.usedCards.Select(card => card.info.identifier).ToList();
+                Debug.Log( $"Used: {string.Join(", ", usedString)}");
+            }
+        
     }
 }
