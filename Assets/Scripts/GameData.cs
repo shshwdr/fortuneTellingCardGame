@@ -231,13 +231,28 @@ public class UpgradeInfo
 }
 
 [System.Serializable]
+public class Rune
+{
+    public RuneInfo info;
+    public int status;
+    
+    public Rune(RuneInfo runeInfo, int runeStatus = 0)
+    {
+        info = runeInfo;
+        status = runeStatus;
+    }
+    
+    public string identifier => info.identifier;
+}
+
+[System.Serializable]
 public class GameState
 {
     public int currentDay = 1;
     public int sanity = 10;
     public int money = 0;
     public int currentCustomerIndex = 0;
-    public List<string> ownedRunes = new List<string>();
+    public List<Rune> ownedRunes = new List<Rune>();
     public Dictionary<string, string> cardSigils = new Dictionary<string, string>(); // cardId -> sigilId
     public List<string> ownedUpgrades = new List<string>();
     public List<Card> availableCards = new List<Card>();

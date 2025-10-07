@@ -54,6 +54,9 @@ public class SimpleGameUI : MonoBehaviour
 
     public Button usedCardButton;
     public Button availableCardButton;
+
+    public Transform runeParent;
+    public RuneCell[] runes;
     
     void Awake()
     {
@@ -107,10 +110,16 @@ public class SimpleGameUI : MonoBehaviour
         
         availableCardButton.onClick.AddListener(() =>
         { 
+            CardDisplayMenu.ShowCards(GameSystem.Instance.gameState.availableCards, "Available Cards");
         });
         usedCardButton.onClick.AddListener(() =>
         {
+            CardDisplayMenu.ShowCards(GameSystem.Instance.gameState.usedCards, "Used Cards");
         });
+        runes = runeParent.GetComponentsInChildren<RuneCell>();
+        
+        // Initial rune display update
+        UpdateRunes();
     }
     
     private void SubscribeToEvents()
@@ -125,11 +134,35 @@ public class SimpleGameUI : MonoBehaviour
             
             GameSystem.Instance.OnDayChanged += UpdateDayDisplay;
             GameSystem.Instance.OnGameStateChanged += UpdateGameStateDisplay;
+            GameSystem.Instance.OnGameStateChanged += UpdateRunes; // Update runes when game state changes
         }
         
         if (CardSystem.Instance != null)
         {
             CardSystem.Instance.OnHandChanged += UpdateCardDisplay;
+        }
+    }
+
+    void UpdateRunes()
+    {
+        if (runes == null || GameSystem.Instance == null) return;
+        
+        var ownedRunes = GameSystem.Instance.gameState.ownedRunes;
+        
+        // Update existing rune cells
+        for (int i = 0; i < runes.Length; i++)
+        {
+            if (i < ownedRunes.Count)
+            {
+                // Display owned rune
+                runes[i].gameObject.SetActive(true);
+                runes[i].SetData(ownedRunes[i]);
+            }
+            else
+            {
+                // Hide empty slots
+                runes[i].gameObject.SetActive(false);
+            }
         }
     }
     
@@ -143,6 +176,7 @@ public class SimpleGameUI : MonoBehaviour
             GameSystem.Instance.OnMoneyChanged -= UpdateMoneyDisplay;
             GameSystem.Instance.OnDayChanged -= UpdateDayDisplay;
             GameSystem.Instance.OnGameStateChanged -= UpdateGameStateDisplay;
+            GameSystem.Instance.OnGameStateChanged -= UpdateRunes; // Remove runes update listener
         }
         
         if (CardSystem.Instance != null)

@@ -22,7 +22,7 @@ public class TopCanvas : MonoBehaviour
         
         allCardButton.onClick.AddListener(() =>
         {
-            
+             CardDisplayMenu.ShowCards(GameSystem.Instance.gameState.allCards);
         });
     }
 

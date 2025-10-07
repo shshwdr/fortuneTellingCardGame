@@ -56,7 +56,7 @@ public class GameSystem : Singleton<GameSystem>
     
     public void StartNewDay()
     {
-        //ShopMenu.OpenShop();
+        ShopMenu.OpenShop();
        // PopupDialog.Create("New Day", "test", "Continue to Next Day", () => StartNewDay());
         // Reset daily statistics
         customersServedToday = 0;
@@ -303,7 +303,40 @@ public class GameSystem : Singleton<GameSystem>
     
     public bool HasRune(string runeId)
     {
-        return gameState.ownedRunes.Contains(runeId);
+        return gameState.ownedRunes.Any(rune => rune.identifier == runeId);
+    }
+    
+    public void AddRune(RuneInfo runeInfo, int status = 0)
+    {
+        if (!HasRune(runeInfo.identifier))
+        {
+            var rune = new Rune(runeInfo, status);
+            gameState.ownedRunes.Add(rune);
+            OnGameStateChanged?.Invoke();
+        }
+    }
+    
+    public Rune GetRune(string runeId)
+    {
+        return gameState.ownedRunes.FirstOrDefault(rune => rune.identifier == runeId);
+    }
+    
+    public bool UpdateRuneStatus(string runeId, int newStatus)
+    {
+        var rune = GetRune(runeId);
+        if (rune != null)
+        {
+            rune.status = newStatus;
+            OnGameStateChanged?.Invoke();
+            return true;
+        }
+        return false;
+    }
+    
+    public int GetRuneStatus(string runeId)
+    {
+        var rune = GetRune(runeId);
+        return rune?.status ?? -1; // Return -1 if rune not found
     }
     
     public string GetCardSigil(string cardId)

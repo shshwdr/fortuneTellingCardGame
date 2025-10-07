@@ -42,7 +42,7 @@ public class ShopMenu : MenuBase
         
         // Get 3 random runes
         var allRunes = CSVLoader.Instance.runeInfoMap.Values.ToList();
-        var randomRunes = allRunes.Where(rune =>rune.canBeDraw && !GameSystem.Instance.gameState.ownedRunes.Any(ownedCard => ownedCard == rune.identifier)).OrderBy(x => Random.value).Take(3).ToList();
+        var randomRunes = allRunes.Where(rune => rune.canBeDraw && !GameSystem.Instance.HasRune(rune.identifier)).OrderBy(x => Random.value).Take(3).ToList();
         availableRunes.AddRange(randomRunes);
         
         // Get 3 random cards that can be drawn and are not already owned
@@ -212,7 +212,7 @@ public class ShopMenu : MenuBase
     {
         if (GameSystem.Instance.SpendMoney(rune.cost))
         {
-            GameSystem.Instance.gameState.ownedRunes.Add(rune.identifier);
+            GameSystem.Instance.AddRune(rune);
             ToastManager.Instance.ShowToast($"Purchased {rune.name}!");
             
             // Refresh all shop items
