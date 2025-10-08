@@ -9,6 +9,7 @@ public class RuneCell : MonoBehaviour
     public TMP_Text text;
     public TMP_Text desc;
     public TMP_Text statusText; // Optional: to display rune status
+    public GameObject effecting;
 
     public void SetData(Rune rune)
     {
@@ -33,6 +34,11 @@ public class RuneCell : MonoBehaviour
     void Start()
     {
         
+    }
+
+    public void SetIsEffect(bool isEffect)
+    {
+        effecting .SetActive(isEffect);
     }
 
     // Update is called once per frame

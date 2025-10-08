@@ -205,8 +205,10 @@ public class RuneInfo
     public string name;
     public string description;
     public int cost;
+    public int value;
     public string effect;
     public bool canBeDraw;
+    public bool isStart;
 }
 
 [System.Serializable]

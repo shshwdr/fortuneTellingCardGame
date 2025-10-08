@@ -8,10 +8,23 @@ public class CardSystem : Singleton<CardSystem>
     
     public System.Action<List<Card>> OnHandChanged;
     
-    // Temporary sanity for preview calculations
+    // Temporary values for preview calculations
     private int tempSanityChange = 0;
-    public int redrawTimePerDay = 5;
+    private int tempMoneyChange = 0;
+    private int tempRerollChange = 0;
+
+    public int redrawTimePerDay
+    {
+        get
+        {
+            return 5+ RuneManager.Instance.getEffectValue("redrawCount");
+        }
+    }
     public int redrawTime = 5;
+    public void AddRedrawTime (int time)
+    {
+        redrawTime += time;
+    }
 
     public int reversedCardCount()
     {
@@ -134,6 +147,12 @@ public class CardSystem : Singleton<CardSystem>
         result.finalSanity = result.initialSanity;
         tempSanityChange = 0; // Reset temp sanity change
         
+        // Initialize money and reroll values
+        result.initialMoney = GameSystem.Instance.gameState.money;
+        result.initialRerolls = CardSystem.Instance.redrawTime;
+        tempMoneyChange = 0; // Reset temp money change
+        tempRerollChange = 0; // Reset temp reroll change
+        
         // Create a copy for calculation
         var tempCustomer = new Customer(customer.info)
         {
@@ -162,6 +181,8 @@ public class CardSystem : Singleton<CardSystem>
             
             ApplyWhenEffects(effects, tempCustomer, allEffects, currentHand, updateState);
         }
+
+        ApplyRuneEffect(currentHand, updateState);
         
         result.finalAttributes = new Dictionary<string, int>
         {
@@ -173,6 +194,12 @@ public class CardSystem : Singleton<CardSystem>
         // Set sanity results
         result.finalSanity = result.initialSanity + tempSanityChange;
         result.tempSanityChange = tempSanityChange;
+        
+        // Set money and reroll results
+        result.finalMoney = result.initialMoney + tempMoneyChange;
+        result.tempMoneyChange = tempMoneyChange;
+        result.finalRerolls = result.initialRerolls + tempRerollChange;
+        result.tempRerollChange = tempRerollChange;
         
         // Check if customer requirements are satisfied
         Dictionary<string, int> attributeChanges = new Dictionary<string, int>();
@@ -194,6 +221,18 @@ public class CardSystem : Singleton<CardSystem>
             if (tempSanityChange != 0)
             {
                 GameSystem.Instance.SubtractSanity(-tempSanityChange);
+            }
+            
+            // Apply money changes to game state
+            if (tempMoneyChange != 0)
+            {
+                GameSystem.Instance.AddMoney(tempMoneyChange);
+            }
+            
+            // Apply reroll changes to card system
+            if (tempRerollChange != 0)
+            {
+                AddRedrawTime(tempRerollChange);
             }
         }
         
@@ -310,6 +349,59 @@ public class CardSystem : Singleton<CardSystem>
                 {
                     return;
                 }
+            }
+        }
+    }
+
+    void ApplyRuneEffect(List<Card> currentHand, bool updateState)
+    {
+        var effects = RuneManager.Instance.runeEffects;
+        var isAllUpCard = true;
+        var isAllDownCard = true;
+        for (int j = 0; j < currentHand.Count; j++)
+        {
+            if (!currentHand[j].isUpright)
+            {
+                isAllUpCard = false;
+            }
+            else
+            {
+                isAllDownCard = false;
+            }
+        }
+
+        foreach (var effect in effects.Keys)
+        {
+            switch (effect)
+            {
+                case "when|allUpCard|refreshCount":
+                    if (isAllUpCard)
+                    {
+                        if (updateState)
+                        {
+                            AddRedrawTime(effects[effect]);
+                        }
+                        else
+                        {
+                            tempRerollChange += effects[effect];
+                        }
+                    }
+
+                    break;
+                case "when|allDownCard|addGold":
+                    if (isAllDownCard)
+                    {
+                        if (updateState)
+                        {
+                            GameSystem.Instance.AddMoney(effects[effect]);
+                        }
+                        else
+                        {
+                            tempMoneyChange += effects[effect];
+                        }
+                    }
+
+                    break;
             }
         }
     }
@@ -443,6 +535,14 @@ public class DivinationResult
     public int initialSanity;
     public int finalSanity;
     public int tempSanityChange;
+    
+    // Money and reroll values
+    public int initialMoney;
+    public int finalMoney;
+    public int tempMoneyChange;
+    public int initialRerolls;
+    public int finalRerolls;
+    public int tempRerollChange;
 
     public int diffAttribute(string attribute)
     {
@@ -454,8 +554,16 @@ public class DivinationResult
         return finalSanity - initialSanity;
     }
     
+    public int diffMoney()
+    {
+        return finalMoney - initialMoney;
+    }
+    
+    public int diffRerolls()
+    {
+        return finalRerolls - initialRerolls;
+    }
+    
     public bool isSatisfied;
     public int moneyEarned;
-    
-   
 }

@@ -25,9 +25,11 @@ public class SimpleGameUI : MonoBehaviour
     [Header("Game State UI")]
     public TMP_Text dayText;
     public TMP_Text moneyText;
+    public TMP_Text moneyTempText;
     public TMP_Text currentCustomerIndexText;
     public TMP_Text sanityText;
     public TMP_Text sanityTempText;
+    public TMP_Text rerollTempText;
     
     
     [Header("Card UI")]
@@ -243,6 +245,36 @@ public class SimpleGameUI : MonoBehaviour
             }
         }
 
+        // Update temporary money display
+        if (moneyTempText != null)
+        {
+            if (result.tempMoneyChange != 0)
+            {
+                string changeText = result.tempMoneyChange > 0 ? $"+{result.tempMoneyChange}" : result.tempMoneyChange.ToString();
+                moneyTempText.text = $"({changeText})";
+                moneyTempText.color = result.tempMoneyChange > 0 ? Color.green : Color.red;
+            }
+            else
+            {
+                moneyTempText.text = "";
+            }
+        }
+
+        // Update temporary reroll display
+        if (rerollTempText != null)
+        {
+            if (result.tempRerollChange != 0)
+            {
+                string changeText = result.tempRerollChange > 0 ? $"+{result.tempRerollChange}" : result.tempRerollChange.ToString();
+                rerollTempText.text = $"({changeText})";
+                rerollTempText.color = result.tempRerollChange > 0 ? Color.green : Color.red;
+            }
+            else
+            {
+                rerollTempText.text = "";
+            }
+        }
+
         var satisfiedText = result.isSatisfied ? "(Satisfied!)" : "";
         var satisfiedTextColor = result.isSatisfied ? "<color=green>" : "<color=red>";
         var closeColor = result.isSatisfied ? "</color>" : "</color>";
@@ -320,18 +352,23 @@ public class SimpleGameUI : MonoBehaviour
 
     void UpdateActions()
     {
-        redrawButton.GetComponentInChildren<TMP_Text>().text = $"Redraw({CardSystem.Instance.redrawTime})";
-        redrawButton.interactable = CardSystem.Instance.redrawTime>0;
-        // if (CardSystem.Instance.reversedCardCount() != 2)
-        // {
-        //     performDivinationButton.interactable = false;
-        //     performDivinationButton.GetComponentInChildren<TMP_Text>().text = "Require 2 reversed cards";
-        // }
-        // else
-        // {
-        //     performDivinationButton.interactable = true;
-        //     performDivinationButton.GetComponentInChildren<TMP_Text>().text = "Fortune Telling";
-        // }
+        // Get preview result to show potential reroll changes
+        DivinationResult result = null;
+        if (currentCustomer != null)
+        {
+            result = CardSystem.Instance.PerformDivination(currentCustomer, false);
+        }
+        
+        int currentRerolls = CardSystem.Instance.redrawTime;
+        int displayRerolls = currentRerolls;
+        
+        if (result != null && result.tempRerollChange != 0)
+        {
+            displayRerolls += result.tempRerollChange;
+        }
+        
+        redrawButton.GetComponentInChildren<TMP_Text>().text = $"Redraw({displayRerolls})";
+        redrawButton.interactable = currentRerolls > 0;
     }
 
     private void PerformDivination()

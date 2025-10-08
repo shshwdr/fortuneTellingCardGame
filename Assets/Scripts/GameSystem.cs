@@ -52,6 +52,14 @@ public class GameSystem : Singleton<GameSystem>
                 gameState.allCards.Add(card);
             }
         }
+
+        foreach (var runeInfo in CSVLoader.Instance.runeInfoMap.Values)
+        {
+            if (runeInfo.isStart)
+            {
+                AddRune(runeInfo);
+            }
+        }
     }
     
     public void StartNewDay()
@@ -317,6 +325,7 @@ public class GameSystem : Singleton<GameSystem>
             var rune = new Rune(runeInfo, status);
             gameState.ownedRunes.Add(rune);
             OnGameStateChanged?.Invoke();
+            RuneManager.Instance.AddRune(rune);
         }
     }
     
