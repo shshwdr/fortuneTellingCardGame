@@ -47,7 +47,13 @@ public class CardDetailDisplay : MonoBehaviour
         
         HideDetail();
     }
-    
+
+    public void ShowRuneDetail(RuneInfo runeInfo)
+    {
+        cardNameText.text = runeInfo.name;
+        cardDescriptionText.text = runeInfo.description;
+        detailPanel.SetActive(true);
+    }
     /// <summary>
     /// 显示卡牌详细信息
     /// </summary>

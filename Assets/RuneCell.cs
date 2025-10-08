@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
-public class RuneCell : MonoBehaviour
+public class RuneCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string identifier;
     public TMP_Text text;
     public TMP_Text desc;
     public TMP_Text statusText; // Optional: to display rune status
     public GameObject effecting;
-
+    private RuneInfo info;
     public void SetData(Rune rune)
     {
+        this.info = rune.info;
         identifier = rune.identifier;
         text.text = rune.info.name;
         desc.text = rune.info.description;
@@ -27,6 +29,7 @@ public class RuneCell : MonoBehaviour
     
     public void SetData(RuneInfo info)
     {
+        this.info = info;
         identifier = info.identifier;
         text.text = info.name;
         desc.text = info.description;
@@ -53,5 +56,27 @@ public class RuneCell : MonoBehaviour
     void Update()
     {
         
+    }
+    
+    /// <summary>
+    /// 鼠标进入时显示卡牌详细信息
+    /// </summary>
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (CardDetailDisplay.Instance != null)
+        {
+            CardDetailDisplay.Instance.ShowRuneDetail(info);
+        }
+    }
+    
+    /// <summary>
+    /// 鼠标离开时隐藏卡牌详细信息
+    /// </summary>
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (CardDetailDisplay.Instance != null)
+        {
+            CardDetailDisplay.Instance.HideDetail();
+        }
     }
 }
