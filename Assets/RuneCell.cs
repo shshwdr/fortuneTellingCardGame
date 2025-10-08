@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public class RuneCell : MonoBehaviour
 {
@@ -38,7 +39,14 @@ public class RuneCell : MonoBehaviour
 
     public void SetIsEffect(bool isEffect)
     {
-        effecting .SetActive(isEffect);
+        effecting.SetActive(isEffect);
+    }
+    
+    public void PlayActivationAnimation()
+    {
+        // 左右扭动动画
+        transform.DOKill(); // 停止之前的动画
+        transform.DOShakeRotation(0.6f, new Vector3(0, 0, 15f), 10, 45f).SetEase(Ease.OutQuad);
     }
 
     // Update is called once per frame

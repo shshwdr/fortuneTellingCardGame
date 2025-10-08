@@ -60,6 +60,7 @@ public class CardSystem : Singleton<CardSystem>
         //GameSystem.Instance.gameState.usedCards.AddRange(redrawCards);
         
         OnHandChanged?.Invoke(currentHand);
+        GameSystem.Instance.OnGameStateChanged?.Invoke();
     }
     public void DrawCardsForCustomer()
     {
@@ -182,7 +183,7 @@ public class CardSystem : Singleton<CardSystem>
             ApplyWhenEffects(effects, tempCustomer, allEffects, currentHand, updateState);
         }
 
-        ApplyRuneEffect(currentHand, updateState);
+        ApplyRuneEffect(currentHand, updateState, result);
         
         result.finalAttributes = new Dictionary<string, int>
         {
@@ -353,7 +354,7 @@ public class CardSystem : Singleton<CardSystem>
         }
     }
 
-    void ApplyRuneEffect(List<Card> currentHand, bool updateState)
+    void ApplyRuneEffect(List<Card> currentHand, bool updateState, DivinationResult result)
     {
         var effects = RuneManager.Instance.runeEffects;
         var isAllUpCard = true;
@@ -377,6 +378,12 @@ public class CardSystem : Singleton<CardSystem>
                 case "when|allUpCard|refreshCount":
                     if (isAllUpCard)
                     {
+                        // Record activated rune
+                        if (!result.activatedRunes.Contains("when|allUpCard|refreshCount"))
+                        {
+                            result.activatedRunes.Add("when|allUpCard|refreshCount");
+                        }
+                        
                         if (updateState)
                         {
                             AddRedrawTime(effects[effect]);
@@ -391,6 +398,12 @@ public class CardSystem : Singleton<CardSystem>
                 case "when|allDownCard|addGold":
                     if (isAllDownCard)
                     {
+                        // Record activated rune
+                        if (!result.activatedRunes.Contains("when|allDownCard|addGold"))
+                        {
+                            result.activatedRunes.Add("when|allDownCard|addGold");
+                        }
+                        
                         if (updateState)
                         {
                             GameSystem.Instance.AddMoney(effects[effect]);
@@ -543,6 +556,9 @@ public class DivinationResult
     public int initialRerolls;
     public int finalRerolls;
     public int tempRerollChange;
+    
+    // Activated runes tracking
+    public List<string> activatedRunes = new List<string>();
 
     public int diffAttribute(string attribute)
     {

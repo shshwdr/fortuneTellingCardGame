@@ -151,6 +151,13 @@ public class SimpleGameUI : MonoBehaviour
         
         var ownedRunes = GameSystem.Instance.gameState.ownedRunes;
         
+        // Get preview result to check activated runes
+        DivinationResult result = null;
+        if (currentCustomer != null)
+        {
+            result = CardSystem.Instance.PerformDivination(currentCustomer, false);
+        }
+        
         // Update existing rune cells
         for (int i = 0; i < runes.Length; i++)
         {
@@ -159,11 +166,58 @@ public class SimpleGameUI : MonoBehaviour
                 // Display owned rune
                 runes[i].gameObject.SetActive(true);
                 runes[i].SetData(ownedRunes[i]);
+                
+                // Check if this rune is activated in preview
+                bool isActivated = false;
+                if (result != null && result.activatedRunes != null)
+                {
+                    // Check if any activated effect belongs to this rune
+                    foreach (var activatedEffect in result.activatedRunes)
+                    {
+                        // Match rune effects by checking if the effect corresponds to this rune
+                        // This is a simplified check - in a real implementation, you might want
+                        // to have a more robust mapping between runes and their effects
+                        if (CheckIfEffectBelongsToRune(ownedRunes[i], activatedEffect))
+                        {
+                            isActivated = true;
+                            break;
+                        }
+                    }
+                }
+                
+                runes[i].SetIsEffect(isActivated);
             }
             else
             {
                 // Hide empty slots
                 runes[i].gameObject.SetActive(false);
+            }
+        }
+    }
+    
+    private bool CheckIfEffectBelongsToRune(Rune rune, string effectName)
+    {
+        // Match rune effect with activated effect name
+        // The rune.info.effect contains the effect type (like "when|allUpCard|refreshCount")
+        // and the effectName in activatedRunes should match this
+        return rune.info.effect == effectName;
+    }
+    
+    public void PlayRuneActivationAnimations(List<string> activatedEffects)
+    {
+        if (runes == null || GameSystem.Instance == null || activatedEffects == null) return;
+        
+        var ownedRunes = GameSystem.Instance.gameState.ownedRunes;
+        
+        for (int i = 0; i < runes.Length && i < ownedRunes.Count; i++)
+        {
+            foreach (var effect in activatedEffects)
+            {
+                if (CheckIfEffectBelongsToRune(ownedRunes[i], effect))
+                {
+                    runes[i].PlayActivationAnimation();
+                    break;
+                }
             }
         }
     }
@@ -381,6 +435,12 @@ public class SimpleGameUI : MonoBehaviour
         // }
         
         var result = CardSystem.Instance.PerformDivination(currentCustomer,true);
+        
+        // Play rune activation animations for activated effects
+        if (result.activatedRunes != null && result.activatedRunes.Count > 0)
+        {
+            PlayRuneActivationAnimations(result.activatedRunes);
+        }
         
         
         //final result

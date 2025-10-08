@@ -83,6 +83,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2654673921929156367, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: effecting
+      value: 
+      objectReference: {fileID: 6271817625264871486}
     - target: {fileID: 4587202669219151880, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
       propertyPath: m_Name
       value: runeCellSimple
