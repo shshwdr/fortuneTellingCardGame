@@ -119,7 +119,7 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         
         var effects = isUpright ? cardInfo.UpEffect(cardLevel) : cardInfo.DownEffect(cardLevel);
         string effectText = "";//isUpright ? "Upright:\n" : "Reversed:\n";
-        effectText += FormatEffect(effects);
+        effectText += CardDetailDisplay.FormatEffectList(effects);
         // foreach (string effect in effects)
         // {
         //     effectText += FormatEffect(effects) + "\n";

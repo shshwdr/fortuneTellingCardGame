@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CardSystem : Singleton<CardSystem>
 {
@@ -214,13 +216,33 @@ public class CardSystem : Singleton<CardSystem>
             
             ApplyAttributeEffects(effects, tempCustomer, allEffects, updateState);
         }
-        
-        for (int i = 0; i < currentHand.Count; i++)
+
+        result.finalAttributes = new Dictionary<string, int>
         {
-            Card card = currentHand[i];
-            var effects = card.GetEffects();
+            {"wisdom", tempCustomer.wisdom},
+            {"emotion", tempCustomer.emotion},
+            {"power", tempCustomer.power}
+        };
+        result.finalSanity = result.initialSanity + tempSanityChange;
+        for (int o = 0; o < 2; o++)
+        {
             
-            ApplyWhenEffects(effects, tempCustomer, allEffects, currentHand, updateState);
+            for (int i = 0; i < currentHand.Count; i++)
+            {
+                Card card = currentHand[i];
+                var effects = card.GetEffects();
+            
+                ApplyWhenEffects(effects, tempCustomer, allEffects, currentHand, updateState, result,o);
+                
+                result.finalAttributes = new Dictionary<string, int>
+                {
+                    {"wisdom", tempCustomer.wisdom},
+                    {"emotion", tempCustomer.emotion},
+                    {"power", tempCustomer.power}
+                };
+                
+                result.finalSanity = result.initialSanity + tempSanityChange;
+            }
         }
 
         ApplyRuneEffect(currentHand, updateState, result);
@@ -451,7 +473,7 @@ public class CardSystem : Singleton<CardSystem>
             }
         }
     }
-    private void ApplyWhenEffects(List<string> effects, Customer customer, List<string> allEffects, List<Card> currentHand, bool updateState)
+    private void ApplyWhenEffects(List<string> effects, Customer customer, List<string> allEffects, List<Card> currentHand, bool updateState,DivinationResult result,int order)
     {
         for (int i = 0; i < effects.Count; i++)
         {
@@ -460,9 +482,14 @@ public class CardSystem : Singleton<CardSystem>
                 case "when":
                 {
                     i++;
+                    if ((effects[i] == "total" && order == 0) || (effects[i] != "total" && order == 1))
+                    {
+                        return;
+                    }
                     switch (effects[i])
                     {
                         case "allUpCard":
+                            
                             bool allUp = true;
                             for (int j = 0; j < currentHand.Count; j++)
                             {
@@ -492,6 +519,50 @@ public class CardSystem : Singleton<CardSystem>
                             }
                             break;
                         case "total":
+                            i++;
+                            var compareOriginValue = 0;
+                            switch (effects[i])
+                            {
+                                case "power":
+                                    compareOriginValue = result.diffAttribute("power");
+                                    break;
+                                case "anyA":
+                                    
+                                    var checkValueT = int.Parse(effects[i+1]);
+                                    if (checkValueT > 0)
+                                    {
+                                        
+                                        compareOriginValue =  Math.Max(Math.Max(result.diffAttribute("power"), result.diffAttribute("emotion")), result.diffAttribute("wisdom"));
+                                    }
+                                    else
+                                    {
+                                        compareOriginValue =  Math.Min(Math.Min(result.diffAttribute("power"), result.diffAttribute("emotion")), result.diffAttribute("wisdom"));
+                                    }
+                                    break;
+                                case "sanity":
+                                    compareOriginValue = result.diffSanity();
+                                    break;
+                            }
+
+                            i++;
+                            var checkValue = int.Parse(effects[i]);
+                            var satisfied = false;
+                            if (checkValue > 0)
+                            {
+                                satisfied = compareOriginValue >= checkValue;
+                                
+                            }
+                            else
+                            {
+                                 satisfied = compareOriginValue <= checkValue;
+                            }
+
+                            i++;
+                            if (satisfied)
+                            {
+                                
+                                ApplyAttributeEffects (effects.GetRange(i, effects.Count - i), customer, allEffects, updateState);
+                            }
                             break;
                     }
 

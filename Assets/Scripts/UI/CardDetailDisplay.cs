@@ -119,7 +119,7 @@ public class CardDetailDisplay : MonoBehaviour
     /// <summary>
     /// 格式化效果列表为可读文本
     /// </summary>
-    private string FormatEffectList(List<string> effects)
+    public static string FormatEffectList(List<string> effects)
     {
         if (effects == null || effects.Count == 0)
             return "No effects";
@@ -133,7 +133,7 @@ public class CardDetailDisplay : MonoBehaviour
             {
                 case "when":
                     i++;
-                    result += "When: ";
+                    result += "When ";
                     switch (effects[i])
                     {
                         case "allUpCard":
@@ -141,6 +141,35 @@ public class CardDetailDisplay : MonoBehaviour
                             break;
                         case "allDownCard":
                             result += "All Cards Are Reversed: ";
+                            break;
+                        case "total":
+                            i++;
+                            result += "Total ";
+                            switch (effects[i])
+                            {
+                                case "power":
+                                    result += "Power Change is ";
+                                    break;
+                                case "anyA":
+                                    result += "Any Attribute Change is ";
+                                    break;
+                                case "sanity":
+                                    result += "Sanity Change is ";
+                                    break;
+                            }
+
+                            i++;
+                            var checkValue = int.Parse(effects[i]);
+                            if (checkValue > 0)
+                            {
+                                result += $"More Than {checkValue}: ";
+                                
+                            }
+                            else
+                            {
+                                result += $"Less Than {checkValue}: ";
+                            }
+
                             break;
                     }
                     i++;
@@ -180,7 +209,7 @@ public class CardDetailDisplay : MonoBehaviour
     /// <summary>
     /// 格式化属性效果
     /// </summary>
-    private string FormatAttributeEffects(List<string> effects)
+    private static string FormatAttributeEffects(List<string> effects)
     {
         string result = "";
         int i = 0;
@@ -215,7 +244,7 @@ public class CardDetailDisplay : MonoBehaviour
             {
                 string value = effects[i];
                 string sign = value.StartsWith("-") ? "" : "+";
-                result += $"• {attributeName} {sign}{value}\n";
+                result += $"{attributeName} {sign}{value}\n";
             }
             i++;
         }

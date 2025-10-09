@@ -9,7 +9,7 @@ hanged,hanged,hanged,copyLastUpEffect,copyLastDownEffect,1,0,,0
 emperor,emperor,emperor,power|3|allA|-1,power|-3|allA|1,2,0,1,0
 devil,devil,devil,emotion|1|wisdom|-1,emotion|1|power|-1,3,0,1,0
 world,The World,The World,when|allUpCard|allA|1,when|allDownCard|allA|1,3,0,1,0
-judgement,Judgement,Judgement,when|total|power|5|allA|1,when|total|power|8|allA|1,1,0,,0
-temperance,Temperance,Temperance,when|total|anyA|-4|emotion|1,when|total|anyA|-5|emotion|5,1,,,0
-tower,tower,tower,when|total|sanity|-4|wisdom|1,when|total|sanity|-5|wisdom|5,1,,,0
+judgement,Judgement,Judgement,when|total|power|3|allA|1,when|total|power|6|allA|1,2,0,1,0
+temperance,Temperance,Temperance,when|total|anyA|-1|emotion|2,when|total|anyA|-5|emotion|4,2,0,1,0
+tower,tower,tower,when|total|sanity|-3|wisdom|2,when|total|sanity|-5|wisdom|4,2,0,1,0
 star,star,star,sanity|3|allA|-1,sanity|-3|allA|1,3,1,1,0
