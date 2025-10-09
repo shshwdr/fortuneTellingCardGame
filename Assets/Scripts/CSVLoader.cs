@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Sinbad;
 using UnityEngine;
 
@@ -10,9 +11,52 @@ public class CardInfo
     public string description;
     public List<string> upEffect;
     public List<string> downEffect;
+
+    public List<string> UpEffect(int level)
+    {
+return         GetEffectWithLevel(true, level);
+    }
+    public List<string> DownEffect(int level)
+    {
+        return GetEffectWithLevel(false, level);
+    }
+
+    public List<string> GetEffectWithLevel(bool isUp,int level)
+    {
+        var infoEffect = (isUp ? upEffect : downEffect).ToList();
+        for (int i = 0; i < infoEffect.Count; i++)
+        {
+            var value = infoEffect[i];
+            int v;
+            if(int.TryParse( value, out v))
+            {
+                int finalv=v;
+                if (infoEffect[0] == "when")
+                {
+                    if (v > 0)
+                    {
+                        var basev = v - 1;
+                        finalv = basev + level;
+                    }else if (v < 0)
+                    {
+                        var basev = v + 1;
+                        finalv = basev - level;
+                    }
+                }
+                else
+                {
+                    finalv = v * level;
+                }
+               
+                infoEffect[i] = finalv.ToString();
+            }
+        }
+        return infoEffect;
+    }
     public bool isStart;
     public bool canBeDraw;
     public int cost;
+    public int maxLevel;
 }
 
 public class CSVLoader : Singleton<CSVLoader>

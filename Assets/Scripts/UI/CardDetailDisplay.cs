@@ -16,7 +16,7 @@ public class CardDetailDisplay : MonoBehaviour
     public TMP_Text reversedEffectText;
     public Image cardImage;
     public TMP_Text currentStatusText;
-    
+    public int level;
     private static CardDetailDisplay instance;
     public static CardDetailDisplay Instance
     {
@@ -52,6 +52,8 @@ public class CardDetailDisplay : MonoBehaviour
     {
         cardNameText.text = runeInfo.name;
         cardDescriptionText.text = runeInfo.description;
+        uprightEffectText.text = "";
+        reversedEffectText.text = "";
         detailPanel.SetActive(true);
     }
     /// <summary>
@@ -59,7 +61,7 @@ public class CardDetailDisplay : MonoBehaviour
     /// </summary>
     /// <param name="cardInfo">卡牌信息</param>
     /// <param name="isCurrentlyUpright">当前是否为正位</param>
-    public void ShowCardDetail(CardInfo cardInfo, bool isCurrentlyUpright)
+    public void ShowCardDetail(CardInfo cardInfo,int level, bool isCurrentlyUpright)
     {
         if (cardInfo == null || detailPanel == null) return;
         
@@ -82,7 +84,7 @@ public class CardDetailDisplay : MonoBehaviour
         if (uprightEffectText != null)
         {
             string uprightText = "<color=green><b>Upright Effects:</b></color>\n";
-            uprightText += FormatEffectList(cardInfo.upEffect);
+            uprightText += FormatEffectList(cardInfo.UpEffect(level));
             uprightEffectText.text = uprightText;
         }
         
@@ -90,7 +92,7 @@ public class CardDetailDisplay : MonoBehaviour
         if (reversedEffectText != null)
         {
             string reversedText = "<color=red><b>Reversed Effects:</b></color>\n";
-            reversedText += FormatEffectList(cardInfo.downEffect);
+            reversedText += FormatEffectList(cardInfo.DownEffect(level));
             reversedEffectText.text = reversedText;
         }
         

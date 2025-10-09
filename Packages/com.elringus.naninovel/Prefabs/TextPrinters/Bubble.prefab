@@ -281,8 +281,8 @@ MonoBehaviour:
     non lacus dictum ullamcorper. Integer sed sem nec neque accumsan luctus ut eget
     urna. Nam scelerisque semper dignissim.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5a5da223be1edb84887b02e14312351e, type: 2}
-  m_sharedMaterial: {fileID: -8572479452236383033, guid: 5a5da223be1edb84887b02e14312351e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 29144a65cf755c843933d2844308815c, type: 2}
+  m_sharedMaterial: {fileID: 4358332516387197198, guid: 29144a65cf755c843933d2844308815c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

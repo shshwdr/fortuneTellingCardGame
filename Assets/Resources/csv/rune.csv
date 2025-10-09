@@ -1,10 +1,10 @@
 ﻿identifier,cost,name,description,effect,value,canBeDraw,isStart
-twinLight,5,twinLight,"when tell fortune with both Moon and Sun cards, remove all negative effect",useBoth|moon|sun|removeAllNeg,,0,
-redraw,5,redraw,redraw count add 2,redrawCount,2,1,1
-lastSanity,5,lastSanity,"if reach sanity =1, add 3 sanity",checkTotal|sanity|1|changeSanity|3,,0,
-lastValue,5,lastValue,,checkTotal|attribute|1|changeValue|3,,0,
-finger,5,finger,,flipCard,,0,
-upright,5,upright,"when tell fortune with all cards up, add 1 refresh count today",when|allUpCard|refreshCount,1,1,1
-down,5,down,"when tell fortune with all cards down, add 2 money",when|allDownCard|addGold,2,1,1
-healSanity,5,healSanity,add 1 max sanity,sanityMax|1,,0,
-balance,5,balance,"when tell fortuen with no sanity change, add 1 sanity",when|sanityNoChange|sanity|1,,0,
+twinLight,0,twinLight,"when tell fortune with both Moon and Sun cards, remove all negative effect",useBoth|moon|sun|removeAllNeg,,0,
+redraw,0,redraw,redraw count add 2,redrawCount,2,1,0
+lastSanity,0,lastSanity,"if reach sanity =1, add 3 sanity",checkTotal|sanity|1|changeSanity|3,,0,
+lastValue,0,lastValue,,checkTotal|attribute|1|changeValue|3,,0,
+finger,0,finger,,flipCard,,0,
+upright,0,upright,"when tell fortune with all cards up, add 1 refresh count today",when|allUpCard|refreshCount,1,1,0
+down,0,down,"when tell fortune with all cards down, add 2 money",when|allDownCard|addGold,2,1,0
+healSanity,0,healSanity,add 1 max sanity,sanityMax|1,,0,
+balance,0,balance,"when tell fortuen with no sanity change, add 1 sanity",when|sanityNoChange|sanity|1,,0,

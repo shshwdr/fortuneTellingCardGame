@@ -168,7 +168,10 @@ public class GameSystem : Singleton<GameSystem>
         yield return new WaitForSeconds(3);
         
         var character = GameSystem.Instance.GetCurrentCustomer();
-        DialogueManager.Instance.StartDialogue(character.info.identifier+ "Request");
+        DialogueManager.Instance.StartDialogue(character.info.identifier+ "Request", () =>
+        {
+            CardSystem.Instance.DrawCardsForCustomer();
+        });
     }
     
     public void NextCustomer()
@@ -177,7 +180,7 @@ public class GameSystem : Singleton<GameSystem>
         
         if (gameState.currentCustomerIndex < gameState.todayCustomers.Count)
         {
-            CardSystem.Instance.DrawCardsForCustomer();
+            //CardSystem.Instance.DrawCardsForCustomer();
             
             OnCustomerChanged?.Invoke(gameState.todayCustomers[gameState.currentCustomerIndex]);
             StartCoroutine(customerShow());
@@ -263,7 +266,7 @@ public class GameSystem : Singleton<GameSystem>
         gameState.money += amount;
         moneyEarnedToday += amount; // Track daily earnings
         OnMoneyChanged?.Invoke(gameState.money);
-        OnGameStateChanged?.Invoke();
+        //OnGameStateChanged?.Invoke();
     }
     
     public void CustomerServed()
@@ -277,7 +280,7 @@ public class GameSystem : Singleton<GameSystem>
         {
             gameState.money -= amount;
             OnMoneyChanged?.Invoke(gameState.money);
-            OnGameStateChanged?.Invoke();
+            //OnGameStateChanged?.Invoke();
             return true;
         }
         return false;
@@ -295,7 +298,7 @@ public class GameSystem : Singleton<GameSystem>
         //     gameState.sanity = 100;
         // }
         OnSanityChanged?.Invoke(gameState.sanity);
-        OnGameStateChanged?.Invoke();
+        //OnGameStateChanged?.Invoke();
     }
     
     public void SubtractSanity(int amount)
@@ -306,7 +309,7 @@ public class GameSystem : Singleton<GameSystem>
             gameState.sanity = 0;
         }
         OnSanityChanged?.Invoke(gameState.sanity);
-        OnGameStateChanged?.Invoke();
+        //OnGameStateChanged?.Invoke();
     }
     public bool HasUpgrade(string upgradeId)
     {
@@ -324,7 +327,7 @@ public class GameSystem : Singleton<GameSystem>
         {
             var rune = new Rune(runeInfo, status);
             gameState.ownedRunes.Add(rune);
-            OnGameStateChanged?.Invoke();
+            //OnGameStateChanged?.Invoke();
             RuneManager.Instance.AddRune(rune);
         }
     }
@@ -340,7 +343,7 @@ public class GameSystem : Singleton<GameSystem>
         if (rune != null)
         {
             rune.status = newStatus;
-            OnGameStateChanged?.Invoke();
+            //OnGameStateChanged?.Invoke();
             return true;
         }
         return false;

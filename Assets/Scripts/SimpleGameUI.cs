@@ -222,6 +222,25 @@ public class SimpleGameUI : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// 清除所有符文的点亮状态和动画效果
+    /// </summary>
+    public void ClearRuneActivationStates()
+    {
+        if (runes == null) return;
+        
+        for (int i = 0; i < runes.Length; i++)
+        {
+            if (runes[i] != null)
+            {
+                // 停止动画效果
+                runes[i].StopActivationAnimation();
+                // 设置为非激活状态
+                runes[i].SetIsEffect(false);
+            }
+        }
+    }
+    
     private void UnsubscribeFromEvents()
     {
         if (GameSystem.Instance != null)
@@ -416,10 +435,10 @@ public class SimpleGameUI : MonoBehaviour
         int currentRerolls = CardSystem.Instance.redrawTime;
         int displayRerolls = currentRerolls;
         
-        if (result != null && result.tempRerollChange != 0)
-        {
-            displayRerolls += result.tempRerollChange;
-        }
+        // if (result != null && result.tempRerollChange != 0)
+        // {
+        //     displayRerolls += result.tempRerollChange;
+        // }
         
         redrawButton.GetComponentInChildren<TMP_Text>().text = $"Redraw({displayRerolls})";
         redrawButton.interactable = currentRerolls > 0;
@@ -466,9 +485,9 @@ public class SimpleGameUI : MonoBehaviour
         
         var character = GameSystem.Instance.GetCurrentCustomer();
         character.talkedTime++;
-        
-        
-        
+
+
+        CardSystem.Instance.ClearHand();
         
         if (result.isSatisfied)
         {
@@ -538,7 +557,11 @@ public class SimpleGameUI : MonoBehaviour
     
     private void SkipCustomer()
     {
-        GameSystem.Instance.NextCustomer();
+        CardSystem.Instance.ClearHand();
+        DialogueManager.Instance.StartDialogue(currentCustomer.identifier+"Request","skipCustomer", () =>
+        {
+            GameSystem.Instance.NextCustomer();
+        });
     }
     
     private void NextDay()

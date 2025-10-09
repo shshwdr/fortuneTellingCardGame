@@ -51,10 +51,10 @@ If this is fate’s doing, then please — tell me,
 Can love still be found for someone who has already drowned?
 
 @choice "Love may return in another form — not always from the same hands."
-    @changeAttribute "emotion" value:3
+    @changeAttribute "emotion" value:2
     @goto .ContinueChoice
 @choice "Your heart still beats. Let it seek what it truly wants, not what is gone."
-    @changeAttribute "power" value:3
+    @changeAttribute "power" value:2
     @goto .ContinueChoice
 @stop
 
@@ -63,7 +63,16 @@ Can love still be found for someone who has already drowned?
 Then tell me, seer — where does the path of love lead me?
 @return
 
-
+# skipCustomer
+@printer Bubble
+@random
+    I understand. Not every door opens today.
+    Then I will carry my questions a little longer.
+    Your silence is kinder than false hope. I’ll come back when I’m steadier.
+    It’s all right — the river can listen for now.
+    I’ll keep writing, even without an answer.
+@FinalStop
+@stop
 #对玩家的占卜结果满意
 # goodResult
 @printer Bubble

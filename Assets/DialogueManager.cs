@@ -15,6 +15,7 @@ public class DialogueManager : Singleton<DialogueManager>
     {
         //Debug.LogError("DialogueManager Start");
         
+        CardSystem.Instance.ClearHand();
         //Debug.LogError("DialogueManager Async");
         try
         {
@@ -52,6 +53,7 @@ public class DialogueManager : Singleton<DialogueManager>
             //scriptPlayer.OnFinalStop += OnDialogueStopped;
             //scriptPlayer.OnPlay += OnDialoguePlay;
             FinalStopEventManager.OnFinalStop += OnDialogueStopped;
+            
             StartDialogue("start", () =>
             {
                 GameSystem.Instance.StartNewGame();

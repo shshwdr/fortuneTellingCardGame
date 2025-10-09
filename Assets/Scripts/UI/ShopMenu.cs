@@ -18,9 +18,16 @@ public class ShopMenu : MenuBase
     private List<RuneInfo> availableRunes = new List<RuneInfo>();
     private List<CardInfo> availableCards = new List<CardInfo>();
     
+    // Track cards that have been upgraded in this shop session
+    private HashSet<string> upgradedCardsThisSession = new HashSet<string>();
+    
     public override void Init()
     {
         base.Init();
+        
+        // Clear upgraded cards tracking when initializing shop
+        upgradedCardsThisSession.Clear();
+        
         SetupShop();
         UpdateMoneyDisplay();
         
@@ -46,13 +53,30 @@ public class ShopMenu : MenuBase
         var randomRunes = allRunes.Where(rune => rune.canBeDraw && !GameSystem.Instance.HasRune(rune.identifier)).OrderBy(x => Random.value).Take(3).ToList();
         availableRunes.AddRange(randomRunes);
         
-        // Get 3 random cards that can be drawn and are not already owned
-        var allCards = CSVLoader.Instance.cardInfoMap.Values.Where(card => 
-            card.canBeDraw && 
-            !GameSystem.Instance.gameState.allCards.Any(ownedCard => ownedCard.info.identifier == card.identifier)
-        ).ToList();
+        // Get cards that can be drawn:
+        // 1. Cards not owned yet
+        // 2. Cards already owned but can be upgraded (level < maxLevel)
+        var allCards = CSVLoader.Instance.cardInfoMap.Values.Where(card => card.canBeDraw).ToList();
         
-        var randomCards = allCards.OrderBy(x => Random.value).Take(3).ToList();
+        var availableCardsList = new List<CardInfo>();
+        
+        foreach (var card in allCards)
+        {
+            var ownedCard = GameSystem.Instance.gameState.allCards.FirstOrDefault(ownedCard => ownedCard.info.identifier == card.identifier);
+            
+            if (ownedCard == null)
+            {
+                // Card not owned, can be purchased
+                availableCardsList.Add(card);
+            }
+            else if (ownedCard.level < card.maxLevel)
+            {
+                // Card owned but can be upgraded
+                availableCardsList.Add(card);
+            }
+        }
+        
+        var randomCards = availableCardsList.OrderBy(x => Random.value).Take(3).ToList();
         availableCards.AddRange(randomCards);
     }
     
@@ -125,8 +149,27 @@ public class ShopMenu : MenuBase
                 if (cardDisplayPrefab != null)
                 {
                     displayPrefab = Instantiate(cardDisplayPrefab, displayContainer);
-                    displayPrefab.GetComponent<CardUISimple>().SetCardData(((CardInfo)itemData).identifier, 0);
-                    //SetupCardDisplay(displayPrefab, (CardInfo)itemData);
+                    var cardUI = displayPrefab.GetComponent<CardUISimple>();
+                    
+                    // Check if this card is owned and show appropriate level
+                    var cardInfo = (CardInfo)itemData;
+                    var ownedCard = GameSystem.Instance.gameState.allCards.FirstOrDefault(ownedCard => ownedCard.info.identifier == cardInfo.identifier);
+                    
+                    if (ownedCard != null && ownedCard.level < cardInfo.maxLevel)
+                    {
+                        // Show as upgrade (next level)
+                        var upgradeCard = new Card(cardInfo, ownedCard.level + 1);
+                        cardUI.SetCardData(upgradeCard, 0);
+                        
+                        // Add upgrade indicator to the display
+                        ShowUpgradeComparison(displayPrefab, ownedCard, upgradeCard);
+                    }
+                    else
+                    {
+                        // Show as new card (level 1)
+                        var newCard = new Card(cardInfo, 1);
+                        cardUI.SetCardData(newCard, 0);
+                    }
                 }
                 shopItemComponent.SetupCard((CardInfo)itemData, () => PurchaseCard((CardInfo)itemData));
                 break;
@@ -134,6 +177,47 @@ public class ShopMenu : MenuBase
         
         // Setup purchase button
         UpdateShopItemPurchaseButton(shopItemComponent, itemType, itemData);
+    }
+    
+    private void ShowUpgradeComparison(GameObject displayPrefab, Card currentCard, Card upgradeCard)
+    {
+        // Find or create comparison display components
+        var comparisonContainer = displayPrefab.transform.Find("UpgradeComparison");
+        if (comparisonContainer == null)
+        {
+            // Create comparison container
+            GameObject comparisonObj = new GameObject("UpgradeComparison");
+            comparisonObj.transform.SetParent(displayPrefab.transform);
+            
+            // Add text component for showing comparison
+            var comparisonText = comparisonObj.AddComponent<TMP_Text>();
+            comparisonText.fontSize = 12;
+            comparisonText.color = Color.green;
+            comparisonText.alignment = TextAlignmentOptions.Center;
+            
+            // Position the comparison text
+            var rectTransform = comparisonObj.GetComponent<RectTransform>();
+            rectTransform.anchorMin = new Vector2(0, 0);
+            rectTransform.anchorMax = new Vector2(1, 0.3f);
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
+            
+            comparisonContainer = comparisonObj.transform;
+        }
+        
+        var comparisonTextComponent = comparisonContainer.GetComponent<TMP_Text>();
+        if (comparisonTextComponent != null)
+        {
+            comparisonTextComponent.text = GetUpgradeComparisonText(currentCard, upgradeCard);
+        }
+    }
+    
+    private string GetUpgradeComparisonText(Card currentCard, Card upgradeCard)
+    {
+        var currentEffects = currentCard.GetEffects();
+        var upgradeEffects = upgradeCard.GetEffects();
+        
+        return $"Lv.{currentCard.level} → Lv.{upgradeCard.level}\nUpgrade Available!";
     }
     
     private void SetupRuneDisplay(GameObject displayObj, RuneInfo rune)
@@ -173,39 +257,49 @@ public class ShopMenu : MenuBase
         
         bool canAfford = false;
         bool alreadyOwned = false;
+        bool canUpgrade = false;
+        bool upgradedThisSession = false;
         string itemName = "";
-        int cost = 10;;
+        int cost = 10;
+        
         switch (itemType)
         {
             case ShopItemType.Rune:
                 var rune = (RuneInfo)itemData;
                 cost = rune.cost;
                 canAfford = GameSystem.Instance.gameState.money >= rune.cost;
-                cost = rune.cost;
                 alreadyOwned = GameSystem.Instance.HasRune(rune.identifier);
                 itemName = rune.name;
                 break;
                 
             case ShopItemType.Card:
                 var card = (CardInfo)itemData;
+                var ownedCard = GameSystem.Instance.gameState.allCards.FirstOrDefault(ownedCard => ownedCard.info.identifier == card.identifier);
+                
                 cost = card.cost;
-                canAfford = GameSystem.Instance.gameState.money >= cost; // Default card cost
-                alreadyOwned = GameSystem.Instance.gameState.availableCards.Any(ownedCard => ownedCard.info.identifier == card.identifier);
+                canAfford = GameSystem.Instance.gameState.money >= cost;
+                alreadyOwned = ownedCard != null;
+                canUpgrade = alreadyOwned && ownedCard.level < card.maxLevel;
+                upgradedThisSession = upgradedCardsThisSession.Contains(card.identifier);
                 itemName = card.name;
                 break;
         }
         
-        buyButton.interactable = canAfford && !alreadyOwned;
+        buyButton.interactable = canAfford && (!alreadyOwned || canUpgrade) && !upgradedThisSession;
         
         var buyButtonText = buyButton.GetComponentInChildren<TMP_Text>();
         if (buyButtonText != null)
         {
-            if (alreadyOwned)
-                buyButtonText.text = "Owned";
+            if (upgradedThisSession)
+                buyButtonText.text = "Upgraded";
+            else if (alreadyOwned && !canUpgrade)
+                buyButtonText.text = "Max Level";
+            else if (canUpgrade)
+                buyButtonText.text = cost + " Upgrade";
             else if (!canAfford)
-                buyButtonText.text = cost+ "Can't Afford";
+                buyButtonText.text = cost + " Can't Afford";
             else
-                buyButtonText.text = cost+" Buy";
+                buyButtonText.text = cost + " Buy";
         }
     }
     
@@ -228,13 +322,28 @@ public class ShopMenu : MenuBase
     
     private void PurchaseCard(CardInfo card)
     {
+        var ownedCard = GameSystem.Instance.gameState.allCards.FirstOrDefault(ownedCard => ownedCard.info.identifier == card.identifier);
+        
         if (GameSystem.Instance.SpendMoney(card.cost))
         {
-            var cardt = new Card(card);
-            GameSystem.Instance.gameState.availableCards.Add(cardt);
-            GameSystem.Instance.gameState.allCards.Add(cardt);
-            
-            ToastManager.Instance.ShowToast($"Purchased {card.name}!");
+            if (ownedCard != null)
+            {
+                // Upgrade existing card
+                ownedCard.level++;
+                
+                // Mark this card as upgraded in this session
+                upgradedCardsThisSession.Add(card.identifier);
+                
+                ToastManager.Instance.ShowToast($"Upgraded {card.name} to level {ownedCard.level}!");
+            }
+            else
+            {
+                // Purchase new card
+                var newCard = new Card(card);
+                GameSystem.Instance.gameState.availableCards.Add(newCard);
+                GameSystem.Instance.gameState.allCards.Add(newCard);
+                ToastManager.Instance.ShowToast($"Purchased {card.name}!");
+            }
             
             // Refresh all shop items
             RefreshAllShopItems();
@@ -244,6 +353,11 @@ public class ShopMenu : MenuBase
         {
              ToastManager.Instance.ShowToast($"Can't afford {card.identifier}!");
         }
+    }
+    
+    public bool IsCardUpgradedThisSession(string cardIdentifier)
+    {
+        return upgradedCardsThisSession.Contains(cardIdentifier);
     }
     
     private void RefreshAllShopItems()

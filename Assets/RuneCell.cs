@@ -51,6 +51,17 @@ public class RuneCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         transform.DOKill(); // 停止之前的动画
         transform.DOShakeRotation(0.6f, new Vector3(0, 0, 15f), 10, 45f).SetEase(Ease.OutQuad);
     }
+    
+    /// <summary>
+    /// 停止激活动画
+    /// </summary>
+    public void StopActivationAnimation()
+    {
+        // 停止DOTween动画
+        transform.DOKill();
+        // 重置旋转
+        transform.rotation = Quaternion.identity;
+    }
 
     // Update is called once per frame
     void Update()

@@ -13,6 +13,7 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public TMP_Text cardNameText;
     public TMP_Text cardDescriptionText;
     public TMP_Text cardEffectText;
+    public TMP_Text cardLevelText;
     public Button cardButton;
     public Image cardBack;
     //public GameObject cardFront;
@@ -23,6 +24,7 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public bool isUpright = false;
     public bool isFixed = false;
     public int cardIndex;
+    public int cardLevel = 1;
     
     
     private CardInfo cardInfo;
@@ -45,6 +47,7 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         cardId = id;
         cardIndex = index;
+        cardLevel = 1; // Default level for new cards
         
         if (CSVLoader.Instance.cardInfoMap.ContainsKey(cardId))
         {
@@ -60,8 +63,22 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         cardInfo = card.info;
         isUpright = card.isUpright;
         isFixed = card.isFixed;
+        cardLevel = card.level;
         cardBack.sprite = Resources.Load<Sprite>("tarot/" + card.info.identifier); 
         UpdateCardDisplay();
+    }
+    
+    public void SetCardDataWithLevel(string id, int level, int index)
+    {
+        cardId = id;
+        cardIndex = index;
+        cardLevel = level;
+        
+        if (CSVLoader.Instance.cardInfoMap.ContainsKey(cardId))
+        {
+            cardInfo = CSVLoader.Instance.cardInfoMap[cardId];
+            UpdateCardDisplay();
+        }
     }
     
     private void UpdateCardDisplay()
@@ -75,15 +92,32 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             cardDescriptionText.text = cardInfo.description;
             
         UpdateUpright();
+        UpdateLevelDisplay();
         //UpdateEffectText();
-fixedOb.SetActive(isFixed);
+        fixedOb.SetActive(isFixed);
+    }
+    
+    private void UpdateLevelDisplay()
+    {
+        if (cardLevelText != null)
+        {
+            if (cardLevel > 1)
+            {
+                cardLevelText.text = $"Lv.{cardLevel}";
+                cardLevelText.gameObject.SetActive(true);
+            }
+            else
+            {
+                cardLevelText.gameObject.SetActive(false);
+            }
+        }
     }
     
     private void UpdateEffectText()
     {
         if (cardEffectText == null || cardInfo == null) return;
         
-        var effects = isUpright ? cardInfo.upEffect : cardInfo.downEffect;
+        var effects = isUpright ? cardInfo.UpEffect(cardLevel) : cardInfo.DownEffect(cardLevel);
         string effectText = "";//isUpright ? "Upright:\n" : "Reversed:\n";
         effectText += FormatEffect(effects);
         // foreach (string effect in effects)
@@ -211,6 +245,7 @@ fixedOb.SetActive(isFixed);
         cardButton.image.color = isUpright ? uprightColor : reversedColor;
         
         UpdateEffectText();
+        UpdateLevelDisplay();
     }
     
     
@@ -228,7 +263,7 @@ fixedOb.SetActive(isFixed);
     {
         if (cardInfo != null && CardDetailDisplay.Instance != null)
         {
-            CardDetailDisplay.Instance.ShowCardDetail(cardInfo, isUpright);
+            CardDetailDisplay.Instance.ShowCardDetail(cardInfo,cardLevel, isUpright);
         }
     }
     

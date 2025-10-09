@@ -56,6 +56,17 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
 ...What strange words. Very well - if you claim to know fate, then show me. Tell me what lies ahead for this village.
 @return
 
+#当玩家拒绝占卜时的离开对话
+# skipCustomer
+@printer Bubble
+@random
+    Very well. A ruler must accept silence as an answer.
+    Hm. Even refusal instructs — I shall weigh it as caution.
+    No reading today? Then I will read my people instead.
+    You withhold your sight; I will test my own.
+    Fate keeps its counsel, it seems. I will return when the winds change.
+@FinalStop
+@stop
 
 #对玩家的占卜结果满意
 # goodResult

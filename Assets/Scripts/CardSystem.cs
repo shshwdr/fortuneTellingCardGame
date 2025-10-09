@@ -73,6 +73,9 @@ public class CardSystem : Singleton<CardSystem>
         GameSystem.Instance.gameState.usedCards.AddRange(currentHand);
         currentHand.Clear();
         
+        // Clear all temporary effects
+        ClearTemporaryEffects();
+        
         // Draw 4 cards from available deck
         for (int i = 0; i < 4; i++)
         {
@@ -83,6 +86,43 @@ public class CardSystem : Singleton<CardSystem>
         
     }
 
+    public void ClearHand()
+    {
+        GameSystem.Instance.gameState.usedCards.AddRange(currentHand);
+        currentHand.Clear();
+        
+        // Clear all temporary effects
+        ClearTemporaryEffects();
+        
+        OnHandChanged?.Invoke(currentHand);
+    }
+    
+    /// <summary>
+    /// 清除所有临时效果，包括卡牌计算的temp效果和符文点亮状态
+    /// </summary>
+    public void ClearTemporaryEffects()
+    {
+        // 重置临时值
+        tempSanityChange = 0;
+        tempMoneyChange = 0;
+        tempRerollChange = 0;
+        
+        // 清除符文点亮状态
+        ClearRuneActivationEffects();
+    }
+    
+    /// <summary>
+    /// 清除符文点亮状态和动画效果
+    /// </summary>
+    private void ClearRuneActivationEffects()
+    {
+        // 通知UI清除符文点亮状态
+        var simpleGameUI = FindObjectOfType<SimpleGameUI>();
+        if (simpleGameUI != null)
+        {
+            simpleGameUI.ClearRuneActivationStates();
+        }
+    }
     Card DrawNewCard()
     {
         if (GameSystem.Instance.gameState.availableCards.Count == 0)
@@ -248,7 +288,7 @@ public class CardSystem : Singleton<CardSystem>
                     totalImprovement += attributeChanges[requirement.attributeName];
                 }
             }
-            result.moneyEarned = Mathf.Max(1, totalImprovement);
+            result.moneyEarned = totalImprovement;
         }
         
         return result;
@@ -354,8 +394,13 @@ public class CardSystem : Singleton<CardSystem>
         }
     }
 
+
     void ApplyRuneEffect(List<Card> currentHand, bool updateState, DivinationResult result)
     {
+        if (currentHand.Count == 0)
+        {
+            return;
+        }
         var effects = RuneManager.Instance.runeEffects;
         var isAllUpCard = true;
         var isAllDownCard = true;
@@ -384,14 +429,8 @@ public class CardSystem : Singleton<CardSystem>
                             result.activatedRunes.Add("when|allUpCard|refreshCount");
                         }
                         
-                        if (updateState)
-                        {
-                            AddRedrawTime(effects[effect]);
-                        }
-                        else
-                        {
-                            tempRerollChange += effects[effect];
-                        }
+                        // Always use temp values, don't apply directly to game state here
+                        tempRerollChange += effects[effect];
                     }
 
                     break;
@@ -404,14 +443,8 @@ public class CardSystem : Singleton<CardSystem>
                             result.activatedRunes.Add("when|allDownCard|addGold");
                         }
                         
-                        if (updateState)
-                        {
-                            GameSystem.Instance.AddMoney(effects[effect]);
-                        }
-                        else
-                        {
-                            tempMoneyChange += effects[effect];
-                        }
+                        // Always use temp values, don't apply directly to game state here
+                        tempMoneyChange += effects[effect];
                     }
 
                     break;

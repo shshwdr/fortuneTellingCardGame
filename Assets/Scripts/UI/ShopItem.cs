@@ -81,31 +81,61 @@ public class ShopItem : MonoBehaviour
         
         bool canAfford = false;
         bool alreadyOwned = false;
+        bool canUpgrade = false;
+        bool upgradedThisSession = false;
+        int cost = 10;
         
         if (isRune && runeData != null)
         {
+            cost = runeData.cost;
             canAfford = GameSystem.Instance.gameState.money >= runeData.cost;
             alreadyOwned = GameSystem.Instance.HasRune(runeData.identifier);
         }
         else if (!isRune && cardData != null)
         {
-            int cardCost = 10; // Default card cost
-            canAfford = GameSystem.Instance.gameState.money >= cardCost;
-            alreadyOwned = GameSystem.Instance.gameState.availableCards.Any(ownedCard => 
-                ownedCard.info.identifier == cardData.identifier);
+            cost = cardData.cost;
+            canAfford = GameSystem.Instance.gameState.money >= cardData.cost;
+            
+            var ownedCard = GameSystem.Instance.gameState.allCards.FirstOrDefault(ownedCard => ownedCard.info.identifier == cardData.identifier);
+            alreadyOwned = ownedCard != null;
+            canUpgrade = alreadyOwned && ownedCard.level < cardData.maxLevel;
+            
+            // Check if this card was upgraded in current shop session
+            var shopMenu = FindObjectOfType<ShopMenu>();
+            if (shopMenu != null)
+            {
+                // Access the upgradedCardsThisSession through reflection or make it public
+                // For now, we'll use a simpler approach by checking if ShopMenu has a method to check this
+                upgradedThisSession = IsCardUpgradedThisSession(cardData.identifier);
+            }
         }
         
-        purchaseButton.interactable = canAfford && !alreadyOwned;
+        purchaseButton.interactable = canAfford && (!alreadyOwned || canUpgrade) && !upgradedThisSession;
         
         if (purchaseButtonText != null)
         {
-            if (alreadyOwned)
-                purchaseButtonText.text = "Owned";
+            if (upgradedThisSession)
+                purchaseButtonText.text = "Upgraded";
+            else if (alreadyOwned && !canUpgrade)
+                purchaseButtonText.text = "Max Level";
+            else if (canUpgrade)
+                purchaseButtonText.text = cost + " Upgrade";
             else if (!canAfford)
-                purchaseButtonText.text = "Can't Afford";
+                purchaseButtonText.text = cost + " Can't Afford";
             else
-                purchaseButtonText.text = "Buy";
+                purchaseButtonText.text = cost + " Buy";
         }
+    }
+    
+    private bool IsCardUpgradedThisSession(string cardIdentifier)
+    {
+        var shopMenu = FindObjectOfType<ShopMenu>();
+        if (shopMenu != null)
+        {
+            // We need to make upgradedCardsThisSession accessible
+            return shopMenu.IsCardUpgradedThisSession(cardIdentifier);
+        }
+        return false;
     }
     
     public Button GetPurchaseButton()

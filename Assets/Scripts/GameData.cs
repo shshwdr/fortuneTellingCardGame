@@ -10,16 +10,46 @@ public class Card
     public bool isUpright;
     public bool isFixed = false;
     public List<string> buffs = new List<string>(); // Future buff system
-    
-    public Card(CardInfo cardInfo, bool upright = true)
+    public int level = 1;
+    public Card(CardInfo cardInfo, int l = 1, bool upright = true)
     {
         info = cardInfo;
         isUpright = upright;
+        level = l;
     }
     
     public List<string> GetEffects()
     {
-        return isUpright ? info.upEffect : info.downEffect;
+        var infoEffect = isUpright ? info.UpEffect(level) : info.DownEffect(level);
+        // for (int i = 0; i < infoEffect.Count; i++)
+        // {
+        //     var value = infoEffect[i];
+        //     int v;
+        //     if(int.TryParse( value, out v))
+        //     {
+        //         int finalv=v;
+        //         if (infoEffect[0] == "when")
+        //         {
+        //             if (v > 0)
+        //             {
+        //                 var basev = v - 1;
+        //                 finalv = basev + level;
+        //             }else if (v < 0)
+        //             {
+        //                 var basev = v + 1;
+        //                 finalv = basev - level;
+        //             }
+        //         }
+        //         else
+        //         {
+        //             finalv = v * level;
+        //         }
+        //        
+        //         infoEffect[i] = finalv.ToString();
+        //     }
+        // }
+        
+        return infoEffect;
     }
     
     public void FlipCard()
@@ -29,7 +59,7 @@ public class Card
     
     public Card Clone()
     {
-        var clone = new Card(info, isUpright);
+        var clone = new Card(info,level, isUpright);
         clone.buffs = new List<string>(buffs);
         return clone;
     }
@@ -132,11 +162,11 @@ public class Customer
         requirements.Clear();
         
         // Main attribute requirement: max(1, day/2)
-        int mainRequirement = Mathf.Max(1, currentDay / 2);
+        int mainRequirement = Mathf.Max(1, currentDay / 3);
         requirements.Add(new AttributeRequirement(info.target, mainRequirement));
         
         // Secondary attribute requirement (from day 2 onwards)
-        if (currentDay >= 2)
+        if (currentDay > 3)
         {
             // Get all attributes except the main one
             List<string> otherAttributes = new List<string> { "wisdom", "emotion", "power" };
@@ -144,7 +174,7 @@ public class Customer
             
             // Randomly select one secondary attribute
             string secondaryAttribute = otherAttributes[Random.Range(0, otherAttributes.Count)];
-            int secondaryRequirement = Random.Range(0, currentDay / 2 + 1); // +1 to make it inclusive
+            int secondaryRequirement = Random.Range(0, mainRequirement); // +1 to make it inclusive
             
             if (secondaryRequirement > 0)
             {

@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        
         //GameSystem.Instance.StartNewGame();
         
         

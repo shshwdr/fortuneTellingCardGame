@@ -58,7 +58,16 @@ Since I’ve stepped in, tell me—does a seeker of truth have moments when he s
 Very well—let us be honest. I’ll bring you my findings and leave my questions here.
 @return
 
-
+# skipCustomer
+@printer Bubble
+@random
+    A refusal is also a signpost. I’ll follow the road a bit further.
+    No reading needed; the question will travel with me.
+    Then I shall test the world instead of your words today.
+    Silence noted — I’ll see what it reveals outside your door.
+    Understood. I’ll return when my evidence is stronger.
+@FinalStop
+@stop
 #Satisfied with the reading
 # goodResult
 @printer Bubble
