@@ -149,6 +149,7 @@ public class ShopMenu : MenuBase
                 if (cardDisplayPrefab != null)
                 {
                     displayPrefab = Instantiate(cardDisplayPrefab, displayContainer);
+                    displayPrefab.transform.localScale = Vector3.one*0.8f;
                     var cardUI = displayPrefab.GetComponent<CardUISimple>();
                     
                     // Check if this card is owned and show appropriate level
@@ -162,7 +163,7 @@ public class ShopMenu : MenuBase
                         cardUI.SetCardData(upgradeCard, 0);
                         
                         // Add upgrade indicator to the display
-                        ShowUpgradeComparison(displayPrefab, ownedCard, upgradeCard);
+                        //ShowUpgradeComparison(displayPrefab, ownedCard, upgradeCard);
                     }
                     else
                     {

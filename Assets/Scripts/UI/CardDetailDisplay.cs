@@ -11,7 +11,7 @@ public class CardDetailDisplay : MonoBehaviour
     [Header("UI Components")]
     public GameObject detailPanel;
     public TMP_Text cardNameText;
-    public TMP_Text cardDescriptionText;
+    //public TMP_Text cardDescriptionText;
     public TMP_Text uprightEffectText;
     public TMP_Text reversedEffectText;
     public Image cardImage;
@@ -51,8 +51,8 @@ public class CardDetailDisplay : MonoBehaviour
     public void ShowRuneDetail(RuneInfo runeInfo)
     {
         cardNameText.text = runeInfo.name;
-        cardDescriptionText.text = runeInfo.description;
-        uprightEffectText.text = "";
+        //cardDescriptionText.text = runeInfo.description;
+        uprightEffectText.text = runeInfo.description;
         reversedEffectText.text = "";
         detailPanel.SetActive(true);
     }
@@ -69,8 +69,8 @@ public class CardDetailDisplay : MonoBehaviour
         if (cardNameText != null)
             cardNameText.text = cardInfo.name;
             
-        if (cardDescriptionText != null)
-            cardDescriptionText.text = cardInfo.description;
+        // if (cardDescriptionText != null)
+        //     cardDescriptionText.text = cardInfo.description;
             
         // 设置卡牌图片
         if (cardImage != null)

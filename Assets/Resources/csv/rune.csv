@@ -1,10 +1,15 @@
 ﻿identifier,cost,name,description,effect,value,canBeDraw,isStart
-twinLight,0,twinLight,"when tell fortune with both Moon and Sun cards, remove all negative effect",useBoth|moon|sun|removeAllNeg,,0,
+twinLight,0,twinLight,"when tell fortune with both Moon and Sun cards, add 1 money",useBoth|moon|sun|removeAllNeg,,0,
 redraw,0,redraw,redraw count add 2,redrawCount,2,1,0
-lastSanity,0,lastSanity,"if reach sanity =1, add 3 sanity",checkTotal|sanity|1|changeSanity|3,,0,
+lastSanity,0,lastSanity,"The first time sanity goes below 0, recover it to 1",checkTotal|sanity|1|changeSanity|3,,0,
 lastValue,0,lastValue,,checkTotal|attribute|1|changeValue|3,,0,
 finger,0,finger,,flipCard,,0,
 upright,0,upright,"when tell fortune with all cards up, add 1 refresh count today",when|allUpCard|refreshCount,1,1,0
 down,0,down,"when tell fortune with all cards down, add 2 money",when|allDownCard|addGold,2,1,0
-healSanity,0,healSanity,add 1 max sanity,sanityMax|1,,0,
-balance,0,balance,"when tell fortuen with no sanity change, add 1 sanity",when|sanityNoChange|sanity|1,,0,
+healSanity,0,healSanity,add sanity to 10,sanityMax|1,,0,
+balance,0,balance,"when tell fortune with no sanity change, add 1 sanity",when|sanityNoChange|sanity|1,1,0,
+rest,,rest,"when a day over, add 1 sanity",,,,
+Shopaholic,,Shopaholic,"when buy anything in shop, add 1 sanity",,,,
+abstinence,,abstinence,"when not buy anything in shop, add 2 sanity",,,,
+Enlightener,,Enlightener,"when satisfy all customer today, add 3 sanity",,,,
+Insurance,,Insurance,"when failed all customer today, add 3 money",,,,

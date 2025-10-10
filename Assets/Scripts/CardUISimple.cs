@@ -31,8 +31,6 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public Transform oppositeTrans;
     public System.Action<int> OnCardClicked;
 
-    public Color uprightColor;
-    public Color reversedColor;
     
     
     void Start()
@@ -101,15 +99,18 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         if (cardLevelText != null)
         {
-            if (cardLevel > 1)
-            {
-                cardLevelText.text = $"Lv.{cardLevel}";
-                cardLevelText.gameObject.SetActive(true);
-            }
-            else
-            {
-                cardLevelText.gameObject.SetActive(false);
-            }
+            
+            cardLevelText.text = $"Lv.{cardLevel}";
+            cardLevelText.gameObject.SetActive(true);
+            // if (cardLevel > 1)
+            // {
+            //     cardLevelText.text = $"Lv.{cardLevel}";
+            //     cardLevelText.gameObject.SetActive(true);
+            // }
+            // else
+            // {
+            //     cardLevelText.gameObject.SetActive(false);
+            // }
         }
     }
     
@@ -126,6 +127,9 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         // }
         
         cardEffectText.text = effectText;
+        cardEffectText.color = isUpright ? Color.black : Color.white;
+        cardNameText.color = isUpright ? Color.black : Color.white;
+        cardLevelText.color = isUpright ? Color.black : Color.white;
     }
     
     private string FormatEffect(List<string> effects)
@@ -227,6 +231,10 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         
     }
 
+    public Sprite uprightSprite;
+    public Sprite reversedSprite;
+    public RectTransform uprightTextTrans;
+    public RectTransform reversedTextTrans;
     public void UpdateUpright()
     {
         
@@ -239,11 +247,11 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         // else
         {
             // If no separate front/back objects, rotate the whole card
-            oppositeTrans.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
+            //oppositeTrans.localRotation = isUpright ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
         }
         
-        cardButton.image.color = isUpright ? uprightColor : reversedColor;
-        
+        cardButton.image.sprite = isUpright ? uprightSprite : reversedSprite;
+        cardEffectText.GetComponent<RectTransform>().anchoredPosition = isUpright? uprightTextTrans.anchoredPosition : reversedTextTrans.anchoredPosition;
         UpdateEffectText();
         UpdateLevelDisplay();
     }
