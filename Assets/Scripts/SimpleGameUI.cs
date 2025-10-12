@@ -81,8 +81,25 @@ public class SimpleGameUI : MonoBehaviour
         
         redrawButton.onClick.AddListener(() =>
         {
+            if (GameSystem.Instance.gameState.currentDay == 1 && GameSystem.Instance.gameState.currentCustomerIndex == 1 && TutorialManager.Instance.currentTutorial == "secondCustomerCome")
+            {
+                if (!CardSystem.Instance.currentHand[0].isFixed || CardSystem.Instance.currentHand[1].isFixed ||
+                    CardSystem.Instance.currentHand[2].isFixed || CardSystem.Instance.currentHand[3].isFixed)
+                {
+                    ToastManager.Instance.ShowToast("Lock only the Lover Card before redraw");
+                    return;
+                }
+            }
+            
+            
             CardSystem.Instance.Redraw();
             UpdateCustomerAttributes(currentCustomer);
+            if (GameSystem.Instance.gameState.currentDay == 1 &&
+                GameSystem.Instance.gameState.currentCustomerIndex == 1 &&
+                TutorialManager.Instance.currentTutorial == "secondCustomerCome")
+            {
+                TutorialManager.Instance.ShowTutorial("redraw");
+            }
         });
             
         if (nextDayButton != null)
@@ -137,6 +154,7 @@ public class SimpleGameUI : MonoBehaviour
             GameSystem.Instance.OnDayChanged += UpdateDayDisplay;
             GameSystem.Instance.OnGameStateChanged += UpdateGameStateDisplay;
             GameSystem.Instance.OnGameStateChanged += UpdateRunes; // Update runes when game state changes
+            GameSystem.Instance.OnUpdateActions += UpdateActions;
         }
         
         if (CardSystem.Instance != null)
@@ -442,13 +460,21 @@ public class SimpleGameUI : MonoBehaviour
         // }
         
         redrawButton.GetComponentInChildren<TMP_Text>().text = $"Redraw({displayRerolls})";
-        redrawButton.interactable = currentRerolls > 0;
+        redrawButton.interactable = currentRerolls > 0 && GameSystem.Instance.gameState.canRedraw;
+        
+        skipCustomerButton.interactable = GameSystem.Instance.gameState.canSkip;
+        performDivinationButton.interactable = GameSystem.Instance.gameState.canTellForturn;
     }
 
     private void PerformDivination()
     {
         if (currentCustomer == null) return;
 
+        
+        
+        
+
+        GameSystem.Instance.disableAllActions();
         // if (CardSystem.Instance.reversedCardCount() != 2)
         // {
         //     return;
@@ -498,7 +524,25 @@ public class SimpleGameUI : MonoBehaviour
             
             DialogueManager.Instance.StartDialogue(character.identifier+"Request","goodResult", () =>
             {
-                GameSystem.Instance.NextCustomer();
+                
+                if (GameSystem.Instance.gameState.currentDay == 1 && GameSystem.Instance.gameState.currentCustomerIndex == 0)
+                {
+                    TutorialManager.Instance.ShowTutorial("firstCustomerLeave", () =>
+                    {
+                        GameSystem.Instance.NextCustomer();
+                    });
+                }else if (GameSystem.Instance.gameState.currentDay == 1 && GameSystem.Instance.gameState.currentCustomerIndex == 1)
+                {
+                    TutorialManager.Instance.ShowTutorial("secondCustomerLeave", () =>
+                    {
+                        GameSystem.Instance.NextCustomer();
+                    });
+                }
+                else
+                {
+                    GameSystem.Instance.NextCustomer();
+                }
+                
             });
         }
         else
@@ -507,7 +551,23 @@ public class SimpleGameUI : MonoBehaviour
             ToastManager.Instance.ShowToast($"The customer is not satisfied...");
             DialogueManager.Instance.StartDialogue(character.identifier+"Request","badResult", () =>
             {
-                GameSystem.Instance.NextCustomer();
+                if (GameSystem.Instance.gameState.currentDay == 1 && GameSystem.Instance.gameState.currentCustomerIndex == 0)
+                {
+                    TutorialManager.Instance.ShowTutorial("firstCustomerLeave", () =>
+                    {
+                        GameSystem.Instance.NextCustomer();
+                    });
+                }else if (GameSystem.Instance.gameState.currentDay == 1 && GameSystem.Instance.gameState.currentCustomerIndex == 1)
+                {
+                    TutorialManager.Instance.ShowTutorial("secondCustomerLeave", () =>
+                    {
+                        GameSystem.Instance.NextCustomer();
+                    });
+                }
+                else
+                {
+                    GameSystem.Instance.NextCustomer();
+                }
             });
         }
         
@@ -558,6 +618,7 @@ public class SimpleGameUI : MonoBehaviour
     
     private void SkipCustomer()
     {
+        GameSystem.Instance.disableAllActions();
         CardSystem.Instance.ClearHand();
         DialogueManager.Instance.StartDialogue(currentCustomer.identifier+"Request","skipCustomer", () =>
         {

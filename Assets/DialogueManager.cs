@@ -116,6 +116,7 @@ public class DialogueManager : Singleton<DialogueManager>
         if (dialogueStopAction != null)
         {
             dialogueStopAction();
+            dialogueStopAction = null;
         }
     }
 

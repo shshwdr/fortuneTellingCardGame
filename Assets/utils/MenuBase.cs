@@ -91,6 +91,7 @@ public class MenuBase : MonoBehaviour
     public  float showTime = 0.5f;
     virtual public void ShowAnim(bool immediate = false)
     {
+        immediate = true;
         if (immediate)
         {
             animatedRect.localScale =Vector3.one * targetSizeDelta;

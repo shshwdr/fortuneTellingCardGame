@@ -22,7 +22,7 @@ public class ShopMenu : MenuBase
     private HashSet<string> upgradedCardsThisSession = new HashSet<string>();
     // Track cards that have been purchased (newly bought) in this shop session
     private HashSet<string> purchasedCardsThisSession = new HashSet<string>();
-    
+    private bool hasPurchase = false;
     public override void Init()
     {
         base.Init();
@@ -38,6 +38,8 @@ public class ShopMenu : MenuBase
         {
             nextDayButton.onClick.AddListener(ProceedToNextDay);
         }
+
+        hasPurchase = false;
     }
     
     private void SetupShop()
@@ -311,8 +313,10 @@ public class ShopMenu : MenuBase
     
     private void PurchaseRune(RuneInfo rune)
     {
+        
         if (GameSystem.Instance.SpendMoney(rune.cost))
         {
+            hasPurchase = true;
             GameSystem.Instance.AddRune(rune);
             ToastManager.Instance.ShowToast($"Purchased {rune.name}!");
             
@@ -332,6 +336,7 @@ public class ShopMenu : MenuBase
         
         if (GameSystem.Instance.SpendMoney(card.cost))
         {
+            hasPurchase = true;
             if (ownedCard != null)
             {
                 // Upgrade existing card
@@ -398,6 +403,17 @@ public class ShopMenu : MenuBase
     private void ProceedToNextDay()
     {
         Hide();
+
+        if (RuneManager.Instance.getEffectValue("addSanityWhenBuy") > 0 && hasPurchase)
+        {
+          GameSystem.Instance.  AddSanity(RuneManager.Instance.getEffectValue("addSanityWhenBuy"));
+        }
+        
+        if (RuneManager.Instance.getEffectValue("addMoneyWhenNotBuy") > 0 && !hasPurchase)
+        {
+            GameSystem.Instance.  AddMoney(RuneManager.Instance.getEffectValue("addMoneyWhenNotBuy"));
+        }
+        
         GameSystem.Instance.StartNewDay();
     }
     

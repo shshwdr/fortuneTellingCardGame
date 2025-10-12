@@ -61,7 +61,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
 @printer Bubble
 @random
     Very well. A ruler must accept silence as an answer.
-    Hm. Even refusal instructs — I shall weigh it as caution.
+    Hm. Even refusal instructs - I shall weigh it as caution.
     No reading today? Then I will read my people instead.
     You withhold your sight; I will test my own.
     Fate keeps its counsel, it seems. I will return when the winds change.
@@ -117,7 +117,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     @choice "If fate brought you here, perhaps it has a lesson to show."
         @changeAttribute "wisdom" value:4
         @goto .story1
-    @choice "No one tricks destiny — seize meaning, don’t wait for it."
+    @choice "No one tricks destiny - seize meaning, don’t wait for it."
         @changeAttribute "power" value:4
         @goto .story1
     @stop
@@ -148,7 +148,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     @choice "Your father ruled with love; follow his gentleness."
         @changeAttribute "emotion" value:4
         @goto .story3
-    @choice "Kindness alone cannot build strength — go further."
+    @choice "Kindness alone cannot build strength - go further."
         @changeAttribute "power" value:4
         @goto .story3
     @stop
@@ -175,7 +175,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     Distant lands, countless souls - they all long for order.
     But if I leave, who will guard this place?
     It feels as if fate waits for me to choose.
-    @choice "A ruler’s reach must grow — trust yourself to guide more."
+    @choice "A ruler’s reach must grow - trust yourself to guide more."
         @changeAttribute "power" value:4
         @goto .story5
     @choice "Your duty is to those who already follow; stay beside them."
@@ -203,10 +203,10 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     They call me the Guardian of the North.
     Yet at night, the wind whispers:
     “Do you guard them, or yourself?”
-    @choice "You protect them — compassion is your true strength."
+    @choice "You protect them - compassion is your true strength."
         @changeAttribute "emotion" value:4
         @goto .story7
-    @choice "Question the voice — a ruler must see beyond sentiment."
+    @choice "Question the voice - a ruler must see beyond sentiment."
         @changeAttribute "wisdom" value:4
         @goto .story7
     @stop
@@ -220,7 +220,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     @choice "Control without warmth becomes emptiness."
         @changeAttribute "emotion" value:4
         @goto .story8
-    @choice "Perfection requires sacrifice — let silence serve order."
+    @choice "Perfection requires sacrifice - let silence serve order."
         @changeAttribute "power" value:4
         @goto .story8
     @stop
@@ -259,10 +259,10 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     It says, “True power is the freedom to choose.”
     Then I realized - my order was too perfect.
     And perfection… means silence.
-    @choice "Perfection is death — cherish imperfection’s voice."
+    @choice "Perfection is death - cherish imperfection’s voice."
         @changeAttribute "wisdom" value:4
         @goto .story11
-    @choice "Even silence has peace — let the world rest under your order."
+    @choice "Even silence has peace - let the world rest under your order."
         @changeAttribute "emotion" value:-1
         @changeAttribute "power" value:4
         @goto .story11

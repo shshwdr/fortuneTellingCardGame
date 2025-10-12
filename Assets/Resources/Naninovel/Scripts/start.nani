@@ -1,4 +1,88 @@
+
+
+@printer Dialogue
+The dim room trembles with the sound of wind chimes swaying in the crack of time.
+You open your eyes, a deck of divination cards lies before you.
+This little house has no door, nor window.
+Yet each time the wind chime rings, someone slips through, from another moment in time.
+
+They come with confusion, fear, or desire.
+And you, the sole witness of this place, with a few cards in hand, can gently pry open their fate.
+
+Are you ready, fortune teller?
+Time is bending, and someone… is being drawn to your guidance.
+
+@FinalStop
+@stop
 tutorial of game, tbd
 @FinalStop
 @stop
 
+# firstCustomerCome
+# 第一个顾客进入
+
+@printer Dialogue
+Four cards materialize before you.
+Each one changes something within your guest: Power, Emotion, or Wisdom
+and might also alter your own Sanity.
+Every visitor has their own wish, hoping to strengthen one or more of these traits.
+Fortunately, this time, fate’s alignment is perfect.
+
+No need to hesitate. Start your fortune telling, and read their destiny.
+@FinalStop
+@stop
+
+# firstCustomerLeave
+# 顾客离开
+
+@printer Dialogue
+The guest departs.
+You can see their attributes shift, and your sanity wavers in response.
+Remember, none of their values can fall below zero.
+And Sanity, it is the anchor that keeps you in this rift.
+When it runs dry, you will no longer know who you are… or who they are.
+
+On the table remain traces: metal dust, an ancient coin, a half-dried tear.
+These are the "prices" your guests leave behind.
+
+You must offer them to Time itself, to keep this little house from being swallowed by the void.
+Some call it… paying the rent.
+@FinalStop
+@stop
+
+# secondCustomerCome
+# 第二位顾客到来
+
+@printer Dialogue
+This time, fate isn’t so kind.
+These cards aren’t enough to fulfill her request.
+
+But destiny is never stingy with chances.
+You may lock the Lover card that seems good enough,
+and redraw the rest.
+@FinalStop
+@stop
+
+# redraw
+# 抽卡后
+
+@printer Dialogue
+The new spread glimmers into existence.
+This time, the alignment matches perfectly.
+Good. You may begin the reading.
+@FinalStop
+@stop
+
+# secondCustomerLeave
+# 结束教学
+
+@printer Dialogue
+Your rerolls are limited each day.
+If no combination feels right, you can always let the guest leave.
+Fate always leaves another door open.
+
+Good luck, fortune teller.
+Unravel their destinies,
+and perhaps, in doing so, uncover your own.
+@FinalStop
+@stop

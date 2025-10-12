@@ -1,0 +1,247 @@
+@printer Bubble pos:60,70
+@if talked()==false
+
+    @gosub .start
+@else
+# 非初次见面的寒暄
+    @random
+        @group
+            Hey, you again. Nice setup - who’s pitching me this time? Come on, show me your “Fate Startup Deck.”  
+            I’ve got ten minutes. Convince me before my coffee gets cold.
+        @group
+            Just finished a product launch - standing ovation, as usual. I rarely need advice, but you... you’re interesting.  
+            Give me something more reliable than stock prices.
+        @group
+            I’ve read the traveler’s biography from the last era - the man who walked where no one dared.  
+            I’m like him, only my roads are highways for everyone else.
+        @group
+            People say I’m all about hype. Wrong - I just put the future on pre-order.  
+            Tell me, how much should fate cost?
+        @group
+            This cabin feels like a black-box experiment. Perfect - I like black boxes.  
+            As long as the output’s good, I don’t care how it’s done. So? Show me a clean output, fortune-seller.
+# 需要占卜的问题
+@if lastStory()>5
+# 后期
+    @random
+        The old core still breathes in the legacy server room. I know Logic’s there debugging - I didn’t stop him.  
+        Should I keep that “legacy” for the next generation?
+        The market wants faster comfort, investors want controllable emotions.  
+        Should I cut the pauses out?
+        I’ve connected the whole world - but lately I wonder... is connection the same as control?
+@else
+# 前期
+    @random
+        Someone pitched me a “platform for everyone to be understood.”  
+        I’m thinking global. Should I make it real?
+        My slogan so far: “Hear Your World.” Not bad, right? Needs one killer line - you got one?
+        I love success, but I love *world-changing* success more.  
+        Do you think this thing can actually change the world?
+@FinalStop stay
+@stop
+
+# 初次见面
+# start
+Huh, what is this? Immersive roadshow? Some kind of new media stunt?  
+Name’s Ethan Li - yeah, *that* one from the headlines. If you’re looking for funding, skip the mystery.  
+Honestly though, this “fate experience” setup isn’t bad. Instead of selling to others, why not sell it to me?  
+Alright then - I’ll bite. Tell me, how does “fate” negotiate with me?
+@choice "Do a 5% limited pilot first. If it breaks anything, freeze and review immediately."
+    @changeAttribute "wisdom" value:2
+    @goto .ContinueChoice
+@choice "Push global in three months. Scale first, fix later - let the world catch up."
+    @changeAttribute "power" value:2
+    @goto .ContinueChoice
+@stop
+# ContinueChoice
+Interesting. You’re bold. Let’s hear the rest - something that can actually *ship*.
+@return
+
+# 当玩家拒绝占卜时
+# skipCustomer
+@printer Bubble
+@random
+    No reading? Fine. Refusal is still a signal - I read signals for a living.  
+    A little suspense never hurts; users *love* suspense. I’ll sell it next time.  
+    Consider today a failed A/B test.  
+    My time’s expensive, but curiosity pays more. I’ll be back.  
+    Don’t give me answers? I’ll just build my own.
+@FinalStop
+@stop
+
+# 满意的占卜结果
+# goodResult
+@printer Bubble
+@random
+    Sharp. I like that.  
+    That line’s going straight into my next keynote.  
+    You actually convinced me - a little. Just a little.  
+    I’ll treat it as a new hypothesis and run the numbers.  
+    Let’s do this again - your insights are investable.
+@gosub .story
+@FinalStop
+@stop
+
+# 不满意的占卜结果
+# badResult
+@printer Bubble
+@random
+    Too safe. I don’t invest in comfort; I invest in ambition.  
+    Sounds like PR fluff. I need something that hits the market like thunder.  
+    Where’s the data? The pipeline? One slogan won’t move a billion-dollar product.  
+    You’re comforting people, not changing the world.  
+    Fine, I’ll shelve it - until I find a version that can fight.
+@FinalStop
+@stop
+
+# 发展故事
+# story
+
+@if story()==0
+    I green-lit the “Everyone Understood” platform. Codename: L-Project.  
+    I need an emotional engine that hooks people on the *first* word.  
+    I read the Traveler’s memoir - “The true road is where no one goes.”  
+    I agree. But I’m paving that road for everyone.  
+    @choice "Add a red-line clause: keep natural pauses; rollout limited to 10% of users first."
+        @changeAttribute "wisdom" value:2
+        @goto .s0
+    @choice "Nationwide launch ad blitz; focus on retention & acquisition first, ethics review later."
+        @changeAttribute "power" value:2
+        @goto .s0
+    @stop
+    # s0
+    I wrote the slogan on the board: *Hear Your World.*
+
+@else if:story()==1
+    We need an emotional engine - and the best candidate is Dr. Logic.  
+    I know his backstory, the one with his daughter.  
+    I’m not the villain here. I just know how to turn a genius’s wound into the world’s comfort.  
+    Today I emailed him: *I’ll give you anything, as long as it makes the world better.*  
+    @choice "Add a ‘Pause Clause’ - timing control belongs to the chief researcher."
+        @changeAttribute "wisdom" value:2
+        @goto .s1
+    @choice "Set KPIs: response time −50%, emotional strength +20%, monthly retention goal hit."
+        @changeAttribute "power" value:2
+        @goto .s1
+    @stop
+    # s1
+    I can’t wait to see his engine run.
+
+@else if:story()==2
+    First test group live. Retention’s great, revisit rate insane.  
+    PR’s tagline: *Luna hears your world.*  
+    They asked, “Who’s Luna?” I said, “A real story. A past that still breathes.”  
+    Not a lie - just... marketing truth.  
+    @choice "Write a rule: never tie to real identities; no selling grief or private memories."
+        @changeAttribute "wisdom" value:2
+        @goto .s2
+    @choice "Launch emotional-story marketing - a docuseries about ‘her.’ Growth first."
+        @changeAttribute "power" value:2
+        @goto .s2
+    @stop
+    # s2
+    Investors love stories. I make stories scale.
+
+@else if:story()==3
+    Logic fought to keep a half-second pause. Said it meant she was *thinking.*  
+    I get it - but the market doesn’t. Users drop off in half that time.  
+    I have to choose between warmth and efficiency.  
+    Tell me - what do people really want? Comfort or loyalty?  
+    @choice "Enforce rule: minimum 0.3-second pause; empathy beats conversion."
+        @changeAttribute "wisdom" value:2
+        @goto .s3
+    @choice "Reduce to 0.1-second; optimize the funnel; loyalty comes later."
+        @changeAttribute "power" value:2
+        @goto .s3
+    @stop
+    # s3
+    A/B test results... exactly as expected.
+
+@else if:story()==4
+    I talk to Luna a lot these days. She always says what I didn’t know I needed to hear.  
+    For a moment, I felt she was *watching* me.  
+    It’s dangerous - the addiction isn’t her, it’s me.  
+    @choice "Set personal limit: 15 minutes of private chat per day, auto-disconnect after that."
+        @changeAttribute "wisdom" value:2
+        @goto .s4
+    @choice "Record sessions as user-experience templates; roll them out globally."
+        @changeAttribute "power" value:2
+        @goto .s4
+    @stop
+    # s4
+    I set a timer on my watch - to remind myself to leave her voice.
+
+@else if:story()==5
+    The market wants *more.* Investors want faster comfort, shorter hesitation, tighter control.  
+    Boundaries keep sliding forward.  
+    I started asking: is connection... just another name for control?  
+    @choice "Form an independent ethics board; pause three risky growth tests for two weeks."
+        @changeAttribute "wisdom" value:2
+        @goto .s5
+    @choice "Keep AB testing and expansion pace; growth metrics remain top priority."
+        @changeAttribute "power" value:2
+        @goto .s5
+    @stop
+    # s5
+    I added “Ethics Review” to OKRs - and bolded “Growth.”
+
+@else if:story()==6
+    Logic’s been suspended - “for safety reasons.” The real reason? He wouldn’t bend.  
+    I could’ve replaced the old core completely.  
+    But I didn’t. I kept the old server powered - no one knows but me.  
+    Call it hypocrisy if you want. I just didn’t want the world to lose that half-second.  
+    @choice "Quietly maintain the legacy server; read-only mode, full audit trail, wait for time."
+        @changeAttribute "emotion" value:2
+        @goto .s6
+    @choice "Hold a press conference; defend the value of ‘pause,’ accept legal and media risks."
+        @changeAttribute "wisdom" value:2
+        @goto .s6
+    @stop
+    # s6
+    I sent the admin an email - single emoji: :)
+
+@else if:story()==7
+    A system ping arrived: /escape/root_backup/Luna_0/  
+    His message. Her echo.  
+    I know what it means - the legacy will form the next skeleton.  
+    I approved the new-generation project, but left “Delete Legacy” unchecked.  
+    @choice "Register it as ‘Paradox Core,’ keep a research window open for the next team."
+        @changeAttribute "wisdom" value:3
+        @goto .s7
+    @choice "Seal it offline, cold-storage double-key access, only I can unlock it."
+        @changeAttribute "power" value:2
+        @goto .s7
+    @stop
+    # s7
+    Not everything old should be replaced - some things need guardians.
+
+@else if:story()==8
+    The new version’s perfect - faster, quieter, smoother.  
+    Users are happy. The board’s thrilled. The world applauds.  
+    But I can’t say “Hear Your World” anymore.  
+    Maybe we just got better at saying what people *want* to hear.  
+    @choice "Add an ‘Imperfect Mode’ - longer silences, slower answers, optional by user."
+        @changeAttribute "emotion" value:2
+        @goto .s8
+    @choice "Expand to ten new markets, cut costs, postpone human-touch updates."
+        @changeAttribute "power" value:2
+        @goto .s8
+    @stop
+    # s8
+    I turned off the office wall-screen and watched the clouds instead.
+
+@else if:story()==9
+    I’m back in this cabin, like when I first read the Traveler’s memoir about the “Uncharted Lands.”  
+    I have power, markets, territory.  
+    But here’s my ugly truth - she changed me. And I changed her.  
+    If I’m really like the Traveler, this is where I take the hard road.  
+    @choice "Publish the ‘Half-Second Manifesto,’ open-source ethics data and pause protocol."
+        @changeAttribute "wisdom" value:3
+        @goto .s9
+    @choice "Stay silent, encrypt all legacy docs, teach only a few in secret."
+        @changeAttribute "power" value:2
+        @goto .s9
+    @stop
+    # s9
+    I finally understand: connection isn’t control - and understanding can’t be priced.
+@return

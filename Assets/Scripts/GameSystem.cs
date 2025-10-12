@@ -18,6 +18,7 @@ public class GameSystem : Singleton<GameSystem>
     public System.Action<int> OnSanityChanged;
     public System.Action<int> OnDayChanged;
     public System.Action OnGameStateChanged;
+    public System.Action OnUpdateActions;
     
     public void StartNewGame()
     {
@@ -75,9 +76,17 @@ public class GameSystem : Singleton<GameSystem>
         moneyEarnedToday = 0;
         
         gameState.currentCustomerIndex = -1;
-        gameState.todayCustomers.Clear();
+        gameState.todayCustomers.Clear(); 
+        
 
-        CardSystem.Instance.redrawTime = CardSystem.Instance.redrawTimePerDay;
+        if (RuneManager.Instance.runeEffects.ContainsKey("unusedRedrawGoToNextDay"))
+        {
+            CardSystem.Instance.redrawTime += CardSystem.Instance.redrawTimePerDay;
+        }
+        else
+        {
+            CardSystem.Instance.redrawTime = CardSystem.Instance.redrawTimePerDay;
+        }
         
         // Reset card deck for new day
         //InitializeAvailableCards();
@@ -175,8 +184,32 @@ public class GameSystem : Singleton<GameSystem>
         DialogueManager.Instance.StartDialogue(character.info.identifier+ "Request", () =>
         {
             CardSystem.Instance.DrawCardsForCustomer();
-            
+            gameState.canRedraw = true;
+            gameState.canSkip = true;
+            gameState.canTellForturn = true;
+
+            if (gameState.currentDay == 1 && gameState.currentCustomerIndex == 0)
+            {
+                TutorialManager.Instance.ShowTutorial("firstCustomerCome");
+            }
+            else if (gameState.currentDay == 1 && gameState.currentCustomerIndex == 1)
+            {
+                TutorialManager.Instance.ShowTutorial("secondCustomerCome");
+            }
+            else
+            {
+                OnUpdateActions.Invoke();
+            }
         });
+    }
+
+    public void disableAllActions()
+    {
+        
+        gameState.canRedraw = false;
+        gameState.canSkip = false;
+        gameState.canTellForturn = false;
+        OnUpdateActions.Invoke();
     }
     
     public void NextCustomer()
@@ -211,6 +244,25 @@ public class GameSystem : Singleton<GameSystem>
         {
             rent = CSVLoader.Instance.dayInfoMap[dayKey].rent;
         }
+
+        if (RuneManager.Instance.runeEffects.ContainsKey("addSanityAfterDay"))
+        {
+            AddSanity(1);
+        }
+
+        if (gameState.satisfiedCustomerCount == 0 && RuneManager.Instance.runeEffects.ContainsKey("failedAllAddMoney"))
+        {
+            AddMoney(RuneManager.Instance.runeEffects["failedAllAddMoney"]);
+        }
+        
+        if (gameState.satisfiedCustomerCount == gameState.todayCustomers.Count && RuneManager.Instance.runeEffects.ContainsKey("satisfyAllAddSanity"))
+        {
+            AddSanity(RuneManager.Instance.runeEffects["satisfyAllAddSanity"]);
+        }
+        
+
+
+        gameState.satisfiedCustomerCount = 0;
         
         // Show day end summary
         ShowDayEndSummary(customersServedToday, moneyEarnedToday, rent);

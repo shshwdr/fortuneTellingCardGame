@@ -203,6 +203,11 @@ public class Customer
         
         return true;
     }
+
+    public int RequirementOnAttribute(string key)
+    {
+        return requirements.Find(r => r.attributeName == key)?.requiredIncrease ?? 0;
+    }
     
     /// <summary>
     /// Get a formatted string describing the customer's requirements
@@ -293,6 +298,12 @@ public class GameState
     public List<Card> availableCards = new List<Card>();
     public List<Card> allCards = new List<Card>();
     public List<Card> usedCards = new List<Card>();
+
+    public bool canRedraw;
+    public bool canTellForturn;
+    public bool canSkip;
+
+    public int satisfiedCustomerCount = 0;
     
     public List<Customer> todayCustomers = new List<Customer>();
     

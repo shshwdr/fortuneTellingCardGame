@@ -22,7 +22,7 @@ public class CardSystem : Singleton<CardSystem>
             return 7+ RuneManager.Instance.getEffectValue("redrawCount");
         }
     }
-    public int redrawTime = 7;
+    public int redrawTime = 0;
     public void AddRedrawTime (int time)
     {
         redrawTime += time;
@@ -77,13 +77,41 @@ public class CardSystem : Singleton<CardSystem>
         
         // Clear all temporary effects
         ClearTemporaryEffects();
-        
-        // Draw 4 cards from available deck
-        for (int i = 0; i < 4; i++)
+
+        if (GameSystem.Instance.gameState.currentDay == 1 && GameSystem.Instance.gameState.currentCustomerIndex == 0)
         {
-            DrawOneCard();
+            DrawCard("sun",true);
+            DrawCard("fool",false);
+            DrawCard("magician",true);
+            DrawCard("world",false);
+            
         }
-        
+        else if (GameSystem.Instance.gameState.currentDay == 1 &&
+                 GameSystem.Instance.gameState.currentCustomerIndex == 1)
+        {
+            if (TutorialManager.Instance.currentTutorial == "firstCustomerLeave")
+            {
+                DrawCard("lover",false);
+                DrawCard("star",true);
+                DrawCard("emperor",true);
+                DrawCard("sun",true);
+            }else if (TutorialManager.Instance.currentTutorial == "secondCustomerCome")
+            {
+                DrawCard("world",false);
+                DrawCard("fool",false);
+                DrawCard("sun",false);
+            }
+        }
+        else
+        {
+            
+            // Draw 4 cards from available deck
+            for (int i = 0; i < 4; i++)
+            {
+                DrawOneCard();
+            }
+
+        }
         OnHandChanged?.Invoke(currentHand);
         GameSystem.Instance.OnAttributeChanged?.Invoke();
 
@@ -126,6 +154,23 @@ public class CardSystem : Singleton<CardSystem>
             simpleGameUI.ClearRuneActivationStates();
         }
     }
+
+    Card DrawCard(string cardName,bool isUpright)
+    {
+        if (GameSystem.Instance.gameState.availableCards.Count == 0)
+        {
+            Debug.Log("Deck is empty. Refilling...");
+            RefillCardDeck();
+        }
+        var card = GameSystem.Instance.gameState.availableCards.Find(card => card.info.identifier == cardName);
+        card.isUpright = isUpright;
+        
+        GameSystem.Instance.gameState.availableCards.Remove(card);
+
+        currentHand.Add(card);
+        return card;
+    }
+    
     Card DrawNewCard()
     {
         if (GameSystem.Instance.gameState.availableCards.Count == 0)
@@ -267,7 +312,7 @@ public class CardSystem : Singleton<CardSystem>
             }
         }
 
-        ApplyRuneEffect(currentHand, updateState, result);
+        ApplyRuneEffect(currentHand, updateState, result,customer);
         
         result.finalAttributes = new Dictionary<string, int>
         {
@@ -307,7 +352,7 @@ public class CardSystem : Singleton<CardSystem>
                     totalImprovement += attributeChanges[requirement.attributeName];
                 }
             }
-            result.moneyEarned = totalImprovement + 1;
+            result.moneyEarned = totalImprovement + 2;
             tempMoneyChange +=  result.moneyEarned;
             result.tempMoneyChange = tempMoneyChange;
         }
@@ -343,56 +388,56 @@ public class CardSystem : Singleton<CardSystem>
         return result;
     }
     
-    private void ApplySpecialEffects(List<CardEffect> allEffects, Customer customer)
-    {
-        // Check for Moon card effects
-        bool hasUprightMoon = allEffects.Any(e => e.cardId == "moon" && e.isUpright && e.effect == "allNegHalf");
-        bool hasReversedMoon = allEffects.Any(e => e.cardId == "moon" && !e.isUpright && e.effect == "allPosHalf");
-        
-        // Check for Sun + Moon synergy rune
-        bool hasSunMoonRune = GameSystem.Instance.HasRune("twin_lights");
-        bool hasSun = allEffects.Any(e => e.cardId == "sun");
-        bool hasMoon = allEffects.Any(e => e.cardId == "moon");
-        
-        if (hasSunMoonRune && hasSun && hasMoon)
-        {
-            // Remove all negative effects
-            for (int i = allEffects.Count - 1; i >= 0; i--)
-            {
-                if (IsNegativeEffect(allEffects[i].effect))
-                {
-                    allEffects.RemoveAt(i);
-                }
-            }
-        }
-        else
-        {
-            // Apply Moon effects
-            if (hasUprightMoon)
-            {
-                // Halve negative effects
-                foreach (var effect in allEffects)
-                {
-                    if (IsNegativeEffect(effect.effect))
-                    {
-                        effect.isHalved = true;
-                    }
-                }
-            }
-            
-            if (hasReversedMoon)
-            {
-                // Halve positive effects
-                foreach (var effect in allEffects)
-                {
-                    if (IsPositiveEffect(effect.effect))
-                    {
-                        effect.isHalved = true;
-                    }
-                }
-            }
-        }
-    }
+    // private void ApplySpecialEffects(List<CardEffect> allEffects, Customer customer)
+    // {
+    //     // Check for Moon card effects
+    //     bool hasUprightMoon = allEffects.Any(e => e.cardId == "moon" && e.isUpright && e.effect == "allNegHalf");
+    //     bool hasReversedMoon = allEffects.Any(e => e.cardId == "moon" && !e.isUpright && e.effect == "allPosHalf");
+    //     
+    //     // Check for Sun + Moon synergy rune
+    //     bool hasSunMoonRune = GameSystem.Instance.HasRune("twin_lights");
+    //     bool hasSun = allEffects.Any(e => e.cardId == "sun");
+    //     bool hasMoon = allEffects.Any(e => e.cardId == "moon");
+    //     
+    //     if (hasSunMoonRune && hasSun && hasMoon)
+    //     {
+    //         // Remove all negative effects
+    //         for (int i = allEffects.Count - 1; i >= 0; i--)
+    //         {
+    //             if (IsNegativeEffect(allEffects[i].effect))
+    //             {
+    //                 allEffects.RemoveAt(i);
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         // Apply Moon effects
+    //         if (hasUprightMoon)
+    //         {
+    //             // Halve negative effects
+    //             foreach (var effect in allEffects)
+    //             {
+    //                 if (IsNegativeEffect(effect.effect))
+    //                 {
+    //                     effect.isHalved = true;
+    //                 }
+    //             }
+    //         }
+    //         
+    //         if (hasReversedMoon)
+    //         {
+    //             // Halve positive effects
+    //             foreach (var effect in allEffects)
+    //             {
+    //                 if (IsPositiveEffect(effect.effect))
+    //                 {
+    //                     effect.isHalved = true;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     
     private void ApplyAttributeEffects(List<string> effects, Customer customer, List<string> allEffects, bool updateState)
     {
@@ -444,7 +489,7 @@ public class CardSystem : Singleton<CardSystem>
     }
 
 
-    void ApplyRuneEffect(List<Card> currentHand, bool updateState, DivinationResult result)
+    void ApplyRuneEffect(List<Card> currentHand, bool updateState, DivinationResult result,Customer customer)
     {
         if (currentHand.Count == 0)
         {
@@ -489,12 +534,48 @@ public class CardSystem : Singleton<CardSystem>
                         // Record activated rune
                         if (!result.activatedRunes.Contains("when|allDownCard|addGold"))
                         {
-                            result.activatedRunes.Add("when|allDownCard|addGold");
+                            result.activatedRunes.Add(effect);
                         }
                         
                         // Always use temp values, don't apply directly to game state here
                         tempMoneyChange += effects[effect];
                     }
+
+                    break;
+                case "moreEmotionToSanity":
+                {
+                    
+                    var required = customer.RequirementOnAttribute("emotion");
+                    if (required > 0 && result.diffAttribute("emotion") > required)
+                    {
+
+                        tempSanityChange += result.diffAttribute("emotion") - required;
+                        result.activatedRunes.Add(effect);
+                    }
+                }
+
+                    break;
+                case "morePowerToMoney":
+                {
+                    var required = customer.RequirementOnAttribute("power");
+                    if (required > 0 && result.diffAttribute("power") > required)
+                    {
+
+                        tempMoneyChange += result.diffAttribute("power") - required;
+                        result.activatedRunes.Add(effect);
+                    }
+                }
+                    break;
+                case "moreWisdomToRedraw":
+                {
+                    var required = customer.RequirementOnAttribute("wisdom");
+                    if (required > 0 && result.diffAttribute("wisdom") > required)
+                    {
+
+                        tempRerollChange += result.diffAttribute("wisdom") - required;
+                        result.activatedRunes.Add(effect);
+                    }
+                }
 
                     break;
             }

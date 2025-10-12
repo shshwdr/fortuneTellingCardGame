@@ -1,18 +1,21 @@
 ﻿identifier,cost,name,description,effect,value,canBeDraw,isStart
-twinLight,3,twinLight,"when tell fortune with both Moon and Sun cards, add 1 money",useBoth|moon|sun|removeAllNeg,,0,
-redraw,5,redraw,redraw count add 2,redrawCount,2,1,0
+redraw,4,redraw,redraw count add 2,redrawCount,2,1,0
+upright,4,upright,"when tell fortune with all cards up, add 2 redraw today",when|allUpCard|refreshCount,1,1,0
+down,5,down,"when tell fortune with all cards down, add 2 money",when|allDownCard|addGold,2,1,0
+rest,4,rest,"when a day over, add 1 sanity",addSanityAfterDay,1,1,
+Shopaholic,4,Shopaholic,"when buy anything in shop, add 1 sanity",addSanityWhenBuy,1,1,
+abstinence,3,abstinence,"when not buy anything in shop, add 2 money",addMoneyWhenNotBuy,2,1,
+Enlightener,5,Enlightener,"when satisfy all customer a day, add 3 sanity",satisfyAllAddSanity,3,1,
+Insurance,3,Insurance,"when failed all customer a day, add 3 money",failedAllAddMoney,3,1,
+emotionToSanity,4,emotionToSanity,extra emotion over customer requirement would be added to Sanity,moreEmotionToSanity,1,1,
+powerToMoney,4,powerToMoney,extra power over customer requirement would be added to Money,morePowerToMoney,,1,
+wisdomToRedraw,4,wisdomToRedraw,extra wisdom over customer requirement would be added to redraw,moreWisdomToRedraw,,1,
+unusedRedrawKeep,4,unusedRedrawKeep,unused redraw will go to next day,unusedRedrawGoToNextDay,,1,
+healSanity,5,healSanity,set sanity to 10,sanityMax|1,,0,0
 lastSanity,6,lastSanity,"The first time sanity goes below 0, recover it to 5",checkTotal|sanity|1|changeSanity|3,,0,
 lastValue,5,lastValue,deprecated,checkTotal|attribute|1|changeValue|3,,0,
 finger,10,finger,flip a card,flipCard,,0,
-upright,5,upright,"when tell fortune with all cards up, add 1 refresh count today",when|allUpCard|refreshCount,1,1,0
-down,6,down,"when tell fortune with all cards down, add 2 money",when|allDownCard|addGold,2,1,0
-healSanity,5,healSanity,set sanity to 10,sanityMax|1,,0,
 balance,3,balance,"when tell fortune with no sanity change, add 1 sanity",when|sanityNoChange|sanity|1,1,0,
-rest,6,rest,"when a day over, add 1 sanity",,,,
-Shopaholic,6,Shopaholic,"when buy anything in shop, add 1 sanity",,,,
-abstinence,6,abstinence,"when not buy anything in shop, add 2 sanity",,,,
-Enlightener,5,Enlightener,"when satisfy all customer a day, add 3 sanity",,,,
-Insurance,5,Insurance,"when failed all customer a day, add 3 money",,,,
+twinLight,3,twinLight,"when tell fortune with both Moon and Sun cards, add 1 money",useBoth|moon|sun|removeAllNeg,,0,
 stress tolerance,4,stress tolerance,"your sanity can go under 0, as long as you can recover it over 0 before the end of day",,,,
-,,,把 Emotion 溢出转回 Sanity,,,,
-,,,preview next card,,,,
+preview,4,preview,preview next card,,,,

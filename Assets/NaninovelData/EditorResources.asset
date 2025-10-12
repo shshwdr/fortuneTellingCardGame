@@ -164,5 +164,8 @@ MonoBehaviour:
     - name: Resources/Naninovel/Scripts/logicRequest
       pathPrefix: Scripts
       guid: 28c7d4fb23cb39e49abe3c5467a9992d
+    - name: Resources/Naninovel/Scripts/richRequest
+      pathPrefix: Scripts
+      guid: 74483bf2f9c451e4b8c3c09d005cac89
   - Id: Characters/114bd824-1e8b-499e-9c29-e522d1fc225f
     Resources: []

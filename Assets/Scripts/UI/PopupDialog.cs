@@ -111,8 +111,8 @@ public class PopupDialog : MenuBase
             // Clear previous listeners
             button1.onClick.RemoveAllListeners();
             button1.onClick.AddListener(() => {
-                button1Action?.Invoke();
                 Hide(true);
+                button1Action?.Invoke();
             });
         }
         else
