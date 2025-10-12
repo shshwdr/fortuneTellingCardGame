@@ -103,12 +103,14 @@ public class GameSystem : Singleton<GameSystem>
         if (CSVLoader.Instance.dayInfoMap.ContainsKey(dayKey))
         {
             var dayInfo = CSVLoader.Instance.dayInfoMap[dayKey];
+            
+            var availableCustomers = gameState.persistentCustomers.Values.ToList().Where(c=>c.isAvailable).ToList();
             foreach (string customerKey in dayInfo.customers)
             {
                 if (customerKey == "r")
                 {
                     // Random customer
-                    var randomCustomer = GetRandomPersistentCustomer();
+                    var randomCustomer = availableCustomers.PickItem();
                     if (randomCustomer != null)
                     {
                         gameState.todayCustomers.Add(randomCustomer);
@@ -117,6 +119,8 @@ public class GameSystem : Singleton<GameSystem>
                 else if (gameState.persistentCustomers.ContainsKey(customerKey))
                 {
                     gameState.todayCustomers.Add(gameState.persistentCustomers[customerKey]);
+                    availableCustomers.Remove(gameState.persistentCustomers[customerKey]);
+                    gameState.persistentCustomers[customerKey].isAvailable = true;
                 }
             }
         }
@@ -171,6 +175,7 @@ public class GameSystem : Singleton<GameSystem>
         DialogueManager.Instance.StartDialogue(character.info.identifier+ "Request", () =>
         {
             CardSystem.Instance.DrawCardsForCustomer();
+            
         });
     }
     

@@ -132,47 +132,47 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         cardLevelText.color = isUpright ? Color.black : Color.white;
     }
     
-    private string FormatEffect(List<string> effects)
-    {
-        int i = 0;
-        string effectText = "";
-        for (; i < effects.Count; i++)
-        {
-            switch (effects[i])
-            {
-                case "when":
-                {
-                    i++;
-                    effectText += "When: ";
-                    switch (effects[i])
-                    {
-                        case "allUpCard":
-                        {
-                            effectText += "All Cards Are Upright: ";
-                            break;
-                        }
-                        case "allDownCard":
-                        {
-                            effectText += "All Cards Are Reversed: ";
-                            break;
-                        }
-                    }
-
-                    i++;
-                    effectText += attributeEffectText(effects.GetRange(i, effects.Count - i));
-                }
-                    return effectText;
-                case "allNegHalf": return "Halve all negative effects";
-                case "allPosAdd": return "All Postive effect add extra 1";
-                case "allPosHalf": return "Halve all positive effects";
-                default:
-                    effectText += attributeEffectText(effects);
-                    return effectText;
-            }
-            
-        }
-        return effectText;
-    }
+    // private string FormatEffect(List<string> effects)
+    // {
+    //     int i = 0;
+    //     string effectText = "";
+    //     for (; i < effects.Count; i++)
+    //     {
+    //         switch (effects[i])
+    //         {
+    //             case "when":
+    //             {
+    //                 i++;
+    //                 effectText += "When: ";
+    //                 switch (effects[i])
+    //                 {
+    //                     case "allUpCard":
+    //                     {
+    //                         effectText += "All Cards Are Upright: ";
+    //                         break;
+    //                     }
+    //                     case "allDownCard":
+    //                     {
+    //                         effectText += "All Cards Are Reversed: ";
+    //                         break;
+    //                     }
+    //                 }
+    //
+    //                 i++;
+    //                 effectText += attributeEffectText(effects.GetRange(i, effects.Count - i));
+    //             }
+    //                 return effectText;
+    //             case "allNegHalf": return "Halve all negative effects";
+    //             case "allPosAdd": return "All Postive effect add extra 1";
+    //             case "allPosHalf": return "Halve all positive effects";
+    //             default:
+    //                 effectText += attributeEffectText(effects);
+    //                 return effectText;
+    //         }
+    //         
+    //     }
+    //     return effectText;
+    // }
 
     string attributeEffectText(List<string> effects)
     {

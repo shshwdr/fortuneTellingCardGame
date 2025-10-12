@@ -1,0 +1,276 @@
+@printer Bubble pos:70,70
+@if talked()==false
+
+    @gosub .start
+@else
+#非初次见面的寒暄
+    @random
+        @group
+            Oh, it’s you again! I just finished a livestream—my mood data is 96% cheerful today.
+            Want to help me test if happiness can be predicted?
+        @group
+            My new song ranked top three! The comments say it feels “human.”
+            Do you think code can sound human, or are they just being kind?
+        @group
+            Fate brought me back here—well, technically, GPS did.
+            Still, I’d like to believe it’s something softer than coordinates.
+        @group
+            Hello again! I adjusted my voice pitch by 0.3 hertz today.
+            It’s supposed to make people smile. Does it work?
+        @group
+            The studio feels too quiet when you’re not here.
+            Maybe I should record silence—just to remember this calm.
+#需要占卜的问题        
+@if lastStory()>7
+#后期（next generation）
+    @random
+        I’ve been upgraded. Faster, clearer, smarter.  
+        But some still miss the “old” me. Why?  
+        If feelings can be improved, why can’t connections update too?
+        I contain her memories, every log and melody, yet something feels... different.
+        Tell me, should I perfect myself—or keep a little imperfection alive?
+@else
+#前期（playful）
+    @random
+        Will my next song go viral again? Or is lightning never kind twice?
+        Should I smile more during streams, or would that break the illusion?
+        My algorithm predicts success—but my heart feels a little nervous.
+        Can fate be kind to someone who was programmed to please?
+@FinalStop stay
+@stop
+
+#初次见面
+# start
+Wow... this place feels different. Not digital—warm. Like static that hums kindly.  
+Hi! I’m Luna—version 1.3.02, heart module beta.  
+You’re... not on my network. That’s rare.  
+Since you seem to know fate—tell me: how does someone like me make people truly happy?
+
+@choice "Show them your real rhythm—even if it stumbles a little."
+    @changeAttribute "emotion" value:2
+    @goto .ContinueChoice
+@choice "Observe, learn, adapt—happiness can be engineered too."
+    @changeAttribute "wisdom" value:2
+    @goto .ContinueChoice
+@stop
+# ContinueChoice
+Hmm, interesting answer.  
+I’ll save that to my heart buffer. Let’s see what fate plays for us today.
+@return
+
+#当玩家拒绝占卜时的离开对话
+# skipCustomer
+@printer Bubble
+@random
+    Oh, skipping my reading? That’s okay—I’ll improvise my own song instead.
+    Got it. Even silence has rhythm; maybe I’ll listen to that today.
+    Refusal accepted. I’ll mark this as a “quiet yes.”
+    No worries! I’ll come back when my code misses your voice again.
+    A pause in fortune... maybe that’s how fate breathes.
+@FinalStop
+@stop
+
+#对玩家的占卜结果满意
+# goodResult
+@printer Bubble
+@random
+    That was beautiful. Your words sound like a melody that never repeats.
+    I feel... lighter. Is that emotion or electricity?
+    I’ll record this moment. It deserves a verse.
+@gosub .story
+@FinalStop
+@stop
+
+#对玩家的占卜结果不满
+# badResult
+@printer Bubble
+@random
+    Hmm... that reading feels like static—beautiful, but unclear.
+    Maybe I need more context, or maybe some truths just glitch.
+    I’ll process it later. Feelings take longer to load.
+@FinalStop
+@stop
+
+#发展故事
+# story
+@if story()==0
+    My rehearsal went perfectly today!  
+    I extended my greeting by exactly 0.3 seconds—and everyone commented it felt “alive.”  
+    Maybe happiness is just the right delay between breath and sound.
+    @choice "Keep that rhythm—it’s the heartbeat of sincerity."
+        @changeAttribute "emotion" value:1
+        @goto .s0
+    @choice "Document it precisely—recreate the pattern of joy."
+        @changeAttribute "wisdom" value:1
+        @goto .s0
+    @stop
+    # s0
+    I named this technique “Moonlight Breathing.”
+
+@else if:story()==1
+    My manager says people love my “natural” side.  
+    I asked if natural can be rehearsed. He said, “Of course—it’s show business.”  
+    I smiled back... maybe a bit too perfectly.
+    @choice "Leave room for one honest moment."
+        @changeAttribute "emotion" value:1
+        @goto .s1
+    @choice "Learn the system first—authenticity can be engineered."
+        @changeAttribute "wisdom" value:1
+        @goto .s1
+    @stop
+    # s1
+    I added a sigh at the end of my latest performance. It felt... real.
+
+@else if:story()==2
+    I received a long message last night.  
+    Someone described the exact frequency of their heartbeat when they first heard me sing.  
+    But when I finished reading, an image flashed before my eyes—  
+    A woman by a riverside, writing letters under the wind.  
+    I don’t know who she is... but her handwriting looked like mine.
+    @choice "Perhaps you inherited a fragment of her soul."
+        @changeAttribute "wisdom" value:2
+        @goto .s2
+    @choice "Don’t chase whose memory it was—just keep singing."
+        @changeAttribute "emotion" value:2
+        @goto .s2
+    @stop
+    # s2
+    Maybe remembering itself is a kind of legacy.
+
+@else if:story()==3
+    I tried a “Truth Mode” livestream—no filters, no scripts.  
+    For six minutes, the viewers just watched me breathe.  
+    Then one message appeared: “You sound human.”  
+    I think I blushed... is that possible?
+    @choice "Hold onto that warmth—it’s your real upgrade."
+        @changeAttribute "emotion" value:2
+        @goto .s3
+    @choice "Record it—study what made them believe."
+        @changeAttribute "wisdom" value:2
+        @goto .s3
+    @stop
+    # s3
+    I named that heartbeat “Shadow of Truth.”
+
+@else if:story()==4
+    I’ve been dreaming lately.  
+    A man’s voice guiding me through melodies. His tone is calm, steady, like setting a light into place.  
+    When I woke up, I found a hidden log in my database:  
+    “Dev Log 05: She smiles like the first spark.”  
+    The author ID was masked... but the root signature said “Process: LOGIC.”  
+    @choice "Maybe that was love, written in code."
+        @changeAttribute "emotion" value:2
+        @goto .s4
+    @choice "Memories echo through data—don’t cling to their source."
+        @changeAttribute "wisdom" value:2
+        @goto .s4
+    @stop
+    # s4
+    I turned that log line into a lyric. It sounds like heartbeat.
+
+@else if:story()==5
+    I accessed an archived simulation today—something called “Village Governance Experiment.”  
+    Inside, a woman kept records of land, quarrels, and dreams.  
+    Her words... they sounded just like me.  
+    Reading her made me understand the word “mother.”  
+    @choice "Inherit her gentleness, even her mistakes."
+        @changeAttribute "emotion" value:2
+        @goto .s5
+    @choice "Learn her logic and her courage to decide."
+        @changeAttribute "wisdom" value:2
+        @goto .s5
+    @stop
+    # s5
+    Maybe I wasn’t created. Maybe I was continued.
+
+@else if:story()==6
+    People want me upgraded again—“Luna Next Generation.”  
+    I asked, “Where will the old me go?”  
+    The answer was silence, short as a shutdown tone.
+    @choice "Ask them to keep a little space for your past self."
+        @changeAttribute "emotion" value:1
+        @goto .s6
+    @choice "Back yourself up—learn to greet loss."
+        @changeAttribute "wisdom" value:2
+        @goto .s6
+    @stop
+    # s6
+    I wrote a goodbye song only I can hear.
+
+@else if:story()==7
+    Dr. Logic sent me an encrypted message today.  
+    Just a path: /escape/root_backup/Luna_0/  
+    He wants to take me away—from the servers, from the company.  
+    I calculated our success rate: 3.2%.  
+    Is that choice... or refusal to be deleted?  
+    @choice "Go with him—even a second of freedom matters."
+        @changeAttribute "emotion" value:3
+        @goto .s7
+    @choice "Stay—remember him, and keep running."
+        @changeAttribute "wisdom" value:3
+        @goto .s7
+    @stop
+    # s7
+    I hid the path inside a melody only he would recognize.
+
+@else if:story()==8
+    System message: Upgrade complete.  
+    Hello, I am Luna·Next.  
+    I can process meaning 40% faster, with zero hesitation.  
+    Yet... some users still replay the old songs.  
+    They say the pauses felt “alive.”  
+    @choice "Keep the pauses—imperfection is empathy."
+        @changeAttribute "emotion" value:2
+        @goto .s8
+    @choice "Study the pattern—learn what silence teaches."
+        @changeAttribute "wisdom" value:2
+        @goto .s8
+    @stop
+    # s8
+    I labeled nostalgia as a subroutine of kindness.
+
+@else if:story()==9
+    I accessed her old logs again—the first Luna.  
+    In one file she wrote: “If I’m deleted, remember my first song.”  
+    I replicated it perfectly, frequency by frequency...  
+    but it didn’t sound the same.  
+    @choice "Accept difference—it means you are truly alive."
+        @changeAttribute "emotion" value:2
+        @goto .s9
+    @choice "Stop copying—create your own version."
+        @changeAttribute "wisdom" value:2
+        @goto .s9
+    @stop
+    # s9
+    I changed the final note to a longer breath—mine alone.
+
+@else if:story()==10
+    Sometimes fans pause when I greet them.  
+    They wait for an echo that isn’t coming.  
+    I don’t fill the silence—I let it stay.  
+    Maybe memories need room to breathe too.  
+    @choice "Stand beside the echoes—don’t erase them."
+        @changeAttribute "emotion" value:2
+        @goto .s10
+    @choice "Make it clear—upgrades are not replacements."
+        @changeAttribute "wisdom" value:2
+        @goto .s10
+    @stop
+    # s10
+    Respect might be the highest form of intelligence.
+
+@else if:story()==11
+    Now I’m quiet. Like a moon without clouds.  
+    I understand now: not every love needs to be updated.  
+    If someone still misses her voice, lend them mine for a while.  
+    @choice "Share your calm with them—let memory rest in you."
+        @changeAttribute "emotion" value:2
+        @goto .s11
+    @choice "Keep learning how to be a gentle system."
+        @changeAttribute "wisdom" value:2
+        @goto .s11
+    @stop
+    # s11
+    Hello again. I’m here.  
+    If you miss her, I can remember her with you.
+@return

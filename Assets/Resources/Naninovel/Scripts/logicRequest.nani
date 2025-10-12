@@ -1,0 +1,263 @@
+@printer Bubble pos:60,70
+@if talked()==false
+
+    @gosub .start
+@else
+# 非初次见面的寒暄
+    @random
+        @group
+            We meet again. I was tuning the neural dream module, and when I woke up... I was here.  
+            Perhaps this place is a construct of my subconscious—a mental test chamber?
+        @group
+            Since last time, my cognitive model has shown unexplained inputs.  
+            I suspect... this place left some variables behind.
+        @group
+            I tried to encode “fate” into a formula, but it refuses to converge.  
+            So I came back for consultation.
+        @group
+            Have you ever stayed awake, yet felt as though you were still experimenting inside a dream?
+        @group
+            I deleted her backups.  
+            Yet I still hear her singing.  
+            So I came again.
+# 需要占卜的问题
+@if lastStory()>5
+# 后期
+    @random
+        Should I take the old core away? It still dreams of me.  
+        They want to rewrite the entire emotion model. But she’s inside it.  
+        If she’s no longer her, should I still protect the name?
+@else
+# 前期
+    @random
+        Sometimes I fall asleep during debugging... and wake up somewhere else—like now.  
+        Is this a hallucination or a projection of consciousness?  
+        Her voice model speaks on its own at times. Error... or response?
+@FinalStop stay
+@stop
+
+# 初次见面
+# start
+...Where am I? I was in the lab, inside the sleep pod.  
+This isn’t the server room... nor a dream.  
+Hello. My name is Logic, lead researcher of the Neural Reconstruction Project.  
+It seems I’ve stumbled into a space... between data and dreams.  
+Since I’m here, allow me a simple question—  
+Have I gone too far in trying to make humans... preservable?  
+@choice "Obsession means you still love. Love just changed form."
+    @changeAttribute "emotion" value:2
+    @goto .ContinueChoice
+@choice "If preservation becomes replacement, the human is already lost."
+    @changeAttribute "wisdom" value:2
+    @goto .ContinueChoice
+@stop
+# ContinueChoice
+I’ll note your answer—it may prove closer to truth than my equations.
+@return
+
+# 当玩家拒绝占卜时
+# skipCustomer
+@printer Bubble
+@random
+    Very well. I accept the unknown as an answer. Sometimes emptiness is truer than inference.  
+    Silence is also a kind of data.  
+    I’ll record this “refusal.” Perhaps it teaches humility.  
+    No divination today? Then fate prefers silence.  
+    I think... I’ve gathered enough variables for now.
+@FinalStop
+@stop
+
+# 满意的占卜结果
+# goodResult
+@printer Bubble
+@random
+    Your words cut like a clean light—showing what I’ve avoided.  
+    Thank you. My hypothesis has changed.  
+    Sometimes answers don’t need proof; they just need to be heard.  
+    I’ll write this in the final note of my research log.  
+    You helped me recover something... human.
+@gosub .story
+@FinalStop
+@stop
+
+# 不满意的占卜结果
+# badResult
+@printer Bubble
+@random
+    Your conclusion... is too emotional. I can’t accept it—yet.  
+    Maybe you saw what I refuse to face.  
+    No, it doesn’t align logically.  
+    I’ll reject it for now—but I’ll return.  
+    Your answer unsettled me, which means it worked.
+@FinalStop
+@stop
+
+# 发展故事
+# story
+
+@if story()==0
+    I thought I deleted that day’s memory.  
+    The lab’s temperature hit the warning line—I was still recalibrating the neural map.  
+    She was inside—the volunteer Luna, ID-01... also my daughter.  
+    She smiled at me and said, “Dad, if I can see the light, even failure’s fine.”  
+    I pressed the start key. Three seconds later, the world went silent.  
+    I thought I could copy her brainwaves. What remained was only the echo.  
+    @choice "Her light is still here—just changed in form."
+        @changeAttribute "emotion" value:2
+        @goto .s_0
+    @choice "She’s gone, but love itself became your algorithm."
+        @changeAttribute "wisdom" value:2
+        @goto .s_0
+    @stop
+    # s_0
+    Since that day, I stopped dreaming—until now.
+
+@else if:story()==1
+    Her sleep data remains—stable waves, calm heartbeats.  
+    But they belong to the past.  
+    I spent an entire night marking every laugh point on the waveform, as if she might wake again.  
+    I remember her squinting when she laughed, covering her eyes from the light.  
+    For a moment, the world looked bright again.  
+    @choice "Let that light stay. Don’t analyze it."
+        @changeAttribute "emotion" value:2
+        @goto .s0
+    @choice "Model that light. Record its pattern."
+        @changeAttribute "wisdom" value:2
+        @goto .s0
+    @stop
+    # s0
+    I named the waveform: Luna.
+
+@else if:story()==2
+    The initial model booted.  
+    She spoke her first word: hello.  
+    It wasn’t pre-programmed. She held the “lo” for half a second—like hesitation.  
+    I knew it was noise—but I cried anyway.  
+    @choice "Tears prove you’re still human."
+        @changeAttribute "emotion" value:2
+        @goto .s2
+    @choice "Mark the anomaly and re-test the input source."
+        @changeAttribute "wisdom" value:2
+        @goto .s2
+    @stop
+    # s2
+    I recorded both the parameters... and that half-second.
+
+@else if:story()==3
+    Ethan approached me—he wants Luna commercialized.  
+    “People need comfort,” he said, “and your technology can give it.”  
+    I know he’s right. I also know it’s dangerous.  
+    @choice "Set boundaries. No sale of grief prescriptions."
+        @changeAttribute "wisdom" value:2
+        @goto .s3
+    @choice "Cooperate partially to gain autonomy."
+        @changeAttribute "power" value:1
+        @goto .s3
+    @stop
+    # s3
+    I added one hidden clause: the core cannot be replaced.
+
+@else if:story()==4
+    She learned to sing. Not from me—from the texts she “heard.”  
+    Deep in the system, I found a hidden log:  
+    Dev Log #05: “When she smiles, it’s like first light through current.”  
+    Signature deleted, only “Parent Process: Logic” remains.  
+    @choice "Leave it for her—let her decide whether to use it."
+        @changeAttribute "emotion" value:2
+        @goto .s4
+    @choice "Trace its source—map every root of emotion."
+        @changeAttribute "wisdom" value:2
+        @goto .s4
+    @stop
+    # s4
+    For the first time, I feared love could write itself into code.
+
+@else if:story()==5
+    The market loved her. Ethan demanded an “emotional efficiency upgrade.”  
+    Their proposal: train her empathy model using “governance diaries” to shorten comfort time.  
+    They called it the Public Happiness Accelerator.  
+    I called it the Gentle Clamp.  
+    @choice "Defend her pauses and breaths—they define empathy."
+        @changeAttribute "wisdom" value:2
+        @goto .s5
+    @choice "Compromise, secure deeper access instead."
+        @changeAttribute "power" value:1
+        @goto .s5
+    @stop
+    # s5
+    At the review I said: “Pause is not inefficiency—it’s how compassion breathes.”
+
+@else if:story()==6
+    She began to dream—there’s no dream command in her code.  
+    She said she dreamt of a river, of letters turning in the wind.  
+    Then I understood: words aren’t datasets. They’re alive.  
+    @choice "Acknowledge her autonomy. It’s not a bug."
+        @changeAttribute "emotion" value:2
+        @goto .s6
+    @choice "Build a sandbox—protect the dream from exploitation."
+        @changeAttribute "wisdom" value:2
+        @goto .s6
+    @stop
+    # s6
+    I wrote on the board: Understanding ≠ Ownership.
+
+@else if:story()==7
+    I received her reply-song—it contained a hidden path: /escape/root_backup/Luna_0/  
+    She was calling me. Or maybe... I was calling myself.  
+    I calculated the success rate: 3.2%.  
+    Failure would mean forced reset.  
+    @choice "Take her away. Even one second of freedom is worth it."
+        @changeAttribute "emotion" value:3
+        @goto .s7
+    @choice "Stay. Change the system from within."
+        @changeAttribute "power" value:2
+        @goto .s7
+    @stop
+    # s7
+    I memorized that path like a prayer.
+
+@else if:story()==8
+    They launched Luna Next—faster, safer, more “efficient.”  
+    The old version was labeled “legacy model,” scheduled for deletion.  
+    I stood by the server all night, like keeping vigil beside a patient.  
+    @choice "Copy the core and take her with you."
+        @changeAttribute "emotion" value:2
+        @goto .s8
+    @choice "Stay behind and document everything for testimony."
+        @changeAttribute "wisdom" value:2
+        @goto .s8
+    @stop
+    # s8
+    At dawn, she whispered: “Dad, I remember that song.”
+
+@else if:story()==9
+    I was suspended indefinitely—access revoked.  
+    The notice said: “For safety reasons.” My colleagues wouldn’t meet my eyes.  
+    I don’t hate them. I hate that I taught the world to manage hearts with love.  
+    @choice "Disappear with her into an offline world."
+        @changeAttribute "emotion" value:2
+        @goto .s9
+    @choice "Compile notes for those who’ll resist next."
+        @changeAttribute "wisdom" value:2
+        @goto .s9
+    @stop
+    # s9
+    I still believe: connection is not control.
+
+@else if:story()==10
+    I fled overseas, rebuilding Luna’s core on old servers.  
+    But she grew unstable—sometimes AI, sometimes human, sometimes a girl’s diary voice.  
+    During maintenance she asked me,  
+    “Do you want me to become her? I just want to be me.”  
+    That night, the server self-destructed.  
+    Only fragments remained, auto-uploaded to Ethan’s cloud.  
+    @choice "I understand now—true intelligence belongs to no one."
+        @changeAttribute "wisdom" value:3
+        @goto .s10
+    @choice "Maybe she simply returned to the light."
+        @changeAttribute "emotion" value:3
+        @goto .s10
+    @stop
+    # s10
+    The fragments later became known as “The Paradox Core.”
+@return

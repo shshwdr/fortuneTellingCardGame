@@ -112,7 +112,7 @@ public class PopupDialog : MenuBase
             button1.onClick.RemoveAllListeners();
             button1.onClick.AddListener(() => {
                 button1Action?.Invoke();
-                Hide();
+                Hide(true);
             });
         }
         else
@@ -132,7 +132,7 @@ public class PopupDialog : MenuBase
             button2.onClick.RemoveAllListeners();
             button2.onClick.AddListener(() => {
                 button2Action?.Invoke();
-                Hide();
+                Hide(true);
             });
         }
         else if (button2 != null)
@@ -161,13 +161,13 @@ public class PopupDialog : MenuBase
         if (Input.GetKeyDown(KeyCode.Alpha1) && onButton1Click != null)
         {
             onButton1Click.Invoke();
-            Hide();
+            Hide(true);
         }
         
         if (Input.GetKeyDown(KeyCode.Alpha2) && onButton2Click != null)
         {
             onButton2Click.Invoke();
-            Hide();
+            Hide(true);
         }
     }
 }

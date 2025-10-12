@@ -113,6 +113,7 @@ public class MenuBase : MonoBehaviour
     }
     virtual public void Hide(bool immediate = false)
     {
+        immediate = true;
         if (immediate)
         {
             menu.SetActive(false);

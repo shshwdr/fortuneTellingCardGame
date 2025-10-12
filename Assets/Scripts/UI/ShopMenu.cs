@@ -20,6 +20,8 @@ public class ShopMenu : MenuBase
     
     // Track cards that have been upgraded in this shop session
     private HashSet<string> upgradedCardsThisSession = new HashSet<string>();
+    // Track cards that have been purchased (newly bought) in this shop session
+    private HashSet<string> purchasedCardsThisSession = new HashSet<string>();
     
     public override void Init()
     {
@@ -27,6 +29,7 @@ public class ShopMenu : MenuBase
         
         // Clear upgraded cards tracking when initializing shop
         upgradedCardsThisSession.Clear();
+        purchasedCardsThisSession.Clear();
         
         SetupShop();
         UpdateMoneyDisplay();
@@ -260,6 +263,7 @@ public class ShopMenu : MenuBase
         bool alreadyOwned = false;
         bool canUpgrade = false;
         bool upgradedThisSession = false;
+        bool purchasedThisSession = false;
         string itemName = "";
         int cost = 10;
         
@@ -282,17 +286,18 @@ public class ShopMenu : MenuBase
                 alreadyOwned = ownedCard != null;
                 canUpgrade = alreadyOwned && ownedCard.level < card.maxLevel;
                 upgradedThisSession = upgradedCardsThisSession.Contains(card.identifier);
+                purchasedThisSession = purchasedCardsThisSession.Contains(card.identifier);
                 itemName = card.name;
                 break;
         }
         
-        buyButton.interactable = canAfford && (!alreadyOwned || canUpgrade) && !upgradedThisSession;
+        buyButton.interactable = canAfford && (!alreadyOwned || canUpgrade) && !upgradedThisSession && !purchasedThisSession;
         
         var buyButtonText = buyButton.GetComponentInChildren<TMP_Text>();
         if (buyButtonText != null)
         {
-            if (upgradedThisSession)
-                buyButtonText.text = "Upgraded";
+            if (upgradedThisSession || purchasedThisSession)
+                buyButtonText.text = "Purchased";
             else if (alreadyOwned && !canUpgrade)
                 buyButtonText.text = "Max Level";
             else if (canUpgrade)
@@ -343,6 +348,10 @@ public class ShopMenu : MenuBase
                 var newCard = new Card(card);
                 GameSystem.Instance.gameState.availableCards.Add(newCard);
                 GameSystem.Instance.gameState.allCards.Add(newCard);
+                
+                // Mark this card as purchased in this session
+                purchasedCardsThisSession.Add(card.identifier);
+                
                 ToastManager.Instance.ShowToast($"Purchased {card.name}!");
             }
             
@@ -359,6 +368,11 @@ public class ShopMenu : MenuBase
     public bool IsCardUpgradedThisSession(string cardIdentifier)
     {
         return upgradedCardsThisSession.Contains(cardIdentifier);
+    }
+    
+    public bool IsCardPurchasedThisSession(string cardIdentifier)
+    {
+        return purchasedCardsThisSession.Contains(cardIdentifier);
     }
     
     private void RefreshAllShopItems()

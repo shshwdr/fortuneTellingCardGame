@@ -1,4 +1,7 @@
-﻿identifier,name,description,target
-girl,girl,girl,emotion
-lord,lord,lord,power
-wanderer,wanderer,wanderer,wisdom
+﻿identifier,name,description,target,isStart
+girl,girl,girl,emotion,1
+lord,lord,lord,power,1
+wanderer,wanderer,wanderer,wisdom,1
+luna,luna,luna,emotion,
+rich,rich,rich,power,
+logic,logic,logic,wisdom,

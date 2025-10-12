@@ -95,6 +95,7 @@ public class CustomerInfo
     public string name;
     public string description;
     public string target; // wealth, rela, sanity, power
+    public bool isStart;
 }
 
 [System.Serializable]
@@ -108,6 +109,7 @@ public class Customer
     public int mainAttribute => GetAttribute(info.target);
     public int lastStory;
     public string identifier => info.identifier;
+    public bool isAvailable;
     
     // Customer requirements based on day and attributes
     public List<AttributeRequirement> requirements = new List<AttributeRequirement>();
@@ -116,6 +118,7 @@ public class Customer
     {
         info = customerInfo;
         lastStory = -1;
+        isAvailable = customerInfo.isStart;
     }
     
     public int GetAttribute(string attributeName)

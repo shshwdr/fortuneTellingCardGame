@@ -14,5 +14,8 @@ public class AttributeCell : MonoBehaviour
         attributeName.text = name;
         currentValue.text = value.ToString();
         this.changeValue.text = changeValue==0?"":changeValue.ToString();
+        
+        if(changeValue!=0)
+        this.changeValue.color = changeValue > 0 ? Color.green : Color.red;
     }
 }

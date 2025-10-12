@@ -31,19 +31,19 @@ return         GetEffectWithLevel(true, level);
             if(int.TryParse( value, out v))
             {
                 int finalv=v;
-                if (infoEffect[0] == "when")
-                {
-                    if (v > 0)
-                    {
-                        var basev = v - 1;
-                        finalv = basev + level;
-                    }else if (v < 0)
-                    {
-                        var basev = v + 1;
-                        finalv = basev - level;
-                    }
-                }
-                else
+                // if (infoEffect[0] == "when")
+                // {
+                //     if (v > 0)
+                //     {
+                //         var basev = v - 1;
+                //         finalv = basev + level;
+                //     }else if (v < 0)
+                //     {
+                //         var basev = v + 1;
+                //         finalv = basev - level;
+                //     }
+                // }
+                // else
                 {
                     finalv = v * level;
                 }

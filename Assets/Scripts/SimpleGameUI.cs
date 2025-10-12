@@ -142,6 +142,7 @@ public class SimpleGameUI : MonoBehaviour
         if (CardSystem.Instance != null)
         {
             CardSystem.Instance.OnHandChanged += UpdateCardDisplay;
+            //CardSystem.Instance.OnHandChanged += UpdateCurrentCustomerAttributes();
         }
     }
 
@@ -290,8 +291,6 @@ public class SimpleGameUI : MonoBehaviour
         UpdateCustomerAttributes(customer);
     }
 
-
-
     public void UpdateCurrentCustomerAttributes()
     {
         UpdateCustomerAttributes(currentCustomer);
@@ -300,6 +299,7 @@ public class SimpleGameUI : MonoBehaviour
     {
         var result = CardSystem.Instance.PerformDivination(currentCustomer, false);
         powerText.SetValue("Power", customer.power, result.diffAttribute("power"));
+        
         relationshipText.SetValue("Emotion", customer.emotion, result.diffAttribute("emotion"));
         wisdomText.SetValue("Wisdom", customer.wisdom, result.diffAttribute("wisdom"));
         
@@ -415,6 +415,7 @@ public class SimpleGameUI : MonoBehaviour
                 }
             }
         }
+        
     }
     
     private void OnCardClicked(int cardIndex)
@@ -492,7 +493,7 @@ public class SimpleGameUI : MonoBehaviour
         if (result.isSatisfied)
         {
             ToastManager.Instance.ShowToast($"Customer is happy! You earned {result.moneyEarned} gold");
-            GameSystem.Instance.AddMoney(result.moneyEarned);
+            //GameSystem.Instance.AddMoney(result.moneyEarned);
             GameSystem.Instance.CustomerServed(); // Track that we successfully served a customer
             
             DialogueManager.Instance.StartDialogue(character.identifier+"Request","goodResult", () =>

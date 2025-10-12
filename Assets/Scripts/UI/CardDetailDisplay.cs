@@ -183,7 +183,40 @@ public class CardDetailDisplay : MonoBehaviour
                 case "allPosAdd":
                     result += "• All positive effects +1 extra\n";
                     break;
-                    
+                    case "setAdjacentCardUpWhenLock":
+                        result += "Set adjacent cards to Upright when lock this card\n";
+                        break;
+                    case "setAdjacentCardDownWhenLock":
+                        result += "Set adjacent cards to Reversed when lock this card\n";
+                        break;
+                    case "doublePower":
+                        result += "All Power change double\n";
+                        break;
+                        case "doubleEmotion":
+                            result += "All Emotion change double\n";
+
+                            break;
+                        case "wisdomS":
+                            result += "Wisdom add equals to ";
+                            i++;
+                            switch (effects[i])
+                            {
+                                 case "powerValue":
+                                     result += "Power Value\n";
+                                     break;
+                                 case "emotionValue":
+                                     result += "Emotion Value\n";
+                                     break;
+                                     case "downCardCount":
+                                         i++;
+                                         result += $"Reversed Card Count * {effects[i]}\n";
+                                         break;
+                                         case "upCardCount":
+                                             i++;
+                                             result += $"Upright Card Count * {effects[i]}\n";
+                                             break;
+                            }
+                            break;
                 case "allPosHalf":
                     result += "• Halve all positive effects\n";
                     break;

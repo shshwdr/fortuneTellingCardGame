@@ -19,10 +19,10 @@ public class CardSystem : Singleton<CardSystem>
     {
         get
         {
-            return 5+ RuneManager.Instance.getEffectValue("redrawCount");
+            return 7+ RuneManager.Instance.getEffectValue("redrawCount");
         }
     }
-    public int redrawTime = 5;
+    public int redrawTime = 7;
     public void AddRedrawTime (int time)
     {
         redrawTime += time;
@@ -85,7 +85,8 @@ public class CardSystem : Singleton<CardSystem>
         }
         
         OnHandChanged?.Invoke(currentHand);
-        
+        GameSystem.Instance.OnAttributeChanged?.Invoke();
+
     }
 
     public void ClearHand()
@@ -164,7 +165,28 @@ public class CardSystem : Singleton<CardSystem>
         if (cardIndex >= 0 && cardIndex < currentHand.Count)
         {
             currentHand[cardIndex].Fix();
-            OnHandChanged?.Invoke(currentHand);
+            if (currentHand[cardIndex].isFixed)
+            {
+              
+            var prev = Math.Max(0, cardIndex - 1);
+            var next =  Math.Min(currentHand.Count - 1, cardIndex + 1);
+            if (currentHand[cardIndex].GetEffects().Contains("setAdjacentCardUpWhenLock"))
+            {
+                currentHand[prev].isUpright = true;
+                currentHand[next].isUpright = true;
+                OnHandChanged?.Invoke(currentHand);
+                GameSystem.Instance.OnAttributeChanged?.Invoke();
+            }
+            if (currentHand[cardIndex].GetEffects().Contains("setAdjacentCardDownWhenLock"))
+            {
+                currentHand[prev].isUpright = false;
+                currentHand[next].isUpright = false;
+                OnHandChanged?.Invoke(currentHand);
+                GameSystem.Instance.OnAttributeChanged?.Invoke();
+            }
+            
+            }
+            OnHandChanged?.Invoke(currentHand);  
         }
     }
     
@@ -224,7 +246,7 @@ public class CardSystem : Singleton<CardSystem>
             {"power", tempCustomer.power}
         };
         result.finalSanity = result.initialSanity + tempSanityChange;
-        for (int o = 0; o < 2; o++)
+        for (int o = 0; o < 3; o++)
         {
             
             for (int i = 0; i < currentHand.Count; i++)
@@ -260,7 +282,7 @@ public class CardSystem : Singleton<CardSystem>
         
         // Set money and reroll results
         result.finalMoney = result.initialMoney + tempMoneyChange;
-        result.tempMoneyChange = tempMoneyChange;
+        result.tempMoneyChange = tempMoneyChange; 
         result.finalRerolls = result.initialRerolls + tempRerollChange;
         result.tempRerollChange = tempRerollChange;
         
@@ -272,6 +294,24 @@ public class CardSystem : Singleton<CardSystem>
         }
         
         result.isSatisfied = customer.AreRequirementsSatisfied(attributeChanges);
+        
+        
+        if (result.isSatisfied)
+        {
+            // Calculate money reward based on total improvement across all requirements
+            int totalImprovement = 0;
+            foreach (var requirement in customer.requirements)
+            {
+                if (attributeChanges.ContainsKey(requirement.attributeName))
+                {
+                    totalImprovement += attributeChanges[requirement.attributeName];
+                }
+            }
+            result.moneyEarned = totalImprovement + 1;
+            tempMoneyChange +=  result.moneyEarned;
+            result.tempMoneyChange = tempMoneyChange;
+        }
+        
         
         if (updateState)
         {
@@ -299,19 +339,6 @@ public class CardSystem : Singleton<CardSystem>
             }
         }
         
-        if (result.isSatisfied)
-        {
-            // Calculate money reward based on total improvement across all requirements
-            int totalImprovement = 0;
-            foreach (var requirement in customer.requirements)
-            {
-                if (attributeChanges.ContainsKey(requirement.attributeName))
-                {
-                    totalImprovement += attributeChanges[requirement.attributeName];
-                }
-            }
-            result.moneyEarned = totalImprovement;
-        }
         
         return result;
     }
@@ -475,6 +502,15 @@ public class CardSystem : Singleton<CardSystem>
     }
     private void ApplyWhenEffects(List<string> effects, Customer customer, List<string> allEffects, List<Card> currentHand, bool updateState,DivinationResult result,int order)
     {
+        int upCount = 0;
+        for (int j = 0; j < currentHand.Count; j++)
+        {
+            if (currentHand[j].isUpright)
+            {
+                upCount++;
+            }
+        }
+        
         for (int i = 0; i < effects.Count; i++)
         {
             switch (effects[i])
@@ -482,6 +518,10 @@ public class CardSystem : Singleton<CardSystem>
                 case "when":
                 {
                     i++;
+                    if (order > 1)
+                    {
+                        return;
+                    }
                     if ((effects[i] == "total" && order == 0) || (effects[i] != "total" && order == 1))
                     {
                         return;
@@ -568,6 +608,33 @@ public class CardSystem : Singleton<CardSystem>
 
                     break;
                 }
+                case "wisdomS":
+                    if (order <= 1)
+                    {
+                        return;
+                    }
+                    i++;
+                    var valueString = effects[i];
+                    
+                    if (valueString == "emotionValue")
+                    {
+                        adjustValue("wisdom", result.diffAttribute("emotion"), allEffects, customer);
+                    }else if (valueString == "powerValue")
+                    {
+                        adjustValue("wisdom", result.diffAttribute("power"), allEffects, customer);
+                    }else if (valueString == "downCardCount")
+                    {
+                        i++;
+                        int value = int .Parse(effects[i]);
+                        adjustValue("wisdom", (4-upCount)*value, allEffects, customer);
+                    }
+                    else if (valueString == "upCardCount")
+                    {
+                        i++;
+                        int value = int .Parse(effects[i]);
+                        adjustValue("wisdom", upCount*value, allEffects, customer);
+                    }
+                    break;
                 default:
                     return;
             }
@@ -589,6 +656,14 @@ public class CardSystem : Singleton<CardSystem>
         }else if (value < 0 && allEffects.Contains("allNegHalf"))
         {
             value = Mathf.RoundToInt(value / 2f);
+        }
+
+        if (key == "power" && allEffects.Contains("doublePower"))
+        {
+            value *= 2;
+        }else if (key == "emotion" && allEffects.Contains("doubleEmotion"))
+        {
+            value *= 2;
         }
                     
         customer.ModifyAttribute(key, value);

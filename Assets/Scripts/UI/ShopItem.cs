@@ -83,6 +83,7 @@ public class ShopItem : MonoBehaviour
         bool alreadyOwned = false;
         bool canUpgrade = false;
         bool upgradedThisSession = false;
+        bool purchasedThisSession = false;
         int cost = 10;
         
         if (isRune && runeData != null)
@@ -107,15 +108,16 @@ public class ShopItem : MonoBehaviour
                 // Access the upgradedCardsThisSession through reflection or make it public
                 // For now, we'll use a simpler approach by checking if ShopMenu has a method to check this
                 upgradedThisSession = IsCardUpgradedThisSession(cardData.identifier);
+                purchasedThisSession = IsCardPurchasedThisSession(cardData.identifier);
             }
         }
         
-        purchaseButton.interactable = canAfford && (!alreadyOwned || canUpgrade) && !upgradedThisSession;
+        purchaseButton.interactable = canAfford && (!alreadyOwned || canUpgrade) && !upgradedThisSession && !purchasedThisSession;
         
         if (purchaseButtonText != null)
         {
-            if (upgradedThisSession)
-                purchaseButtonText.text = "Upgraded";
+            if (upgradedThisSession || purchasedThisSession)
+                purchaseButtonText.text = "Purchased";
             else if (alreadyOwned && !canUpgrade)
                 purchaseButtonText.text = "Max Level";
             else if (canUpgrade)
@@ -134,6 +136,17 @@ public class ShopItem : MonoBehaviour
         {
             // We need to make upgradedCardsThisSession accessible
             return shopMenu.IsCardUpgradedThisSession(cardIdentifier);
+        }
+        return false;
+    }
+    
+    private bool IsCardPurchasedThisSession(string cardIdentifier)
+    {
+        var shopMenu = FindObjectOfType<ShopMenu>();
+        if (shopMenu != null)
+        {
+            // We need to make purchasedCardsThisSession accessible
+            return shopMenu.IsCardPurchasedThisSession(cardIdentifier);
         }
         return false;
     }
