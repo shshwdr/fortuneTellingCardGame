@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Naninovel;
@@ -30,6 +31,8 @@ public class SimpleGameUI : MonoBehaviour
     public TMP_Text sanityText;
     public TMP_Text sanityTempText;
     public TMP_Text rerollTempText;
+
+    public List<GameObject> hideWithoutCusotmer;
     
     
     [Header("Card UI")]
@@ -69,6 +72,22 @@ public class SimpleGameUI : MonoBehaviour
     void OnDestroy()
     {
         UnsubscribeFromEvents();
+    }
+
+    public void HideCustomerInfo()
+    {
+        foreach (var obj in hideWithoutCusotmer)
+        {
+            obj.SetActive(false);
+        }
+    }
+    
+    public void ShowCustomerInfo()
+    { 
+        foreach (var obj in hideWithoutCusotmer)
+        {
+            obj.SetActive(true);
+        }
     }
     
     private void InitializeUI()
@@ -139,6 +158,7 @@ public class SimpleGameUI : MonoBehaviour
         
         // Initial rune display update
         UpdateRunes();
+        HideCustomerInfo();
     }
     
     private void SubscribeToEvents()
@@ -286,6 +306,14 @@ public class SimpleGameUI : MonoBehaviour
         customerImage.sprite = Resources.Load<Sprite>("Characters/" + currentCustomer.info.identifier);
         customerImage.GetComponent<Animator>().SetTrigger("walkin");
         SFXManager.Instance.PlayMessage();
+        StartCoroutine(ShowCustomerData());
+
+    }
+
+    IEnumerator ShowCustomerData()
+    {
+        yield return new WaitForSeconds(3f);
+        ShowCustomerInfo();
     }
     
     private void UpdateCustomerDisplay(Customer customer)
@@ -373,7 +401,7 @@ public class SimpleGameUI : MonoBehaviour
         if (customerTargetText != null)
         {
             string requirementsText = customer.GetRequirementsText();
-            customerTargetText.text = $"{satisfiedTextColor}Needs: {requirementsText} {satisfiedText}{closeColor}";
+            customerTargetText.text = $"{satisfiedTextColor}Desire: {requirementsText} {satisfiedText}{closeColor}";
         }
 
         customerNextChatText.text = CustomFunctions.NextStoryRequest();

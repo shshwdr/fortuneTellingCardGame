@@ -180,6 +180,7 @@ public class GameSystem : Singleton<GameSystem>
         OnCustomerShow?.Invoke(GetCurrentCustomer());
         yield return new WaitForSeconds(3);
         
+        
         var character = GameSystem.Instance.GetCurrentCustomer();
         DialogueManager.Instance.StartDialogue(character.info.identifier+ "Request", () =>
         {

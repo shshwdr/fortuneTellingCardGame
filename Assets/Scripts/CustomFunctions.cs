@@ -63,15 +63,15 @@ public static class CustomFunctions
     public static string NextStoryRequest()
     {
         var character = GameSystem.Instance.GetCurrentCustomer();
-        var res = "Next Event: ";
+        var res = "NEXT FATE: \n";
         var story = character.lastStory+1;
         if (character.mainAttribute < mainAttributes[story])
         {
-            res+= $"{mainAttributes[story]-character.mainAttribute} more {character.info.target} ";
+            res+= $"{character.info.target}+{mainAttributes[story]-character.mainAttribute} ";
         }
         if (character.talkedTime < talkedTime[story])
         {
-            res+= $"{talkedTime[story]-character.talkedTime} more talk";
+            res+= $"divine+{talkedTime[story]-character.talkedTime} ";
         }
 
         return res;

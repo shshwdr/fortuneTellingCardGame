@@ -281,8 +281,8 @@ MonoBehaviour:
     non lacus dictum ullamcorper. Integer sed sem nec neque accumsan luctus ut eget
     urna. Nam scelerisque semper dignissim.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 29144a65cf755c843933d2844308815c, type: 2}
-  m_sharedMaterial: {fileID: 4358332516387197198, guid: 29144a65cf755c843933d2844308815c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 03bd9f62a6273114d9d3dc3322921d26, type: 2}
+  m_sharedMaterial: {fileID: -2098854011122516723, guid: 03bd9f62a6273114d9d3dc3322921d26, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
@@ -672,10 +672,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 35
-    m_Right: 35
-    m_Top: 35
-    m_Bottom: 130
+    m_Left: 65
+    m_Right: 25
+    m_Top: 25
+    m_Bottom: 50
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -752,7 +752,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ae8da339e3f5e5147a06ab961c19008a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8022b48f9f27bcd459b50598f940fcf2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
