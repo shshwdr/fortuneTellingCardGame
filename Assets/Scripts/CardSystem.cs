@@ -40,10 +40,17 @@ public class CardSystem : Singleton<CardSystem>
             Debug.LogError("Redraw: Redraw time is 0");
             return;
         }
+         SFXManager.Instance.DeckShuffle();
         redrawTime--;
         
-        // Collect unfixed cards to return to deck
-        List<Card> redrawCards = new List<Card>();
+        
+
+        List<string> predefined = new List<string>()
+        {
+            "world",
+            "fool",
+            "sun",
+        };
         
         // Replace unfixed cards in their original positions
         for (int i = 0; i < currentHand.Count; i++)
@@ -54,15 +61,24 @@ public class CardSystem : Singleton<CardSystem>
                 //redrawCards.Add(currentHand[i]);
                 GameSystem.Instance.gameState.usedCards.Add(currentHand[i]);
                 // Replace with a new card in the same position
-                currentHand[i] = DrawNewCard();
+                if (GameSystem.Instance.gameState.currentDay == 1 &&
+                    GameSystem.Instance.gameState.currentCustomerIndex == 1 && TutorialManager.Instance.currentTutorial == "secondCustomerCome")
+                {
+                     currentHand[i] = DrawCard(predefined[i-1],false);
+                }
+                else
+                {
+                    
+                    currentHand[i] = DrawNewCard();
+                }
+
             }
         }
         
-        // Return the unfixed cards to used cards pile
-        //GameSystem.Instance.gameState.usedCards.AddRange(redrawCards);
         
         OnHandChanged?.Invoke(currentHand);
         GameSystem.Instance.OnGameStateChanged?.Invoke();
+
     }
     public void DrawCardsForCustomer()
     {
@@ -207,6 +223,7 @@ public class CardSystem : Singleton<CardSystem>
     }
     public void FixCard(int cardIndex)
     {
+        SFXManager.Instance.CardLock();
         if (cardIndex >= 0 && cardIndex < currentHand.Count)
         {
             currentHand[cardIndex].Fix();

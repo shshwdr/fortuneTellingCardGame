@@ -42,6 +42,12 @@ public class CardDisplayMenu : MenuBase
         Show();
     }
     
+    public override void Show(bool immediate = false)
+    {
+        base.Show(immediate);
+        SFXManager.Instance.Menu();
+    }
+    
     /// <summary>
     /// Refresh the visual display of cards
     /// </summary>

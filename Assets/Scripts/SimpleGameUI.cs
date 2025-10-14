@@ -305,7 +305,7 @@ public class SimpleGameUI : MonoBehaviour
         customerImage.enabled = true;
         customerImage.sprite = Resources.Load<Sprite>("Characters/" + currentCustomer.info.identifier);
         customerImage.GetComponent<Animator>().SetTrigger("walkin");
-        SFXManager.Instance.PlayMessage();
+        SFXManager.Instance.NewCustomer();
         StartCoroutine(ShowCustomerData());
 
     }
@@ -535,6 +535,15 @@ public class SimpleGameUI : MonoBehaviour
                 }
             }
         }
+
+        if (result.isSatisfied)
+        {
+            SFXManager.Instance.GoodFortune();
+        }
+        else
+        {
+            SFXManager.Instance.BadFortune();
+        }
         
         ShowResult(result);
         
@@ -646,6 +655,7 @@ public class SimpleGameUI : MonoBehaviour
     
     private void SkipCustomer()
     {
+        SFXManager.Instance.Refuse();
         GameSystem.Instance.disableAllActions();
         CardSystem.Instance.ClearHand();
         DialogueManager.Instance.StartDialogue(currentCustomer.identifier+"Request","skipCustomer", () =>

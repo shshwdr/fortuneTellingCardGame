@@ -235,6 +235,7 @@ public class GameSystem : Singleton<GameSystem>
     
     private void EndDay()
     {
+        SFXManager.Instance.DayEnd();
         int previousDay = gameState.currentDay;
         gameState.currentDay++;
         

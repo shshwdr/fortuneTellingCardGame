@@ -437,4 +437,10 @@ public class ShopMenu : MenuBase
             );
         }
     }
+
+    public override void Show(bool immediate = false)
+    {
+        base.Show(immediate);
+        SFXManager.Instance.Menu();
+    }
 }
