@@ -83,7 +83,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
 # badResult
 @printer Bubble
 @random
-    Nonsense - should I really listen to you?
+    Nonsense! should I really listen to you? No, NO.
     You can’t even see my struggle, yet you speak of destiny?
     If you are the voice of fate, then fate must be nothing but human chatter.
 @FinalStop
@@ -107,7 +107,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
         @goto .story0
     @stop
     # story0
-    Their smiles bring warmth - and fear.
+    Their smiles bring warmth... and fear.
     I fear I may not deserve their trust.
 @else if:story()==1
     Actually... I once read about this place in a ... diary.
@@ -122,7 +122,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
         @goto .story1
     @stop
     # story1
-    Perhaps I should not laugh at chance… or perhaps I should master it.
+    Perhaps I should not laugh at chance... or perhaps I should master it.
 @else if:story()==2
     I expanded the canals and granaries. The harvest was the best in years.
     The people thank me, bring gifts and songs.
@@ -143,7 +143,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
 @else if:story()==3
     I inherited the village from my father.
     He was kind and gentle, never sought to expand.
-    But I… I want this land to grow strong.
+    But I... I want this land to grow strong.
     Sometimes, I fear I’ve lost the tenderness he carried.
     @choice "Your father ruled with love; follow his gentleness."
         @changeAttribute "emotion" value:4
@@ -171,7 +171,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     # story4
     I'm not sure I'm doing the right thing.
 @else if:story()==5
-    I begin to see… maybe not only this village needs me.
+    I begin to see... maybe not only this village needs me.
     Distant lands, countless souls - they all long for order.
     But if I leave, who will guard this place?
     It feels as if fate waits for me to choose.
@@ -188,7 +188,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     Mother used to say Father was her destiny.
     They planted trees, rested beneath the wind together.
     Sometimes I wonder - can their love be the seed of this land’s peace?
-    If I could be trusted as he was… maybe I’d be a true lord.
+    If I could be trusted as he was... maybe I’d be a true lord.
     @choice "Let affection temper judgment; that is lasting peace."
         @changeAttribute "emotion" value:3
         @goto .story6
@@ -230,7 +230,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     A foreigner came, calling my rule an illusion.
     I cast him out, but he left one phrase:
     “When fate has only one voice, it ceases to be fate.”
-    I don’t understand… but it echoes in my mind.
+    I don’t understand... but it echoes in my mind.
     @choice "Hear the echo - question protects truth."
         @changeAttribute "wisdom" value:4
         @goto .story9
@@ -243,7 +243,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
 @else if:story()==10
     In the end, I ordered his execution.
     But as the flames rose, he smiled.
-    So calm… as if he understood fate better than I.
+    So calm... as if he understood fate better than I.
     For the first time, I wondered which side of destiny I stood on.
     @choice "Own the mistake - clarity begins there."
         @changeAttribute "wisdom" value:4
@@ -258,7 +258,7 @@ No matter. Since you’re here, perhaps fate has its reasons. Tell me, stranger 
     I’ve read his book countless times.
     It says, “True power is the freedom to choose.”
     Then I realized - my order was too perfect.
-    And perfection… means silence.
+    And perfection... means silence.
     @choice "Perfection is death - cherish imperfection’s voice."
         @changeAttribute "wisdom" value:4
         @goto .story11

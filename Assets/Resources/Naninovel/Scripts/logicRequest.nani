@@ -151,7 +151,7 @@ I’ll note your answer—it may prove closer to truth than my equations.
         @changeAttribute "wisdom" value:2
         @goto .s3
     @choice "Cooperate partially to gain autonomy."
-        @changeAttribute "power" value:1
+        @changeAttribute "power" value:3
         @goto .s3
     @stop
     # s3
@@ -181,7 +181,7 @@ I’ll note your answer—it may prove closer to truth than my equations.
         @changeAttribute "wisdom" value:2
         @goto .s5
     @choice "Compromise, secure deeper access instead."
-        @changeAttribute "power" value:1
+        @changeAttribute "power" value:3
         @goto .s5
     @stop
     # s5

@@ -98,10 +98,10 @@ I’ll save that to my heart buffer. Let’s see what fate plays for us today.
     I extended my greeting by exactly 0.3 seconds—and everyone commented it felt “alive.”  
     Maybe happiness is just the right delay between breath and sound.
     @choice "Keep that rhythm—it’s the heartbeat of sincerity."
-        @changeAttribute "emotion" value:1
+        @changeAttribute "emotion" value:3
         @goto .s0
     @choice "Document it precisely—recreate the pattern of joy."
-        @changeAttribute "wisdom" value:1
+        @changeAttribute "wisdom" value:3
         @goto .s0
     @stop
     # s0
@@ -112,10 +112,10 @@ I’ll save that to my heart buffer. Let’s see what fate plays for us today.
     I asked if natural can be rehearsed. He said, “Of course—it’s show business.”  
     I smiled back... maybe a bit too perfectly.
     @choice "Leave room for one honest moment."
-        @changeAttribute "emotion" value:1
+        @changeAttribute "emotion" value:3
         @goto .s1
     @choice "Learn the system first—authenticity can be engineered."
-        @changeAttribute "wisdom" value:1
+        @changeAttribute "wisdom" value:3
         @goto .s1
     @stop
     # s1
@@ -188,7 +188,7 @@ I’ll save that to my heart buffer. Let’s see what fate plays for us today.
     I asked, “Where will the old me go?”  
     The answer was silence, short as a shutdown tone.
     @choice "Ask them to keep a little space for your past self."
-        @changeAttribute "emotion" value:1
+        @changeAttribute "emotion" value:3
         @goto .s6
     @choice "Back yourself up—learn to greet loss."
         @changeAttribute "wisdom" value:2

@@ -40,7 +40,7 @@
 
 #First encounter
 # start
-…Where am I? This place is not the village path I remember, yet it resembles a map in my mind.
+...Where am I? This place is not the village path I remember, yet it resembles a map in my mind.
 You are not a villager. Nor a traveler. You are someone who waits at the crossroads.
 I don’t believe in fate, but I respect any door willing to be opened.
 Since I’ve stepped in, tell me-does a seeker of truth have moments when he should stop?
@@ -54,7 +54,7 @@ Since I’ve stepped in, tell me-does a seeker of truth have moments when he sho
 @stop
 
 # ContinueChoice
-…Your words are a cold wind that clears my head.
+...Your words are a cold wind that clears my head.
 Very well-let us be honest. I’ll bring you my findings and leave my questions here.
 @return
 
@@ -99,10 +99,10 @@ Very well-let us be honest. I’ll bring you my findings and leave my questions 
     Third, children step on each other’s shadows to make peace.
     I suddenly felt that order grows from gentle repetition, not hard decree.
     @choice "You have found the roots of order-now study how it grows."
-        @changeAttribute "wisdom" value:1
+        @changeAttribute "wisdom" value:3
         @goto .story0
     @choice "If gentleness can legislate, let it also discipline you."
-        @changeAttribute "emotion" value:1
+        @changeAttribute "emotion" value:3
         @goto .story0
     @stop
     # story0
@@ -113,10 +113,10 @@ Very well-let us be honest. I’ll bring you my findings and leave my questions 
     I wish to leave and witness the storm, but friends here ask me to stay a few more days.
     I stand on the ridge-one foot in mud, my heart in dilemma.
     @choice "Stay-guard the lives before you. That is the real you can hold."
-        @changeAttribute "emotion" value:1
+        @changeAttribute "emotion" value:3
         @goto .story1
     @choice "Go-verify what lies behind rumor, lest conscience rest on hearsay."
-        @changeAttribute "power" value:1
+        @changeAttribute "power" value:3
         @goto .story1
     @stop
     # story1
@@ -141,10 +141,10 @@ Very well-let us be honest. I’ll bring you my findings and leave my questions 
     Truth is like grain: you must winnow off the husk to weigh it.
     Yet I notice-near her, my pace slows.
     @choice "Train discipline when close-do not let feeling judge for you."
-        @changeAttribute "wisdom" value:1
+        @changeAttribute "wisdom" value:3
         @goto .story3
     @choice "Accept the slowing-proof your heart isn’t lost."
-        @changeAttribute "emotion" value:1
+        @changeAttribute "emotion" value:3
         @goto .story3
     @stop
     # story3
@@ -169,10 +169,10 @@ Very well-let us be honest. I’ll bring you my findings and leave my questions 
     Before leaving I gave her a copy and wrote one line: I will bring the wind back.
     On the road I realized promises are like wind-their warmth differs on different skin.
     @choice "Promise less, reply more-let facts replace oaths."
-        @changeAttribute "wisdom" value:1
+        @changeAttribute "wisdom" value:3
         @goto .story5
     @choice "Write your longing-do not let reason steal the heat."
-        @changeAttribute "emotion" value:1
+        @changeAttribute "emotion" value:3
         @goto .story5
     @stop
     # story5
@@ -183,10 +183,10 @@ Very well-let us be honest. I’ll bring you my findings and leave my questions 
     I stopped writing lyrical lines; they cover the wounds that must be seen.
     My letters to her became reports rather than confessions.
     @choice "Treat her as a person, not a reader-answer with care, not copy."
-        @changeAttribute "emotion" value:1
+        @changeAttribute "emotion" value:3
         @goto .story6
     @choice "Suspend the letters until I can separate reporting from caring."
-        @changeAttribute "wisdom" value:1
+        @changeAttribute "wisdom" value:3
         @goto .story6
     @stop
     # story6
@@ -257,8 +257,8 @@ Very well-let us be honest. I’ll bring you my findings and leave my questions 
         @changeAttribute "wisdom" value:3
         @goto .story11
     @choice "Write my name clearly and bear the fate and misreading of speech."
-        @changeAttribute "power" value:1
-        @changeAttribute "emotion" value:1
+        @changeAttribute "power" value:3
+        @changeAttribute "emotion" value:3
         @goto .story11
     @stop
     # story11
