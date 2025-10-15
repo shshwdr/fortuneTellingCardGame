@@ -319,8 +319,8 @@ MonoBehaviour:
     neque id felis posuere suscipit. Proin fringilla pharetra viverra. Lorem ipsum
     dolor sit amet, consectetur adipiscing elit.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 03bd9f62a6273114d9d3dc3322921d26, type: 2}
-  m_sharedMaterial: {fileID: -2098854011122516723, guid: 03bd9f62a6273114d9d3dc3322921d26, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d7095e508e4225f4284b5273b9f7b28a, type: 2}
+  m_sharedMaterial: {fileID: -7766135538678839564, guid: d7095e508e4225f4284b5273b9f7b28a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -562,9 +562,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 25
-    m_Right: 25
-    m_Top: 15
+    m_Left: 40
+    m_Right: 40
+    m_Top: 30
     m_Bottom: 60
   m_ChildAlignment: 0
   m_Spacing: 0
