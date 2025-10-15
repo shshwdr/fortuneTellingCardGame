@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 /// <summary>
 /// Simplified CardUI without DOTween dependency for testing
 /// </summary>
@@ -87,7 +88,7 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             cardNameText.text = cardInfo.name;
             
         if (cardDescriptionText != null)
-            cardDescriptionText.text = cardInfo.description;
+            cardDescriptionText.text =  cardInfo.description;
             
         UpdateUpright();
         UpdateLevelDisplay();
@@ -126,7 +127,7 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         //     effectText += FormatEffect(effects) + "\n";
         // }
         
-        cardEffectText.text = effectText;
+        cardEffectText.text = CardSystem.formatString( effectText,!isUpright);
         cardEffectText.color = isUpright ? Color.black : Color.white;
         cardNameText.color = isUpright ? Color.black : Color.white;
         cardLevelText.color = isUpright ? Color.black : Color.white;

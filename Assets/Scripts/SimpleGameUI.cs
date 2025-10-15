@@ -394,17 +394,17 @@ public class SimpleGameUI : MonoBehaviour
             }
         }
 
-        var satisfiedText = result.isSatisfied ? "(Satisfied!)" : "";
+        var satisfiedText = result.isSatisfied ? "" : "";
         var satisfiedTextColor = result.isSatisfied ? "<color=green>" : "<color=red>";
         var closeColor = result.isSatisfied ? "</color>" : "</color>";
         
         if (customerTargetText != null)
         {
             string requirementsText = customer.GetRequirementsText();
-            customerTargetText.text = $"{satisfiedTextColor}Desire: {requirementsText} {satisfiedText}{closeColor}";
+            customerTargetText.text = CardSystem.formatString($"{satisfiedTextColor}Desire: {requirementsText}{satisfiedText}{closeColor}");
         }
 
-        customerNextChatText.text = CustomFunctions.NextStoryRequest();
+        customerNextChatText.text = CardSystem.formatString( CustomFunctions.NextStoryRequest());
 
         UpdateActions();
     }
@@ -412,13 +412,13 @@ public class SimpleGameUI : MonoBehaviour
     private void UpdateMoneyDisplay(int money)
     {
         if (moneyText != null)
-            moneyText.text = $"Money: {money}";
+            moneyText.text = $"Money   {money}";
     }
     
     private void UpdateSanityDisplay(int sanity)
     {
         if (sanityText != null)
-            sanityText.text = $"Sanity: {sanity}";
+            sanityText.text = $"Sanity   {sanity}";
     }
     
     private void UpdateDayDisplay(int day)

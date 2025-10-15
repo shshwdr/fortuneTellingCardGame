@@ -1,11 +1,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class CardSystem : Singleton<CardSystem>
 {
+
+    static public string formatString(string str,bool isWhite = false)
+    {
+        var prefix = !isWhite ? "b_" : "w_";
+        var spritePrefix = "<sprite name=\"" + prefix;
+        var spriteSurfix = "\">";
+        
+        var list = new List<string>()
+        {
+            "sanity",
+            "money",
+            "wisdom",
+            "power",
+            "emotion"
+        };
+        foreach (var s in list)
+        {
+            var test = s;
+            if (!string.IsNullOrEmpty(test))
+                test = char.ToUpper(test[0]) + test.Substring(1);
+            str = Regex.Replace(str, s, test+spritePrefix+s+spriteSurfix, RegexOptions.IgnoreCase);
+        }
+        
+        return str;
+
+    }
     public List<Card> currentHand = new List<Card>();
     
     public System.Action<List<Card>> OnHandChanged;
