@@ -9,9 +9,43 @@ public class TutorialManager : Singleton<TutorialManager>
 
     HashSet<string> finishedTutorial = new HashSet<string>();
     public string currentTutorial;
+
+    public Transform tutorialAreaParent;
+    public Transform tutorialAreaAll;
     public void ShowTutorial(string tutorialName,Action action=null)
     {
         StartCoroutine(test(tutorialName, action));
+    }
+
+    public void ShowTutorialArea(string str)
+    {
+        tutorialAreaAll.gameObject.SetActive(true);
+         if (tutorialAreaParent != null)
+         {
+             foreach (Transform child in tutorialAreaParent)
+             {
+                 if (child.name == str)
+                 {
+                     child.gameObject.SetActive(true);
+                 }
+                 else
+                 {
+                     child.gameObject.SetActive(false);
+                 }
+             }
+         }
+    }
+
+    public void HideAllTutorialAreas()
+    {
+        tutorialAreaAll.gameObject.SetActive(false);
+        if (tutorialAreaParent != null)
+        {
+            foreach (Transform child in tutorialAreaParent)
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
     }
 
     IEnumerator test(string tutorialName,Action action=null)
@@ -56,7 +90,7 @@ public class TutorialManager : Singleton<TutorialManager>
     // Start is called before the first frame update
     void Start()
     {
-        
+        HideAllTutorialAreas();
     }
 
     // Update is called once per frame
