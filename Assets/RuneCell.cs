@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class RuneCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -13,13 +14,14 @@ public class RuneCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public TMP_Text statusText; // Optional: to display rune status
     public GameObject effecting;
     private RuneInfo info;
+    public Image icon;
     public void SetData(Rune rune)
     {
         this.info = rune.info;
         identifier = rune.identifier;
         text.text = rune.info.name;
         desc.text = rune.info.description;
-        
+         icon.sprite = info.icon;
         // Display status if statusText is available
         if (statusText != null)
         {
@@ -33,6 +35,7 @@ public class RuneCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         identifier = info.identifier;
         text.text = info.name;
         desc.text = info.description;
+        icon.sprite = info.icon;
     }
     // Start is called before the first frame update
     void Start()

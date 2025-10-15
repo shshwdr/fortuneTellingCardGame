@@ -175,6 +175,82 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7132516910197820803, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -58.29503
+      objectReference: {fileID: 0}
+    - target: {fileID: 7132516910197820803, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7348835115323338647, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_text
+      value: Emotional Overflow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7348835115323338647, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7348835115323338647, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7348835115323338647, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7348835115323338647, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7348835115323338647, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7348835115323338647, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -7766135538678839564, guid: d7095e508e4225f4284b5273b9f7b28a, type: 2}
+    - target: {fileID: 7348835115323338647, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772954307982430056, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772954307982430056, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772954307982430056, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772954307982430056, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772954307982430056, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 122.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772954307982430056, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772954307982430056, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8853301926629298937, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 66f4a47437836bb458e9f04926327527, type: 3}
+    - target: {fileID: 8853301926629298937, guid: 06560d57bb9377a4b97ab3433e9b7607, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -223,15 +299,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.70440245, g: 0.70440245, b: 0.70440245, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 66f4a47437836bb458e9f04926327527, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

@@ -49,11 +49,11 @@ public class CardSystem : Singleton<CardSystem>
         {
             "world",
             "fool",
-            "sun",
+            "magician",
         };
-        
+        var cardCount = currentHand.Count;
         // Replace unfixed cards in their original positions
-        for (int i = 0; i < currentHand.Count; i++)
+        for (int i = 0; i < cardCount; i++)
         {
             if (!currentHand[i].isFixed)
             {
@@ -96,10 +96,10 @@ public class CardSystem : Singleton<CardSystem>
 
         if (GameSystem.Instance.gameState.currentDay == 1 && GameSystem.Instance.gameState.currentCustomerIndex == 0)
         {
-            DrawCard("sun",true);
-            DrawCard("fool",false);
-            DrawCard("magician",true);
-            DrawCard("world",false);
+            DrawCardAndAddToHand("sun",true);
+            DrawCardAndAddToHand("fool",false);
+            DrawCardAndAddToHand("magician",true);
+            DrawCardAndAddToHand("world",false);
             
         }
         else if (GameSystem.Instance.gameState.currentDay == 1 &&
@@ -107,15 +107,10 @@ public class CardSystem : Singleton<CardSystem>
         {
             if (TutorialManager.Instance.currentTutorial == "firstCustomerLeave")
             {
-                DrawCard("lover",false);
-                DrawCard("star",true);
-                DrawCard("emperor",true);
-                DrawCard("sun",true);
-            }else if (TutorialManager.Instance.currentTutorial == "secondCustomerCome")
-            {
-                DrawCard("world",false);
-                DrawCard("fool",false);
-                DrawCard("sun",false);
+                DrawCardAndAddToHand("lover",false);
+                DrawCardAndAddToHand("star",true);
+                DrawCardAndAddToHand("emperor",true);
+                DrawCardAndAddToHand("sun",true);
             }
         }
         else
@@ -181,10 +176,16 @@ public class CardSystem : Singleton<CardSystem>
         var card = GameSystem.Instance.gameState.availableCards.Find(card => card.info.identifier == cardName);
         card.isUpright = isUpright;
         
+        card.isFixed = false;
         GameSystem.Instance.gameState.availableCards.Remove(card);
 
-        currentHand.Add(card);
         return card;
+    }
+
+    void DrawCardAndAddToHand(string cardName,bool isUpright)
+    {
+         var card = DrawCard(cardName,isUpright);
+        currentHand.Add(card);
     }
     
     Card DrawNewCard()
@@ -197,7 +198,7 @@ public class CardSystem : Singleton<CardSystem>
         int randomIndex = Random.Range(0, GameSystem.Instance.gameState.availableCards.Count);
         Card drawnCard = GameSystem.Instance.gameState.availableCards[randomIndex].Clone();
         drawnCard.isUpright = Random.Range(0, 2) == 0;
-        
+        drawnCard.isFixed = false;
         GameSystem.Instance.gameState.availableCards.RemoveAt(randomIndex);
         return drawnCard;
     }

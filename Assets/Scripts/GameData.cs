@@ -240,6 +240,7 @@ public class DayInfo
 public class RuneInfo
 {
     public string identifier;
+    public string iconString;
     public string name;
     public string description;
     public int cost;
@@ -247,6 +248,7 @@ public class RuneInfo
     public string effect;
     public bool canBeDraw;
     public bool isStart;
+    public Sprite icon => Resources.Load<Sprite>("runes/" + iconString);
 }
 
 [System.Serializable]
