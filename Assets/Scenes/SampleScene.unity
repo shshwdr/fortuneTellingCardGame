@@ -2564,7 +2564,7 @@ MonoBehaviour:
   cardDisplayPrefab: {fileID: 749219183397236069, guid: 33b37fd96ce2ba74d8d2a146239daf42, type: 3}
   moneyText: {fileID: 1027510308}
   nextDayButton: {fileID: 836604758}
-  openAtBeginning: 1
+  openAtBeginning: 0
 --- !u!1 &607857084
 GameObject:
   m_ObjectHideFlags: 0
@@ -3710,6 +3710,10 @@ PrefabInstance:
     - target: {fileID: 7393756832670080077, guid: 6f51af8482c5bb2489092f66dc2237bf, type: 3}
       propertyPath: m_Name
       value: button
+      objectReference: {fileID: 0}
+    - target: {fileID: 7522585838319279622, guid: 6f51af8482c5bb2489092f66dc2237bf, type: 3}
+      propertyPath: m_text
+      value: New Day
       objectReference: {fileID: 0}
     - target: {fileID: 7522585838319279622, guid: 6f51af8482c5bb2489092f66dc2237bf, type: 3}
       propertyPath: m_sharedMaterial
