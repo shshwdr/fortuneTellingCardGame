@@ -1,4 +1,4 @@
-@printer Bubble pos:60,70
+@printer Bubble pos:70,75
 @if talked()==false
 
     @gosub .start
@@ -46,10 +46,10 @@ Huh, what is this? Immersive roadshow? Some kind of new media stunt?
 Name’s Ethan Li - yeah, *that* one from the headlines. If you’re looking for funding, skip the mystery.  
 Honestly though, this “fate experience” setup isn’t bad. Instead of selling to others, why not sell it to me?  
 Alright then - I’ll bite. Tell me, how does “fate” negotiate with me?
-@choice "Do a 5% limited pilot first. If it breaks anything, freeze and review immediately."
+@choice "Fate only negotiates with those who dare to take responsibility. Are you willing to pay the price?"
     @changeAttribute "wisdom" value:2
     @goto .ContinueChoice
-@choice "Push global in three months. Scale first, fix later - let the world catch up."
+@choice "You’ve already turned fate into a project. Then let’s talk success and failure — not truth and lies."
     @changeAttribute "power" value:2
     @goto .ContinueChoice
 @stop

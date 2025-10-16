@@ -55,10 +55,7 @@ public static class CustomFunctions
     {
         15,20,25,30,35,40,45,50,100
     };
-    static List<int> talkedTime = new List<int>()
-    {
-        1,2,3,4,5,6,7,8,9,10,100
-    };
+   
 
     public static string NextStoryRequest()
     {
@@ -67,12 +64,12 @@ public static class CustomFunctions
         var story = character.lastStory+1;
         if (character.mainAttribute < mainAttributes[story])
         {
-            res+= $"{character.info.target}+{mainAttributes[story]-character.mainAttribute} ";
+            res+= $"{character.info.target}{mainAttributes[story]}";
         }
-        if (character.talkedTime < talkedTime[story])
-        {
-            res+= $"divine+{talkedTime[story]-character.talkedTime} ";
-        }
+        // if (character.talkedTime < talkedTime[story])
+        // {
+        //     res+= $"divine+{talkedTime[story]-character.talkedTime} ";
+        // }
 
         return res;
     }
@@ -84,7 +81,7 @@ public static class CustomFunctions
         int i = character.lastStory  + 1;
         //for (int i = 0; i < 10; i++)
         {
-            if (mainAttributes.Count>i && talkedTime.Count>i && character.mainAttribute >= mainAttributes[i] && character.talkedTime >= talkedTime[i])
+            if (mainAttributes.Count>i /*&& talkedTime.Count>i */&& character.mainAttribute >= mainAttributes[i] /*&& character.talkedTime >= talkedTime[i]*/)
             {
                 result= i;
                 character.lastStory=i;

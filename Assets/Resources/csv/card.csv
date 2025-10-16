@@ -1,20 +1,20 @@
-﻿identifier,name,description,upEffect,downEffect,maxLevel,isStart,isStartFinal,canBeDraw,cost,power,emotion,wisdom,sanity,all,position,comment,
-sun,sun,sun,power|1|sanity|-1,power|-1|sanity|1,3,1,1,1,3,1,,,,,,power: (3+4+3)*2 = 20,power reach 10: 1+3+?
-lover,lover,lover,emotion|-1|sanity|1,emotion|1|sanity|-1,3,1,1,1,3,,1,,,,,emotion: (3+3+4)*2,
-fool,fool,fool,wisdom|1|sanity|-1,wisdom|-1|sanity|1,3,1,1,1,3,,,1,,,,wisdom: 3+,
-magician,magician,magician,power|1|emotion|-1,power|-1|emotion|1,3,1,1,1,3,1,1,,,,,,
-hermit,hermit,hermit,when|allUpCard|sanity|3,when|allDownCard|sanity|3,3,0,0,1,3,,,,1,,,,
-devil,devil,devil,emotion|1|wisdom|-1,emotion|1|power|-1,3,0,0,1,3,,1,,,,,,
-world,The World,The World,when|allUpCard|allA|1,when|allDownCard|allA|1,3,1,1,1,3,,,,,1,1,,
-judgement,Judgement,Judgement,when|total|power|3|allA|1,when|total|power|4|power|2,2,0,0,1,3,1,,,,1,,,
-temperance,Temperance,Temperance,when|total|anyA|-3|allA|1,when|total|anyA|-3|emotion|2,2,0,0,1,3,,1,,,,,,
-star,star,star,sanity|3|allA|-1,sanity|-3|allA|1,3,1,1,1,3,,,,1,1,,,
-neighbour,neighbour,neighbour,setAdjacentCardUpWhenLock,setAdjacentCardDownWhenLock,1,,,1,3,,,,,,1,,
-Chariot,Chariot,Chariot,doublePower,doubleEmotion,1,,,1,3,1,1,,,,,,
-tower,tower,tower,wisdomS|emotionValue,wisdomS|powerValue,1,,,1,3,,,1,,,,,
-emperor,emperor,emperor,wisdom|3|allA|-1,wisdom|-3|allA|1,2,1,1,1,3,,,1,,1,,,
-hanged,hanged,hanged,wisdomS|downCardCount|1,wisdomS|upCardCount|1,2,,,1,3,,,1,,,,,
-moon,moon,moon,allPosAdd,allNegHalf,1,0,0,1,3,,,,,,,,
+﻿identifier,name,description,upEffect,downEffect,maxLevel,isStart,isStartFinal,canBeDraw,cost,power,emotion,wisdom,sanity,all,position,comment,icon
+sun,Sun,sun,power|1|sanity|-1,power|-1|sanity|1,3,1,1,1,3,1,,,,,,power: (3+4+3)*2 = 20,sun
+lover,Lover,lover,emotion|-1|sanity|1,emotion|1|sanity|-1,3,1,1,1,3,,1,,,,,emotion: (3+3+4)*2,lover
+fool,Fool,fool,wisdom|1|sanity|-1,wisdom|-1|sanity|1,3,1,1,1,3,,,1,,,,wisdom: 3+,fool
+magician,Magician,magician,power|1|emotion|-1,power|-1|emotion|1,3,1,1,1,3,1,1,,,,,,magician
+hermit,Hermit,hermit,when|allUpCard|sanity|3,when|allDownCard|sanity|3,3,0,0,1,5,,,,1,,,,hermit
+devil,Devil,devil,emotion|1|wisdom|-1,emotion|1|power|-1,3,0,0,1,3,,1,,,,,,devil
+world,The World,The World,when|allUpCard|allA|1,when|allDownCard|allA|1,3,1,1,1,5,,,,,1,1,,world
+judgement,Judgement,Judgement,when|total|power|3|allA|1,when|total|power|3|power|2,2,0,0,1,3,1,,,,1,,,judgement
+temperance,Temperance,Temperance,when|total|anyA|-3|allA|1,when|total|anyA|-3|emotion|2,2,0,0,1,3,,1,,,,,,temperance
+star,Star,star,sanity|3|allA|-1,sanity|-3|allA|1,3,1,1,1,3,,,,1,1,,,star
+neighbour,Ritual,neighbour,setAdjacentCardUpWhenLock,setAdjacentCardDownWhenLock,1,,,1,4,,,,,,1,,ritual
+Chariot,Chariot,Chariot,doublePower,doubleEmotion,1,,,1,5,1,1,,,,,,chariot
+tower,The Tower,tower,wisdomS|emotionValue,wisdomS|powerValue,1,,,1,5,,,1,,,,,tower
+emperor,The Scholar,emperor,wisdom|3|allA|-1,wisdom|-3|allA|1,2,1,1,1,3,,,1,,1,,,scholar
+hanged,Hanged Man,hanged,wisdomS|downCardCount|1,wisdomS|upCardCount|1,2,,,1,5,,,1,,,,,hangedman
+moon,Moon,moon,allPosAdd,allNegHalf,1,0,0,1,3,,,,,,,,moon
 e,e,需要么,wisdom|sanityValue,sanity|wisdomValue,,,,,,,,1,1,,,,
 a,a,需要么,wisdom|1|emotion|-1,wisdom|1|power|-1,,,,,,,,,,,,,
 ee,ee,随机。。不爱，也没有流派,allA|random,allA|random,1,0,0,,,,,,,1,,,

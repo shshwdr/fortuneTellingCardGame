@@ -85,7 +85,7 @@ public class CardDetailDisplay : MonoBehaviour
         {
             string uprightText = "<color=green><b>Upright Effects:</b></color>\n";
             uprightText += FormatEffectList(cardInfo.UpEffect(level));
-            uprightEffectText.text = uprightText;
+            uprightEffectText.text = CardSystem.formatString( uprightText,true);
         }
         
         // 显示逆位效果
@@ -93,7 +93,7 @@ public class CardDetailDisplay : MonoBehaviour
         {
             string reversedText = "<color=red><b>Reversed Effects:</b></color>\n";
             reversedText += FormatEffectList(cardInfo.DownEffect(level));
-            reversedEffectText.text = reversedText;
+            reversedEffectText.text =  CardSystem.formatString( reversedText,true);
         }
         
         // 显示当前状态
@@ -177,11 +177,11 @@ public class CardDetailDisplay : MonoBehaviour
                     return result;
                     
                 case "allNegHalf":
-                    result += "• Halve all negative effects\n";
+                    result += "Halve all negative effects\n";
                     break;
                     
                 case "allPosAdd":
-                    result += "• All positive effects +1 extra\n";
+                    result += "All positive effects +1 extra\n";
                     break;
                     case "setAdjacentCardUpWhenLock":
                         result += "Set adjacent cards to Upright when lock this card\n";
@@ -218,7 +218,7 @@ public class CardDetailDisplay : MonoBehaviour
                             }
                             break;
                 case "allPosHalf":
-                    result += "• Halve all positive effects\n";
+                    result += "Halve all positive effects\n";
                     break;
                     
                 case "wisdom":
@@ -230,7 +230,7 @@ public class CardDetailDisplay : MonoBehaviour
                     return result;
                     
                 default:
-                    result += $"• {effects[i]}\n";
+                    result += $"{effects[i]}\n";
                     break;
             }
             i++;

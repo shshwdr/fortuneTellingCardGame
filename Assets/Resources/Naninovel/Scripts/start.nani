@@ -63,7 +63,9 @@ Some call it... paying the rent.
 
 @printer Dialogue
 This time, fate isn’t so kind.
+@tutorial "requirement"
 These cards aren’t enough to fulfill her request.
+@tutorial ""
 
 But destiny is never stingy with chances.
 @tutorial "lock"
@@ -79,7 +81,11 @@ and redraw the rest.
 
 @printer Dialogue
 The new spread glimmers into existence.
+@tutorial "requirement"
 This time, the alignment matches perfectly.
+@tutorial "nextStory"
+The customer's next fate story will be revealed too.
+@tutorial ""
 Good. You may begin the reading.
 @FinalStop
 @stop
@@ -89,7 +95,9 @@ Good. You may begin the reading.
 
 @printer Dialogue
 Your rerolls are limited each day.
+@tutorial "skip"
 If no combination feels right, you can always let the guest leave.
+@tutorial ""
 Fate always leaves another door open.
 
 Good luck, fortune teller.

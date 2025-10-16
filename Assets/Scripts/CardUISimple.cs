@@ -63,7 +63,7 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         isUpright = card.isUpright;
         isFixed = card.isFixed;
         cardLevel = card.level;
-        cardBack.sprite = Resources.Load<Sprite>("tarot/" + card.info.identifier); 
+       // cardBack.sprite = Resources.Load<Sprite>("tarot/" + card.info.identifier); 
         UpdateCardDisplay();
     }
     
@@ -89,7 +89,7 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             
         if (cardDescriptionText != null)
             cardDescriptionText.text =  cardInfo.description;
-            
+
         UpdateUpright();
         UpdateLevelDisplay();
         //UpdateEffectText();
@@ -252,7 +252,21 @@ public class CardUISimple : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
         
         cardButton.image.sprite = isUpright ? uprightSprite : reversedSprite;
-        cardEffectText.GetComponent<RectTransform>().anchoredPosition = isUpright? uprightTextTrans.anchoredPosition : reversedTextTrans.anchoredPosition;
+       cardEffectText.GetComponent<RectTransform>().anchoredPosition = uprightTextTrans.anchoredPosition;//isUpright? uprightTextTrans.anchoredPosition : reversedTextTrans.anchoredPosition;
+        
+        
+        
+        var folder = "";
+        if (isUpright)
+        {
+            folder = "cards_light";
+        }
+        else
+        {
+            folder = "cards_dark";
+        }
+        cardBack.sprite = cardInfo.Icon(isUpright); 
+        
         UpdateEffectText();
         UpdateLevelDisplay();
     }

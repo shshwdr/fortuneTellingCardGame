@@ -109,9 +109,9 @@ public class GameSystem : Singleton<GameSystem>
     private void LoadTodayCustomers()
     {
         string dayKey = gameState.currentDay.ToString();
-        if (CSVLoader.Instance.dayInfoMap.ContainsKey(dayKey))
+        //if (CSVLoader.Instance.dayInfoMap.ContainsKey(dayKey))
         {
-            var dayInfo = CSVLoader.Instance.dayInfoMap[dayKey];
+            var dayInfo = CSVLoader.Instance.getDayInfo( gameState.currentDay);
             
             var availableCustomers = gameState.persistentCustomers.Values.ToList().Where(c=>c.isAvailable).ToList();
             foreach (string customerKey in dayInfo.customers)
@@ -242,10 +242,9 @@ public class GameSystem : Singleton<GameSystem>
         // Get rent for the day that just ended
         string dayKey = previousDay.ToString();
         int rent = 0;
-        if (CSVLoader.Instance.dayInfoMap.ContainsKey(dayKey))
-        {
-            rent = CSVLoader.Instance.dayInfoMap[dayKey].rent;
-        }
+        rent = CSVLoader.Instance.getDayInfo( gameState.currentDay).rent;
+        
+        
 
         if (RuneManager.Instance.runeEffects.ContainsKey("addSanityAfterDay"))
         {

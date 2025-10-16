@@ -1,4 +1,4 @@
-@printer Bubble pos:70,70
+@printer Bubble pos:70,75
 @if talked()==false
     @gosub .start
 @else
@@ -50,11 +50,14 @@ They said when the heart breaks, it drifts to strange places.
 If this is fate’s doing, then please, tell me,
 Can love still be found for someone who has already drowned?
 
+My name is Selene.
+If I must be seen by fate, let it at least call me by my name.
+
 @choice "Love may return in another form, not always from the same hands."
     @changeAttribute "emotion" value:2
     @goto .ContinueChoice
 @choice "Your heart still beats. Let it seek what it truly wants, not what is gone."
-    @changeAttribute "power" value:2
+    @changeAttribute "emotion" value:2
     @goto .ContinueChoice
 @stop
 
@@ -80,6 +83,10 @@ Then tell me, seer, where does the path of love lead me?
     Your words... they bring warmth, like sunlight through clouds.
     Perhaps there is meaning in this pain after all.
     You make it sound as though even sorrow can bloom.
+    The way you spoke—it felt like you were sewing torn fabric back together.
+    I don’t feel saved... but I feel steadier. Sometimes that’s enough.
+    I will not call this hope, not yet. I will call it breath.
+    I will carry this reading like a small lamp. If it flickers, I’ll still remember the light.
 @gosub .story
 @FinalStop
 @stop
@@ -102,7 +109,6 @@ Then tell me, seer, where does the path of love lead me?
 # story
 
 @if story()==0
-    I thought about your words last time.
     I waited by the river, just once more... but he never came.
     The water carried only my reflection back to me.
     Maybe love isn’t meant to return.
@@ -134,7 +140,7 @@ Then tell me, seer, where does the path of love lead me?
     Maybe being held up once helps me learn to walk again.
 
 @else if:story()==2
-    I still write to him, the traveler. 
+    I still write to him, Orien. 
     Not out of longing, I tell myself... but to ask about the world.
     When I seal each letter, my hand still trembles.
 
@@ -178,7 +184,7 @@ Then tell me, seer, where does the path of love lead me?
     When I write, it feels like my heart finally has a shape.
 
 @else if:story()==5
-    The traveler’s letters stopped coming.
+    Orien’s letters stopped coming.
     At first I thought it was distance. Then I realized, perhaps he’s gone.
     I should feel sad... but instead I feel quiet.
     Maybe love doesn’t die, it just changes names.
@@ -193,7 +199,7 @@ Then tell me, seer, where does the path of love lead me?
     A quiet heart is still a heart.
 
 @else if:story()==6
-    I thought I could balance everything, love my husband, admire the traveler, serve the people.
+    I thought I could balance everything, love my husband, admire Orien, serve the people.
     But hearts are fragile things; they spill when filled too full.
     Still, I want to believe all of it can be true.
     @choice "Choose boundaries, love needs edges to hold shape."
@@ -224,7 +230,7 @@ Then tell me, seer, where does the path of love lead me?
 @else if:story()==8
     They say I cursed him, that I brought sorrow to this land.
     They won’t let me speak in the councils anymore.
-    My son attends in my place. They adore him.
+    My son, Aldric, attends in my place. They adore him.
     Perhaps this is what fate intended.
     @choice "Let them judge, serve quietly where hands are needed."
         @changeAttribute "emotion" value:3
@@ -237,9 +243,9 @@ Then tell me, seer, where does the path of love lead me?
     If they will not hear me, the fields still will.
 
 @else if:story()==9
-    My son visits less. He says I should rest, enjoy peace.
+    Aldric visits less. He says I should rest, enjoy peace.
     Peace... feels like being buried alive.
-    Sometimes I dream of the traveler again, standing by the river.
+    Sometimes I dream of the Orien again, standing by the river.
     But even in the dream, he turns away.
     @choice "Turn from the river, let memory stop pulling you under."
         @changeAttribute "wisdom" value:3
@@ -270,7 +276,9 @@ Then tell me, seer, where does the path of love lead me?
     I’m tired now. My hands shake when I write.
     They’ll take my books away soon, call them nonsense.
     If anyone finds these pages, I hope they read with mercy.
-    Maybe love was never meant to last... only to be written.
+    Maybe love was never meant to last... only to be written.    
+    Aldric says I should rest. He means well. He has his father’s steadiness, and Orien’s shadow at his back.
+
     @choice "Let the last page be yours, sign it without apology."
         @changeAttribute "power" value:3
         @goto .story11

@@ -23,6 +23,13 @@ public class ShopMenu : MenuBase
     // Track cards that have been purchased (newly bought) in this shop session
     private HashSet<string> purchasedCardsThisSession = new HashSet<string>();
     private bool hasPurchase = false;
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        nextDayButton.onClick.AddListener(ProceedToNextDay);
+    }
+
     public override void Init()
     {
         base.Init();
@@ -36,7 +43,6 @@ public class ShopMenu : MenuBase
         
         if (nextDayButton != null)
         {
-            nextDayButton.onClick.AddListener(ProceedToNextDay);
         }
 
         hasPurchase = false;

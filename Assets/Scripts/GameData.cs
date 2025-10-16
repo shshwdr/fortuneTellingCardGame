@@ -96,6 +96,8 @@ public class CustomerInfo
     public string description;
     public string target; // wealth, rela, sanity, power
     public bool isStart;
+    
+    public Sprite icon=> Resources.Load<Sprite>("Characters/" + identifier);
 }
 
 [System.Serializable]
@@ -110,7 +112,6 @@ public class Customer
     public int lastStory;
     public string identifier => info.identifier;
     public bool isAvailable;
-    
     // Customer requirements based on day and attributes
     public List<AttributeRequirement> requirements = new List<AttributeRequirement>();
     
@@ -165,7 +166,7 @@ public class Customer
         requirements.Clear();
         
         // Main attribute requirement: max(1, day/2)
-        int mainRequirement = Mathf.Max(1, currentDay / 3);
+        int mainRequirement = Mathf.Max(1, lastStory+1);
         requirements.Add(new AttributeRequirement(info.target, mainRequirement));
         
         // Secondary attribute requirement (from day 2 onwards)

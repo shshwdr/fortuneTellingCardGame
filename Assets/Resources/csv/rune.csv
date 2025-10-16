@@ -1,16 +1,16 @@
 ﻿identifier,cost,name,description,effect,value,canBeDraw,isStart,iconString
-redraw,4,Foresight,redraw count add 2,redrawCount,2,1,0,iodestone_redraw
-upright,4,Upright,"when tell fortune with all cards up, add 2 redraw today",when|allUpCard|refreshCount,1,1,0,bismuth_upright
-down,5,Reversed,"when tell fortune with all cards down, add 2 money",when|allDownCard|addGold,2,1,0,wax_down
-rest,4,Repose,"when a day over, add 1 sanity",addSanityAfterDay,1,1,,powder_rest
-Shopaholic,4,Shopaholic,"when buy anything in shop, add 1 sanity",addSanityWhenBuy,1,1,,oill_rest
-abstinence,3,Abstinence,"when not buy anything in shop, add 2 money",addMoneyWhenNotBuy,2,1,,antimony_abstience
-Enlightener,5,Enlightener,"when satisfy all customer a day, add 3 sanity",satisfyAllAddSanity,3,1,,sulfur_enlighter
-Insurance,3,Insurance,"when failed all customer a day, add 3 money",failedAllAddMoney,3,1,,vitriol_insurance
-emotionToSanity,4,Emotional Overflow,extra emotion over customer requirement would be added to Sanity,moreEmotionToSanity,1,1,,nitre_emotiontosanity
-powerToMoney,4,Power Surge,extra power over customer requirement would be added to Money,morePowerToMoney,,1,,rocksalt_ powertomoney
-wisdomToRedraw,4,Mind Ascendant,extra wisdom over customer requirement would be added to redraw,moreWisdomToRedraw,,1,,copper_wisdomtoredraw
-unusedRedrawKeep,4,Sustain,unused redraw will go to next day,unusedRedrawGoToNextDay,,1,,arsenic_unusedredrawkeep
+redraw,4,Foresight,Increases your redraw count by 2.,redrawCount,2,1,0,iodestone_redraw
+upright,4,Upright,"When you tell a fortune with all cards facing up, gain +2 redraws for today.",when|allUpCard|refreshCount,1,1,0,bismuth_upright
+down,5,Reversed,"When you tell a fortune with all cards facing down, gain +2 money.",when|allDownCard|addGold,2,1,0,wax_down
+rest,4,Repose,"At the end of each day, restore +1 sanity.",addSanityAfterDay,1,1,,powder_rest
+Shopaholic,4,Shopaholic,"If you purchase anything in the shop, gain +2 sanity that day.",addSanityWhenBuy,2,1,,oill_rest
+abstinence,3,Abstinence,"If you buy nothing in the shop, gain +2 money.",addMoneyWhenNotBuy,2,1,,antimony_abstience
+Enlightener,5,Enlightener,"When you satisfy all customers in a day, gain +3 sanity.",satisfyAllAddSanity,3,1,,sulfur_enlighter
+Insurance,3,Insurance,"When you fail all customers in a day, gain +3 money.",failedAllAddMoney,3,1,,vitriol_insurance
+emotionToSanity,4,Empath,Extra Emotion beyond a customer’s demand converts into Sanity.,moreEmotionToSanity,1,1,,nitre_emotiontosanity
+powerToMoney,4,Pulse,Extra Power beyond a customer’s demand converts into Money.,morePowerToMoney,,1,,rocksalt_ powertomoney
+wisdomToRedraw,4,Zenith,Extra Wisdom beyond a customer’s demand converts into Redraws.,moreWisdomToRedraw,,1,,copper_wisdomtoredraw
+unusedRedrawKeep,4,Sustain,Unused redraws carry over to the next day.,unusedRedrawGoToNextDay,,1,,arsenic_unusedredrawkeep
 healSanity,5,healSanity,set sanity to 10,sanityMax|1,,0,0,
 lastSanity,6,lastSanity,"The first time sanity goes below 0, recover it to 5",checkTotal|sanity|1|changeSanity|3,,0,,
 lastValue,5,lastValue,deprecated,checkTotal|attribute|1|changeValue|3,,0,,

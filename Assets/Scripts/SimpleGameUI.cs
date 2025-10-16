@@ -498,7 +498,22 @@ public class SimpleGameUI : MonoBehaviour
     {
         if (currentCustomer == null) return;
 
-        
+        if (GameSystem.Instance.GetSanity() <= 0)
+        {
+            ToastManager.Instance.ShowToast("This Divine will bring your sanity below zero.");
+            return;
+        }
+        else
+        {
+            foreach (var attr in  CardSystem.Instance.allAttributes)
+            {
+                if (currentCustomer.GetAttribute(attr) <= 0)
+                {
+                    ToastManager.Instance.ShowToast($"This Divine will bring {currentCustomer}'s {attr} below zero.");
+                    return;
+                }
+            }
+        }
         
         
 
@@ -555,7 +570,7 @@ public class SimpleGameUI : MonoBehaviour
         
         if (result.isSatisfied)
         {
-            ToastManager.Instance.ShowToast($"Customer is happy! You earned {result.moneyEarned} gold");
+            ToastManager.Instance.ShowToast($"{currentCustomer.info.name} is satisfied! You earned {result.moneyEarned} gold");
             //GameSystem.Instance.AddMoney(result.moneyEarned);
             GameSystem.Instance.CustomerServed(); // Track that we successfully served a customer
             
@@ -585,7 +600,7 @@ public class SimpleGameUI : MonoBehaviour
         else
         {
             
-            ToastManager.Instance.ShowToast($"The customer is not satisfied...");
+            ToastManager.Instance.ShowToast($"{currentCustomer.info.name} is not satisfied...");
             DialogueManager.Instance.StartDialogue(character.identifier+"Request","badResult", () =>
             {
                 if (GameSystem.Instance.gameState.currentDay == 1 && GameSystem.Instance.gameState.currentCustomerIndex == 0)

@@ -1,7 +1,7 @@
 ﻿identifier,name,description,target,isStart
-girl,girl,girl,emotion,1
-lord,lord,lord,power,1
-wanderer,wanderer,wanderer,wisdom,1
-luna,luna,luna,emotion,
-rich,rich,rich,power,
-logic,logic,logic,wisdom,
+girl,Selene,girl,emotion,1
+lord,Lord Aldric,lord,power,1
+wanderer,Orien,wanderer,wisdom,1
+luna,Luna,luna,emotion,
+rich,Ethan Li,rich,power,
+logic,Dr. Logic,logic,wisdom,

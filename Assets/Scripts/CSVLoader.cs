@@ -11,6 +11,21 @@ public class CardInfo
     public string description;
     public List<string> upEffect;
     public List<string> downEffect;
+    public string icon;
+
+    public Sprite Icon(bool isUpright)
+    {
+            var folder = "";
+            if (isUpright)
+            {
+                folder = "cards_light/";
+            }
+            else
+            {
+                folder = "cards_dark/";
+            }
+            return Resources.Load<Sprite>("cards/"+folder + icon); 
+    }
 
     public List<string> UpEffect(int level)
     {
@@ -66,7 +81,13 @@ public class CSVLoader : Singleton<CSVLoader>
     public Dictionary<string, DayInfo> dayInfoMap = new Dictionary<string, DayInfo>();
     public Dictionary<string, RuneInfo> runeInfoMap = new Dictionary<string, RuneInfo>();
     public Dictionary<string, SigilInfo> sigilInfoMap = new Dictionary<string, SigilInfo>();
-    
+
+    public DayInfo getDayInfo(int day)
+    {
+
+        string str = day.ToString();
+        return dayInfoMap.ContainsKey(str) ? dayInfoMap[str] : dayInfoMap.Values.Last();
+    }
     // Start is called before the first frame update
     public void Init()
     {
@@ -74,7 +95,6 @@ public class CSVLoader : Singleton<CSVLoader>
         LoadCustomerData();
         LoadDayData();
         LoadRuneData();
-        LoadSigilData();
     }
     
     private void LoadCardData()
@@ -83,6 +103,16 @@ public class CSVLoader : Singleton<CSVLoader>
         foreach (var cardInfo in cardInfos)
         {
             cardInfoMap[cardInfo.identifier] = cardInfo;
+            if (cardInfo.canBeDraw)
+            {
+                if (cardInfo.Icon(true) == null)
+                {
+                    Debug.LogError($"{cardInfo.identifier} no upright icon");
+                }else if (cardInfo.Icon(false) == null)
+                {
+                    Debug.LogError($"{cardInfo.identifier} no dark icon");
+                }
+            }
         }
     }
     
@@ -92,6 +122,10 @@ public class CSVLoader : Singleton<CSVLoader>
         foreach (var customerInfo in customerInfos)
         {
             customerInfoMap[customerInfo.identifier] = customerInfo;
+            if (customerInfo.icon== null)
+            {
+                Debug.LogError($"{customerInfo.identifier} no icon");
+            }
         }
     }
     
@@ -110,17 +144,13 @@ public class CSVLoader : Singleton<CSVLoader>
         foreach (var runeInfo in runeInfos)
         {
             runeInfoMap[runeInfo.identifier] = runeInfo;
+            if (runeInfo.canBeDraw && runeInfo.icon == null)
+            {
+                Debug.LogError($"{runeInfo.identifier} no icon");
+            }
         }
     }
     
-    private void LoadSigilData()
-    {
-        var sigilInfos = CsvUtil.LoadObjects<SigilInfo>("sigil");
-        foreach (var sigilInfo in sigilInfos)
-        {
-            sigilInfoMap[sigilInfo.identifier] = sigilInfo;
-        }
-    }
     
     // Update is called once per frame
     void Update()
